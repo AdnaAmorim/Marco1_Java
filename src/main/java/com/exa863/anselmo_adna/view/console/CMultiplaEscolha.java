@@ -1,10 +1,9 @@
-package com.exa863.anselmo_adna.core.console;
+package com.exa863.anselmo_adna.view.console;
 
 import org.jline.keymap.BindingReader;
 import org.jline.keymap.KeyMap;
 import org.jline.terminal.Attributes;
 import org.jline.terminal.Terminal;
-import org.jline.utils.InfoCmp;
 
 import java.io.IOException;
 
@@ -13,18 +12,13 @@ import static org.jline.utils.InfoCmp.Capability.key_up;
 
 public class CMultiplaEscolha {
 
-    // Esse mapeamento de keys aqui no incicio é para utilizarmos para mover o menu
     private static final String KEY_UP = "UP";
     private static final String KEY_DOWN = "DOWN";
     private static final String KEY_ENTER = "ENTER";
 
-    // Classe principal utilitario de console
     private final Console console;
-    // Classe do pacote de terminal, para utilizarmos ANSI
     private final Terminal terminal;
-    // Utilizado pra ler as teclas (ou seja, as setas)
     private final BindingReader reader;
-    // Mapeamento das teclas
     private final KeyMap<String> keys;
 
     public CMultiplaEscolha(Console console) {
@@ -48,7 +42,6 @@ public class CMultiplaEscolha {
 
         Attributes atributosOriginais = terminal.enterRawMode();
 
-        // Esconde o cursor
         console.setCursorInvisivel();
 
         int selecionado = 0;
@@ -82,7 +75,6 @@ public class CMultiplaEscolha {
                 }
             }
         } finally {
-            // Mostra o cursor novamente
             console.setCursorVisivel();
             terminal.setAttributes(atributosOriginais);
             terminal.flush();

@@ -1,4 +1,4 @@
-package com.exa863.anselmo_adna.core.console;
+package com.exa863.anselmo_adna.view.console;
 
 import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;

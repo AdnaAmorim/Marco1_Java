@@ -1,11 +1,10 @@
 package com.exa863.anselmo_adna;
 
-import com.exa863.anselmo_adna.arts.MenuInicialASCII;
-import com.exa863.anselmo_adna.core.console.CEscolha;
-import com.exa863.anselmo_adna.core.console.CMultiplaEscolha;
-import com.exa863.anselmo_adna.core.console.Console;
-import com.exa863.anselmo_adna.game_Contoller.Controller;
-
+import com.exa863.anselmo_adna.controller.GameController;
+import com.exa863.anselmo_adna.view.console.CEscolha;
+import com.exa863.anselmo_adna.view.console.CMultiplaEscolha;
+import com.exa863.anselmo_adna.view.console.Console;
+import com.exa863.anselmo_adna.view.console.art.MenuInicialASCII;
 
 import java.io.IOException;
 
@@ -47,8 +46,9 @@ public class Main {
             throw new RuntimeException(e);
         }
     }
+
     private static void iniciarJogo() throws InterruptedException {
-        Controller game = new Controller();
+        GameController game = new GameController();
         CMultiplaEscolha menuJogo = new CMultiplaEscolha(console);
         boolean rodando = true;
 
@@ -65,7 +65,6 @@ public class Main {
                 CEscolha escolha = menuJogo.escolha(opcoes);
 
                 if (escolha.index == 0) {
-
                     game.getDataDia().avancarMinutos(120); // Avança 2 horas
                 } else if (escolha.index == 1) {
                     game.getDataDia().avancarMinutos(480); // Avança 8 horas

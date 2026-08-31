@@ -1,4 +1,4 @@
-package com.exa863.anselmo_adna.arts;
+package com.exa863.anselmo_adna.view.console.art;
 
 public class MenuInicialASCII {
     public static final String tituloArt = """
@@ -23,6 +23,7 @@ public class MenuInicialASCII {
                                                       By: Anselmo, Adna.        
             
                                                
+            
             
             
             """;
