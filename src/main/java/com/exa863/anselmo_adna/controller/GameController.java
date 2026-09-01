@@ -6,6 +6,7 @@ import com.exa863.anselmo_adna.model.world.EstadoGame;
 import com.exa863.anselmo_adna.model.world.Local;
 
 public class GameController {
+
     private DataDia dataDia;
     private Local[] locais;
     private Local localAtual;
@@ -22,7 +23,7 @@ public class GameController {
 
     private void configurarMundo() {
         this.player = new Player();
-        locais[0] = new Local("Academia de Boxe", "Onde os campeões são moldados.");
+        this.locais[0] = new Local("Academia de Boxe", "Onde os campeões são moldados.");
         this.localAtual = locais[0];
         this.estadoGame = EstadoGame.EXPLORANDO;
     }
@@ -31,4 +32,5 @@ public class GameController {
     public Local getLocalAtual() { return localAtual; }
     public EstadoGame getEstadoGame() { return estadoGame; }
     public Player getPlayer() { return player; }
+    public void setPlayer(Player player) { this.player = player; }
 }
