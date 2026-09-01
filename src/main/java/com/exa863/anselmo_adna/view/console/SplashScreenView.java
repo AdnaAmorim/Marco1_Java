@@ -1,19 +1,19 @@
 package com.exa863.anselmo_adna.view.console;
 
 import com.exa863.anselmo_adna.controller.GameController;
-import com.exa863.anselmo_adna.view.SceneManager;
+import com.exa863.anselmo_adna.controller.SceneController;
 import com.exa863.anselmo_adna.view.View;
 import com.exa863.anselmo_adna.view.console.art.MenuInicialASCII;
 
 public class SplashScreenView implements View {
 
     private final Console console;
-    private final SceneManager sceneManager;
+    private final SceneController sceneController;
     private final GameController gameController;
 
-    public SplashScreenView(Console console, SceneManager sceneManager, GameController gameController) {
+    public SplashScreenView(Console console, SceneController sceneController, GameController gameController) {
         this.console = console;
-        this.sceneManager = sceneManager;
+        this.sceneController = sceneController;
         this.gameController = gameController;
     }
 
@@ -32,7 +32,7 @@ public class SplashScreenView implements View {
             Thread.sleep(2000);
             console.clearConsole();
 
-            sceneManager.trocarCena(new MenuView(console, sceneManager, gameController));
+            sceneController.trocarCena(new MenuView(console, sceneController, gameController));
 
         } catch (InterruptedException e) {
             e.printStackTrace();

@@ -1,13 +1,14 @@
-package com.exa863.anselmo_adna.view;
+package com.exa863.anselmo_adna.controller;
 
+import com.exa863.anselmo_adna.view.View;
 import com.exa863.anselmo_adna.view.console.Console;
 
-public class SceneManager {
+public class SceneController {
 
     private final Console console;
     private View cenaAtual;
 
-    public SceneManager(Console console) {
+    public SceneController(Console console) {
         this.console = console;
     }
 

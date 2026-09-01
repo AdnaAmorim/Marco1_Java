@@ -1,19 +1,19 @@
 package com.exa863.anselmo_adna.view.console;
 
 import com.exa863.anselmo_adna.controller.GameController;
-import com.exa863.anselmo_adna.view.SceneManager;
+import com.exa863.anselmo_adna.controller.SceneController;
 import com.exa863.anselmo_adna.view.View;
 import java.io.IOException;
 
 public class JogoView implements View {
 
     private final Console console;
-    private final SceneManager sceneManager;
+    private final SceneController sceneController;
     private final GameController gameController;
 
-    public JogoView(Console console, SceneManager sceneManager, GameController gameController) {
+    public JogoView(Console console, SceneController sceneController, GameController gameController) {
         this.console = console;
-        this.sceneManager = sceneManager;
+        this.sceneController = sceneController;
         this.gameController = gameController;
     }
 
@@ -34,13 +34,13 @@ public class JogoView implements View {
             switch (escolha.index) {
                 case 0 -> {
                     gameController.getDataDia().avancarMinutos(120);
-                    sceneManager.trocarCena(this);
+                    sceneController.trocarCena(this);
                 }
                 case 1 -> {
                     gameController.getDataDia().avancarMinutos(480);
-                    sceneManager.trocarCena(this);
+                    sceneController.trocarCena(this);
                 }
-                case 2 -> sceneManager.trocarCena(new MenuView(console, sceneManager, gameController));
+                case 2 -> sceneController.trocarCena(new MenuView(console, sceneController, gameController));
             }
         } catch (IOException e) {
             e.printStackTrace();

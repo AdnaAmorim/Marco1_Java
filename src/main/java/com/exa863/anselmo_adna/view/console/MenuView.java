@@ -1,19 +1,19 @@
 package com.exa863.anselmo_adna.view.console;
 
 import com.exa863.anselmo_adna.controller.GameController;
-import com.exa863.anselmo_adna.view.SceneManager;
+import com.exa863.anselmo_adna.controller.SceneController;
 import com.exa863.anselmo_adna.view.View;
 import java.io.IOException;
 
 public class MenuView implements View {
 
     private final Console console;
-    private final SceneManager sceneManager;
+    private final SceneController sceneController;
     private final GameController gameController;
 
-    public MenuView(Console console, SceneManager sceneManager, GameController gameController) {
+    public MenuView(Console console, SceneController sceneController, GameController gameController) {
         this.console = console;
-        this.sceneManager = sceneManager;
+        this.sceneController = sceneController;
         this.gameController = gameController;
     }
 
@@ -31,14 +31,14 @@ public class MenuView implements View {
             CEscolha escolha = menu.escolha(opcoes);
 
             switch (escolha.index) {
-                case 0 -> sceneManager.trocarCena(new JogoView(console, sceneManager, gameController));
+                case 0 -> sceneController.trocarCena(new JogoView(console, sceneController, gameController));
                 case 1 -> {
                     console.printlnConsole("=== TUTORIAL ===");
                     console.printlnConsole("Treine boxe para evoluir os atributos do seu boxeador.");
                     console.printlnConsole("Durma para descansar e recuperar energia.");
                     console.printlnConsole("Pressione Enter para voltar ao menu...");
                     console.getEntrada("");
-                    sceneManager.trocarCena(this);
+                    sceneController.trocarCena(this);
                 }
                 case 2 -> {
                     console.printlnConsole("=== CRÉDITOS ===");
@@ -46,7 +46,7 @@ public class MenuView implements View {
                     console.printlnConsole("Algoritmos em Java - Marco 1");
                     console.printlnConsole("Pressione Enter para voltar ao menu...");
                     console.getEntrada("");
-                    sceneManager.trocarCena(this);
+                    sceneController.trocarCena(this);
                 }
                 case 3 -> {
                     console.printlnConsole("Saindo do jogo... Até mais!");
