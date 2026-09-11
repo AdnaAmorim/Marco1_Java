@@ -19,14 +19,6 @@ public class Player extends Personagem {
         this.inventario = new Inventario();
     }
 
-    public Player() {
-        super(1, "Boxeador", "Jovem promessa do boxe", Cores.CASTANHO, Sexo.MASCULINO);
-        this.dinheiro = 100;
-        this.atributos = new Atributo();
-        this.relacionamentos = new Relacionamentos[10];
-        this.inventario = new Inventario();
-    }
-
     public int getDinheiro() {
         return dinheiro;
     }

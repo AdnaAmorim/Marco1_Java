@@ -11,7 +11,13 @@ public class Relacionamentos {
         this.nivelAmizade = nivelAmizade;
     }
 
-    public Personagem getPersonagem() { return personagem; }
-    public int getNivelAmizade() { return nivelAmizade; }
-    public void setNivelAmizade(int nivelAmizade) { this.nivelAmizade = nivelAmizade; }
+    public Personagem getPersonagem() {
+        return personagem;
+    }
+    public int getNivelAmizade() {
+        return nivelAmizade;
+    }
+    public void setNivelAmizade(int nivelAmizade) {
+        this.nivelAmizade = nivelAmizade;
+    }
 }

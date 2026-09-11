@@ -1,6 +1,7 @@
 package com.exa863.anselmo_adna.model.character;
 
 public class Personagem {
+
     private int id;
     private String nome;
     private String descricao;
@@ -33,5 +34,21 @@ public class Personagem {
 
     public Sexo getSexo() {
         return sexo;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
+    public void setCorOlhos(Cores corOlhos) {
+        this.corOlhos = corOlhos;
+    }
+
+    public void setSexo(Sexo sexo) {
+        this.sexo = sexo;
     }
 }

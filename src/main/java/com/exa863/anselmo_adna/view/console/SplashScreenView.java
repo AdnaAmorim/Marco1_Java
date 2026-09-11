@@ -32,7 +32,14 @@ public class SplashScreenView implements View {
             Thread.sleep(2000);
             console.clearConsole();
 
-            sceneController.trocarCena(new MenuView(console, sceneController, gameController));
+            // ALTERAÇÃO: Ao terminar a logo, vai pro Menu!
+            sceneController.trocarCena(
+                    new MenuView(
+                            console,
+                            sceneController,
+                            gameController
+                    )
+            );
 
         } catch (InterruptedException e) {
             e.printStackTrace();

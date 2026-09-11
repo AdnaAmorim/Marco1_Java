@@ -15,3 +15,4 @@ public class Main {
         sceneController.trocarCena(new SplashScreenView(console, sceneController, gameController));
     }
 }
+
