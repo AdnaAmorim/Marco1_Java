@@ -65,6 +65,14 @@ public class Console {
         return terminal;
     }
 
+    public int getLargura() {
+        return terminal.getWidth();
+    }
+
+    public int getAltura() {
+        return terminal.getHeight();
+    }
+
     // Métodos utilitários
 
     private String getEntradaString() {
@@ -81,9 +89,22 @@ public class Console {
         }
     }
 
+    public boolean enterPressionado() {
+        try {
+            if (terminal.reader().ready()) {
+                while (terminal.reader().ready()) {
+                    terminal.reader().read();
+                }
+                return true;
+            }
+        } catch (Exception ignored) {
+        }
+        return false;
+    }
+
     public void clearConsole() {
-        printConsole(espacamento);
         terminal.puts(InfoCmp.Capability.clear_screen);
-        terminal.flush();
+        terminal.writer().print("\033[H\033[2J\033[3J");
+        terminal.writer().flush();
     }
 }
