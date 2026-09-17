@@ -5,12 +5,12 @@ import org.jline.terminal.TerminalBuilder;
 import org.jline.utils.InfoCmp;
 
 import java.io.IOException;
-import java.util.Scanner;
+
 
 public class Console {
 
     private final Terminal terminal;
-    private final Scanner scanner;
+    private final java.io.BufferedReader reader;
 
     private static final int espacamentoPadrao = 4;
     public static String espacamento = " ".repeat(espacamentoPadrao);
@@ -21,7 +21,7 @@ public class Console {
                     .system(true)
                     .build();
 
-            this.scanner = new Scanner(terminal.reader());
+            this.reader = new java.io.BufferedReader(terminal.reader());
 
         } catch (IOException e) {
             throw new IllegalStateException(
@@ -76,7 +76,11 @@ public class Console {
     // Métodos utilitários
 
     private String getEntradaString() {
-        return scanner.nextLine();
+        try {
+            return reader.readLine();
+        } catch (IOException e) {
+            return "";
+        }
     }
 
     private Integer getEntradaInt() {
@@ -102,9 +106,83 @@ public class Console {
         return false;
     }
 
+    public void esperarEnter(String mensagem) {
+        printConsole(mensagem);
+        while (!enterPressionado()) {
+            try { Thread.sleep(50); } catch (Exception e) {}
+        }
+        printConsole("\r" + " ".repeat(mensagem.length() + 10) + "\r");
+    }
+
     public void clearConsole() {
         terminal.puts(InfoCmp.Capability.clear_screen);
         terminal.writer().print("\033[H\033[2J\033[3J");
         terminal.writer().flush();
+    }
+
+    public void animarFramesTempo(String[] frames, long duracaoMs, long intervaloMs) {
+        setCursorInvisivel();
+        long endTime = System.currentTimeMillis() + duracaoMs;
+        int frameIndex = 0;
+        int maxLen = 0;
+        for (String f : frames) {
+            if (f != null && f.length() > maxLen) {
+                maxLen = f.length();
+            }
+        }
+
+        while (System.currentTimeMillis() < endTime) {
+            String frame = frames[frameIndex];
+            int pad = maxLen - (frame != null ? frame.length() : 0);
+            printConsole("\r" + frame + (pad > 0 ? " ".repeat(pad) : ""));
+            frameIndex = (frameIndex + 1) % frames.length;
+            try { Thread.sleep(intervaloMs); } catch (InterruptedException ignored) {}
+        }
+        setCursorVisivel();
+    }
+
+    public void animarFramesAteEnter(String[] frames, long intervaloMs, String sufixo) {
+        setCursorInvisivel();
+        enterPressionado();
+        int frameIndex = 0;
+        int maxLen = 0;
+        for (String f : frames) {
+            if (f != null && f.length() > maxLen) {
+                maxLen = f.length();
+            }
+        }
+
+        while (!enterPressionado()) {
+            String frame = frames[frameIndex];
+            int pad = maxLen - (frame != null ? frame.length() : 0);
+            printConsole("\r" + frame + (pad > 0 ? " ".repeat(pad) : "") + sufixo);
+            frameIndex = (frameIndex + 1) % frames.length;
+            try { Thread.sleep(intervaloMs); } catch (InterruptedException ignored) {}
+        }
+        setCursorVisivel();
+    }
+
+    public void animarTextoSequencial(String[] blocos, long intervaloLetraMs, long intervaloBlocoMs) {
+        for (String bloco : blocos) {
+            for (char ch : bloco.toCharArray()) {
+                printConsole(String.valueOf(ch));
+                try { Thread.sleep(intervaloLetraMs); } catch (Exception e) {}
+            }
+            try { Thread.sleep(intervaloBlocoMs); } catch (Exception e) {}
+        }
+    }
+
+    public void printDigitado(String texto, long delayMs) {
+        for (char c : texto.toCharArray()) {
+            printConsole(String.valueOf(c));
+            try {
+                Thread.sleep(delayMs);
+            } catch (InterruptedException ignored) {}
+        }
+        printlnConsole("");
+    }
+
+    public void printDigitado(String texto) {
+        printDigitado(texto, 20);
     }
 }

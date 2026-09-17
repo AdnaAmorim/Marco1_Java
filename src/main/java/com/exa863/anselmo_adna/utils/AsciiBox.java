@@ -73,25 +73,24 @@ public class AsciiBox {
 	}
 
 	private String centerString(String string) {
-		
 		int stringLenght = AttributedString.fromAnsi(string).length();
 		
-		int calc = ((this.size - stringLenght)/2) - 1;
+		int diff = this.size - 2 - stringLenght;
+		if (diff < 0) diff = 0;
 		
-		String space = Strings.repeat(this.inside, calc);
+		int calc = diff / 2;
 		
-		String leftSpace = space;
-		String rightSpace = space;
+		String leftSpace = Strings.repeat(this.inside, calc);
+		String rightSpace = Strings.repeat(this.inside, diff - calc);
+		
+		if (this.fix && (diff % 2 != 0)) {
+			// Inverte os espaços extras caso a flag fix seja verdadeira
+			String temp = leftSpace;
+			leftSpace = rightSpace;
+			rightSpace = temp;
+		}
 		
 		String horizontalBorder = this.borders.length == 2 ? this.borders[1] : this.borders[0]; 
-		
-		if((stringLenght % 2) != 0) {
-			if (this.fix) {
-				leftSpace += Strings.repeat(this.inside, 1);
-			} else {
-				rightSpace += Strings.repeat(this.inside, 1);
-			}
-		}
 		
 		return horizontalBorder + leftSpace + string + rightSpace + horizontalBorder;
 	}
