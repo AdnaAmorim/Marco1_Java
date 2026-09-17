@@ -31,7 +31,7 @@ public class MenuView implements View {
             CEscolha escolha = menu.escolha(opcoes);
 
             switch (escolha.index) {
-                case 0 -> sceneController.trocarCena(new JogoView(console, sceneController, gameController));
+                case 0 -> sceneController.trocarCena(new CriacaoPersonagemView(console, sceneController, gameController));
                 case 1 -> {
                     console.printlnConsole("=== TUTORIAL ===");
                     console.printlnConsole("Treine boxe para evoluir os atributos do seu boxeador.");

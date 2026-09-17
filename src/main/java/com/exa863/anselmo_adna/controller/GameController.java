@@ -23,7 +23,7 @@ public class GameController {
         this.sceneController = sceneController;
         this.dataDia = new DataDia();
         this.estadoGame = EstadoGame.INICIANDO;
-        this.locais = new Local[10];
+        this.locais = new Local[5];
 
         configurarMundo();
     }
@@ -34,15 +34,54 @@ public class GameController {
     }
 
     private void configurarMundo() {
-        this.player = new Player();
-        this.locais[0] = new Local("Academia de Boxe", "Onde os campeões são moldados.");
+
+        this.locais[0] = new Local(
+                "Academia",
+                "Voce ficarar mais forte"
+        );
+
+        this.locais[1] = new Local(
+                "casa",
+                "Seu lugar de descanso"
+        );
+
+        this.locais[2] = new Local(
+                "Academia de Boxe",
+                "Voce farar grandes lutas ou nao"
+        );
+
+        this.locais[3] = new Local(
+                "Cidade A",
+                "Cidade rica"
+        );
+
+        this.locais[4] = new Local(
+                "Cidade B",
+                "Cidade mais pobre"
+        );
+
         this.localAtual = locais[0];
+
         this.estadoGame = EstadoGame.EXPLORANDO;
     }
 
-    public DataDia getDataDia() { return dataDia; }
-    public Local getLocalAtual() { return localAtual; }
-    public EstadoGame getEstadoGame() { return estadoGame; }
-    public Player getPlayer() { return player; }
-    public void setPlayer(Player player) { this.player = player; }
+    public DataDia getDataDia() {
+        return dataDia;
+    }
+
+    public Local getLocalAtual() {
+        return localAtual;
+    }
+
+    public EstadoGame getEstadoGame() {
+        return estadoGame;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
 }

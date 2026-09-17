@@ -19,6 +19,7 @@ public class DataDia {
     }
 
     public String getHoraFormatada() {
+
         return String.format("%02d:%02d", horas, minutos);
     }
 
@@ -26,7 +27,13 @@ public class DataDia {
         return "Dia " + dias;
     }
 
-    public int getDias() { return dias; }
-    public int getHoras() { return horas; }
-    public int getMinutos() { return minutos; }
+    public int getDias() {
+        return dias;
+    }
+    public int getHoras() {
+        return horas;
+    }
+    public int getMinutos() {
+        return minutos;
+    }
 }
