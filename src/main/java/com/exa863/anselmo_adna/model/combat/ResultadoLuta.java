@@ -1,22 +1,25 @@
 package com.exa863.anselmo_adna.model.combat;
 
 import com.exa863.anselmo_adna.model.character.Personagem;
+import com.exa863.anselmo_adna.model.combat.EstiloLuta;
+import com.exa863.anselmo_adna.model.stats.Atributo;
 
 public class ResultadoLuta {
-    private final Personagem lutador1;
-    private final Personagem lutador2;
-    private final Personagem vencedor;   // null em caso de empate
-    private final Personagem perdedor;   // null em caso de empate
+    private final Lutador lutador1;
+    private final Lutador lutador2;
+    private final Lutador vencedor;   // null em caso de empate
+    private final Lutador perdedor;   // null em caso de empate
     private final TipoVitoria tipoVitoria;
     private final double scoreLutador1;
     private final double scoreLutador2;
     private final double saldoFinal;
     private final String descricao;
+    private final int turnos;
 
-    public ResultadoLuta(Personagem lutador1, Personagem lutador2,
-                         Personagem vencedor, Personagem perdedor,
+    public ResultadoLuta(Lutador lutador1, Lutador lutador2,
+                         Lutador vencedor, Lutador perdedor,
                          TipoVitoria tipoVitoria, double scoreLutador1,
-                         double scoreLutador2, double saldoFinal, String descricao) {
+                         double scoreLutador2, double saldoFinal, String descricao, int turnos) {
         this.lutador1 = lutador1;
         this.lutador2 = lutador2;
         this.vencedor = vencedor;
@@ -26,29 +29,31 @@ public class ResultadoLuta {
         this.scoreLutador2 = scoreLutador2;
         this.saldoFinal = saldoFinal;
         this.descricao = descricao;
+        this.turnos = turnos;
+        
     }
 
     public boolean isEmpate() {
         return vencedor == null;
     }
 
-    public boolean isVencedor(Personagem personagem) {
-        return vencedor != null && vencedor.equals(personagem);
+    public boolean isVencedor(Lutador lutador) {
+        return vencedor != null && vencedor.equals(lutador);
     }
 
-    public Personagem getLutador1() {
+    public Lutador getLutador1() {
         return lutador1;
     }
 
-    public Personagem getLutador2() {
+    public Lutador getLutador2() {
         return lutador2;
     }
 
-    public Personagem getVencedor() {
+    public Lutador getVencedor() {
         return vencedor;
     }
 
-    public Personagem getPerdedor() {
+    public Lutador getPerdedor() {
         return perdedor;
     }
 
@@ -70,6 +75,10 @@ public class ResultadoLuta {
 
     public String getDescricao() {
         return descricao;
+    }
+
+    public int getTurnos() {
+        return turnos;
     }
 
     @Override
