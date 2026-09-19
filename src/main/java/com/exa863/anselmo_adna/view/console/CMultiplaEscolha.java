@@ -40,6 +40,8 @@ public class CMultiplaEscolha {
             );
         }
 
+        console.limparBufferTeclado();
+
         Attributes atributosOriginais = terminal.enterRawMode();
 
         console.setCursorInvisivel();

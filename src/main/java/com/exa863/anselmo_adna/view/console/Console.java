@@ -93,6 +93,15 @@ public class Console {
         }
     }
 
+    public void limparBufferTeclado() {
+        try {
+            while (terminal.reader().ready()) {
+                terminal.reader().read();
+            }
+        } catch (Exception ignored) {
+        }
+    }
+
     public boolean enterPressionado() {
         try {
             if (terminal.reader().ready()) {
@@ -107,6 +116,7 @@ public class Console {
     }
 
     public void esperarEnter(String mensagem) {
+        limparBufferTeclado();
         printConsole(mensagem);
         while (!enterPressionado()) {
             try { Thread.sleep(50); } catch (Exception e) {}
