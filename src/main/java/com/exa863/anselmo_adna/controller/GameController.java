@@ -65,7 +65,7 @@ public class GameController {
 
         Local cidadeA = new Local(
                 "Cidade A",
-                "Uma cidade rica e movimentada."
+                "Uma cidade mais pobre."
         );
         cidadeA.setCustoAcesso(400);
 
@@ -85,7 +85,7 @@ public class GameController {
 
         Local cidadeB = new Local(
                 "Cidade B",
-                "Uma cidade mais pobre."
+                "Uma cidade rica e movimentada."
         );
         cidadeB.setCustoAcesso(1000);
 
