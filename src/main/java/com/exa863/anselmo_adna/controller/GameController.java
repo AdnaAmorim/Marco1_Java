@@ -4,100 +4,66 @@ import com.exa863.anselmo_adna.model.character.Player;
 import com.exa863.anselmo_adna.model.world.DataDia;
 import com.exa863.anselmo_adna.model.world.EstadoGame;
 import com.exa863.anselmo_adna.model.world.Local;
+import com.exa863.anselmo_adna.model.narrativa.Capitulo;
+import com.exa863.anselmo_adna.model.narrativa.GrafoCapitulos;
+import com.exa863.anselmo_adna.model.narrativa.capitulos.*;
+
+import java.util.List;
 
 public class GameController {
 
     private DataDia dataDia;
-
     private Local mapaGlobal;
     private Local localAtual;
-
     private EstadoGame estadoGame;
     private Player player;
 
-    public GameController() {
+    // Controlador que eh responsável pela gestão da história
+    private NarrativaController narrativaController;
 
+    public GameController() {
         this.dataDia = new DataDia();
         this.estadoGame = EstadoGame.INICIANDO;
 
+        configurarNarrativa();
         configurarMundo();
+    }
+
+    private void configurarNarrativa() {
+        // Carrega todos os capítulos respeitando as dependências do Grafo
+        List<Capitulo> listaCapitulos = List.of(
+                new Capitulo01(), new Capitulo02(), new Capitulo03(),
+                new Capitulo04(), new Capitulo05(), new Capitulo06(),
+                new Capitulo07(), new Capitulo08(), new Capitulo09(),
+                new Capitulo10()
+        );
+
+        GrafoCapitulos grafo = new GrafoCapitulos(listaCapitulos);
+        this.narrativaController = new NarrativaController(grafo);
     }
 
     private void configurarMundo() {
 
-
         // MAPA GLOBAL
-
-        mapaGlobal = new Local(
-                "Mapa Global",
-                "Mapa principal do mundo."
-        );
-
-
+        mapaGlobal = new Local("Mapa Global", "Mapa principal do mundo.");
 
         // CIDADE NATAL
-
-        Local cidadeNatal = new Local(
-                "Cidade Natal",
-                "A cidade onde sua história começa."
-        );
-
-
-        Local academia = new Local(
-                "Academia",
-                "Lugar onde você pode treinar e evoluir."
-        );
-
-        Local casa = new Local(
-                "Casa",
-                "Seu lugar de descanso."
-        );
-
-        Local academiaBoxe = new Local(
-                "Academia de Boxe",
-                "Lugar onde acontecem grandes lutas."
-        );
-
-
+        Local cidadeNatal = new Local("Cidade Natal", "A cidade onde sua história começa.");
+        Local academia = new Local("Academia", "Lugar onde você pode treinar e evoluir.");
+        Local casa = new Local("Casa", "Seu lugar de descanso.");
+        Local academiaBoxe = new Local("Academia de Boxe", "Lugar onde acontecem grandes lutas.");
 
         // CIDADE A
-
-
-        Local cidadeA = new Local(
-                "Cidade A",
-                "Uma cidade mais pobre."
-        );
+        Local cidadeA = new Local("Cidade A", "Uma cidade mais pobre.");
         cidadeA.setCustoAcesso(400);
-
-        Local loja = new Local(
-                "Loja",
-                "Uma loja onde você pode comprar itens."
-        );
-
-        Local academiaProfissional = new Local(
-                "Academia Profissional",
-                "Uma academia para lutadores profissionais."
-        );
-
-
+        Local loja = new Local("Loja", "Uma loja onde você pode comprar itens.");
+        Local academiaProfissional = new Local("Academia Profissional", "Uma academia para lutadores profissionais.");
 
         // CIDADE B
-
-        Local cidadeB = new Local(
-                "Cidade B",
-                "Uma cidade rica e movimentada."
-        );
+        Local cidadeB = new Local("Cidade B", "Uma cidade rica e movimentada.");
         cidadeB.setCustoAcesso(1000);
-
-        Local campeonatoMundial = new Local(
-                "Campeonato Mundial",
-                "O maior campeonato de boxe do mundo."
-        );
-
-        Local abrirAcademia = new Local(
-                "Abrir uma Academia",
-                "Construa sua própria academia."
-        );
+        Local campeonatoMundial = new Local("Campeonato Mundial", "O maior campeonato de boxe do mundo.");
+        Local abrirAcademia = new Local("Abrir uma Academia", "Construa sua própria academia.");
 
         cidadeNatal.adicionarSubLocal(academia);
         cidadeNatal.adicionarSubLocal(casa);
@@ -154,28 +120,25 @@ public class GameController {
         this.player = player;
     }
 
-    public void entrarLocal(Local local) {
+    public NarrativaController getNarrativaController() {
+        return narrativaController;
+    }
 
+    public void entrarLocal(Local local) {
         if (local == null) {
             return;
         }
 
         if (local.isLocalDeSaida()) {
-
             voltarLocal();
-
         } else {
-
             localAtual = local;
         }
     }
 
-    //Volta para o local pai.
-
+    // Volta para o local pai.
     public void voltarLocal() {
-
         if (localAtual.getLocalPai() != null) {
-
             localAtual = localAtual.getLocalPai();
         }
     }
