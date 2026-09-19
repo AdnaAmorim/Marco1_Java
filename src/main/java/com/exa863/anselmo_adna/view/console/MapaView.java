@@ -64,6 +64,8 @@ public class MapaView implements View {
 
             if (nomeDoLocal.equals("Casa")) {
                 sceneController.trocarCena(new JogoView(console, sceneController, gameController));
+            } else if (nomeDoLocal.equals("Loja")) { 
+                sceneController.trocarCena(new LojaView(console, sceneController, gameController));
             } else {
                 sceneController.trocarCena(new MapaView(console, sceneController, gameController));
             }
