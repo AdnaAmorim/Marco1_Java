@@ -64,7 +64,7 @@ public class MapaView implements View {
 
             if (nomeDoLocal.equals("Casa")) {
                 sceneController.trocarCena(new JogoView(console, sceneController, gameController));
-            } else if (nomeDoLocal.equals("Loja")) { 
+            } else if (nomeDoLocal.equals("Loja")) {
                 sceneController.trocarCena(new LojaView(console, sceneController, gameController));
             } else {
                 sceneController.trocarCena(new MapaView(console, sceneController, gameController));
@@ -79,7 +79,7 @@ public class MapaView implements View {
     private boolean podeAcessar(Local local) throws IOException {
         int custo = local.getCustoAcesso();
 
-        if (custo <= 0 || local.isLocalDeSaida()) {
+        if (custo <= 0 || local.isLocalDeSaida() || local.isAcessoLiberado()) {
             return true;
         }
 
@@ -112,6 +112,7 @@ public class MapaView implements View {
         }
 
         player.setDinheiro(dinheiro - custo);
+        local.setAcessoLiberado(true);
         return true;
     }
 }
