@@ -7,14 +7,11 @@ public class Local {
 
     private String nome;
     private String descricao;
-
     private Local localPai;
-
     private List<Local> subLocais;
-
     private boolean localDeSaida;
-
     private int custoAcesso;
+    private boolean acessoLiberado;
 
     public Local(String nome, String descricao) {
         this.nome = nome;
@@ -22,6 +19,7 @@ public class Local {
         this.subLocais = new ArrayList<>();
         this.localDeSaida = false;
         this.custoAcesso = 0;
+        this.acessoLiberado = false;
     }
 
     public String getNome() {
@@ -50,12 +48,18 @@ public class Local {
     public boolean isLocalDeSaida() {
         return localDeSaida;
     }
+    public boolean isAcessoLiberado() {
+        return acessoLiberado;
+    }
 
     public void adicionarSubLocal(Local local) {
 
         local.localPai = this;
 
         subLocais.add(local);
+    }
+    public void setAcessoLiberado(boolean acessoLiberado) {
+        this.acessoLiberado = acessoLiberado;
     }
 
     public void adicionarSaida() {
