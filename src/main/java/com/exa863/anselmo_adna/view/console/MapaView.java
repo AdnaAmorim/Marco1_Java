@@ -2,12 +2,16 @@ package com.exa863.anselmo_adna.view.console;
 
 import com.exa863.anselmo_adna.controller.GameController;
 import com.exa863.anselmo_adna.controller.SceneController;
+import com.exa863.anselmo_adna.controller.cenas.CutsceneController;
 import com.exa863.anselmo_adna.model.character.Player;
+import com.exa863.anselmo_adna.model.narrativa.Capitulo;
+import com.exa863.anselmo_adna.model.narrativa.TipoGatilho;
 import com.exa863.anselmo_adna.model.world.Local;
 import com.exa863.anselmo_adna.view.View;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 public class MapaView implements View {
 
@@ -59,9 +63,33 @@ public class MapaView implements View {
             }
 
             gameController.entrarLocal(localEscolhido);
-
             String nomeDoLocal = localEscolhido.getNome();
 
+            // 1. verificacao de gatilhos da historia
+            Optional<Capitulo> capituloDisponivel = gameController.getNarrativaController()
+                    .obterCapituloDisponivel(
+                            TipoGatilho.ENTRAR_LOCAL,
+                            nomeDoLocal,
+                            gameController.getPlayer()
+                    );
+
+            // 2. se tem historia para esse local, aplica cutscene
+            if (capituloDisponivel.isPresent()) {
+                CutsceneController cc = new CutsceneController(
+                        capituloDisponivel.get(),
+                        gameController.getPlayer()
+                );
+
+                // define para onde o jogo vai depois de acabar a cena
+                View proximaCena = nomeDoLocal.equals("Casa") ?
+                        new JogoView(console, sceneController, gameController) :
+                        new MapaView(console, sceneController, gameController);
+
+                sceneController.trocarCena(new CutsceneView(console, sceneController, cc, proximaCena));
+                return;
+            }
+
+            // 3.fluxo normal (se nao tiver mais cutscine)
             if (nomeDoLocal.equals("Casa")) {
                 sceneController.trocarCena(new JogoView(console, sceneController, gameController));
             } else if (nomeDoLocal.equals("Loja")) {
