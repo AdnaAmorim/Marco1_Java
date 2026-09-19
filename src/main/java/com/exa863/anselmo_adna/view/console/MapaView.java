@@ -40,7 +40,7 @@ public class MapaView implements View {
             Local local = subLocais.get(i);
             String rotulo = local.getNome();
 
-            if (local.getCustoAcesso() > 0) {
+            if (local.getCustoAcesso() > 0 && !local.isAcessoLiberado()) {
                 rotulo += " (Entrada: " + local.getCustoAcesso() + " reais)";
             }
 
@@ -75,7 +75,6 @@ public class MapaView implements View {
         }
     }
 
-    // Verifica se o jogador pode pagar a entrada do local
     private boolean podeAcessar(Local local) throws IOException {
         int custo = local.getCustoAcesso();
 
