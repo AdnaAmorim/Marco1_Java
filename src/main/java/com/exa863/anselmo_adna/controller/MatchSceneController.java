@@ -6,7 +6,7 @@ import com.exa863.anselmo_adna.view.console.Console;
 import com.exa863.anselmo_adna.view.console.MatchView;
 
 public class MatchSceneController {
-    
+
     private final MatchController matchController;
     private final SceneController sceneController;
     private final GameController gameController;

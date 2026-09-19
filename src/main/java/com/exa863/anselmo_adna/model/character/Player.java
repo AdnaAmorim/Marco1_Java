@@ -18,7 +18,7 @@ public class Player extends Personagem {
 
     public Player(int id, String nome, String descricao, Cores corOlhos, Sexo sexo) {
         super(id, nome, descricao, corOlhos, sexo);
-        this.dinheiro = 100;
+        this.dinheiro = 0;
         this.atributos = new Atributo();
         this.relacionamentos = new Relacionamentos[10];
         this.inventario = new Inventario();

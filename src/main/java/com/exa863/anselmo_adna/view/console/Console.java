@@ -4,13 +4,13 @@ import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
 import org.jline.utils.InfoCmp;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-
 
 public class Console {
 
     private final Terminal terminal;
-    private final java.io.BufferedReader reader;
+    private final BufferedReader reader;
 
     private static final int espacamentoPadrao = 4;
     public static String espacamento = " ".repeat(espacamentoPadrao);
@@ -21,7 +21,7 @@ public class Console {
                     .system(true)
                     .build();
 
-            this.reader = new java.io.BufferedReader(terminal.reader());
+            this.reader = new BufferedReader(terminal.reader());
 
         } catch (IOException e) {
             throw new IllegalStateException(
@@ -125,6 +125,7 @@ public class Console {
     }
 
     public void clearConsole() {
+        printConsole(espacamento);
         terminal.puts(InfoCmp.Capability.clear_screen);
         terminal.writer().print("\033[H\033[2J\033[3J");
         terminal.writer().flush();
@@ -135,6 +136,7 @@ public class Console {
         long endTime = System.currentTimeMillis() + duracaoMs;
         int frameIndex = 0;
         int maxLen = 0;
+
         for (String f : frames) {
             if (f != null && f.length() > maxLen) {
                 maxLen = f.length();
@@ -153,9 +155,10 @@ public class Console {
 
     public void animarFramesAteEnter(String[] frames, long intervaloMs, String sufixo) {
         setCursorInvisivel();
-        enterPressionado();
+        enterPressionado(); // Limpa o buffer antes de começar
         int frameIndex = 0;
         int maxLen = 0;
+
         for (String f : frames) {
             if (f != null && f.length() > maxLen) {
                 maxLen = f.length();

@@ -18,7 +18,7 @@ public class MatchView implements View {
     private final Lutador lutador2;
 
     public MatchView(Console console, SceneController sceneController, GameController gameController, Match match,
-            Lutador lutador1, Lutador lutador2) {
+                     Lutador lutador1, Lutador lutador2) {
         this.console = console;
         this.sceneController = sceneController;
         this.gameController = gameController;
@@ -109,21 +109,21 @@ public class MatchView implements View {
         String linhaAttrs = String.format("%-37s %37s", attr1, attr2);
 
         String[] content = {
-            titulo,
-            "",
-            linhaNomes,
-            linhaEstilos,
-            linhaHp,
-            linhaSt,
-            "",
-            linhaAttrs
+                titulo,
+                "",
+                linhaNomes,
+                linhaEstilos,
+                linhaHp,
+                linhaSt,
+                "",
+                linhaAttrs
         };
 
         String box = new com.exa863.anselmo_adna.utils.AsciiBox()
-            .size(79)
-            .borders("─", "│")
-            .corners("╭", "╮", "╰", "╯")
-            .render(content);
+                .size(79)
+                .borders("─", "│")
+                .corners("╭", "╮", "╰", "╯")
+                .render(content);
 
         console.printlnConsole(box + "\n");
     }
@@ -141,30 +141,30 @@ public class MatchView implements View {
 
     private void anunciarRound(Round round) {
         imprimirApresentacaoHUD();
-        
+
         int numeroRound = round.getNumero();
         if (numeroRound == 1) {
             apresentarLuta();
         } else {
             console.printDigitado("\n[Gongo soa] Preparem-se para o Round " + numeroRound + "!\n");
         }
-        
+
         console.esperarEnter("\n[Pressione ENTER para continuar]");
-        
+
         animarContagem();
-        
+
         console.clearConsole();
         imprimirHUD(round);
     }
 
     private void imprimirApresentacaoHUD() {
         String titulo = "GRANDE COMBATE";
-        
+
         String n1 = lutador1.getNome();
         if (n1.length() > 37) n1 = n1.substring(0, 37);
         String e1 = "[" + lutador1.getEstiloLuta().getNome() + "]";
         if (e1.length() > 37) e1 = e1.substring(0, 37);
-        
+
         String n2 = lutador2.getNome();
         if (n2.length() > 37) n2 = n2.substring(0, 37);
         String e2 = "[" + lutador2.getEstiloLuta().getNome() + "]";
@@ -172,11 +172,11 @@ public class MatchView implements View {
 
         String linhaNomes = String.format("%-37s %37s", n1, n2);
         String linhaEstilos = String.format("%-37s %37s", e1, e2);
-        
+
         double f1 = lutador1.getAtributosEfetivos().forca;
         double a1 = lutador1.getAtributosEfetivos().agilidade;
         double r1 = lutador1.getAtributosEfetivos().resistencia;
-        
+
         double f2 = lutador2.getAtributosEfetivos().forca;
         double a2 = lutador2.getAtributosEfetivos().agilidade;
         double r2 = lutador2.getAtributosEfetivos().resistencia;
@@ -186,19 +186,19 @@ public class MatchView implements View {
         String linhaAttrs = String.format("%-37s %37s", attr1, attr2);
 
         String[] content = {
-            titulo,
-            "",
-            linhaNomes,
-            linhaEstilos,
-            "",
-            linhaAttrs
+                titulo,
+                "",
+                linhaNomes,
+                linhaEstilos,
+                "",
+                linhaAttrs
         };
 
         String box = new com.exa863.anselmo_adna.utils.AsciiBox()
-            .size(79)
-            .borders("─", "│")
-            .corners("╭", "╮", "╰", "╯")
-            .render(content);
+                .size(79)
+                .borders("─", "│")
+                .corners("╭", "╮", "╰", "╯")
+                .render(content);
 
         console.printlnConsole(box + "\n");
     }
@@ -210,18 +210,18 @@ public class MatchView implements View {
 
         console.printDigitado("\nSENHORAS E SENHORES! Boa noite!\n");
         try { Thread.sleep(800); } catch (Exception e) {}
-        
+
         console.printDigitado("Na noite de hoje, " + dataHj + ", presenciaremos um combate histórico!\n");
         try { Thread.sleep(800); } catch (Exception e) {}
-        
+
         console.printDigitado("Entrando pelo córner esquerdo, um mestre implacável do " + lutador1.getEstiloLuta().getNome() + "...");
         console.printDigitado("O temível " + lutador1.getNome().toUpperCase() + "!\n");
         try { Thread.sleep(800); } catch (Exception e) {}
-        
+
         console.printDigitado("E pelo córner direito, com muita determinação e técnica no " + lutador2.getEstiloLuta().getNome() + "...");
         console.printDigitado("O formidável " + lutador2.getNome().toUpperCase() + "!\n");
         try { Thread.sleep(800); } catch (Exception e) {}
-        
+
         console.printDigitado("A luta vai começar...\n");
         try { Thread.sleep(800); } catch (Exception e) {}
     }

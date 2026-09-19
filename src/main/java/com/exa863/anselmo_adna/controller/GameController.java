@@ -4,65 +4,130 @@ import com.exa863.anselmo_adna.model.character.Player;
 import com.exa863.anselmo_adna.model.world.DataDia;
 import com.exa863.anselmo_adna.model.world.EstadoGame;
 import com.exa863.anselmo_adna.model.world.Local;
-import com.exa863.anselmo_adna.controller.cenas.SplashScreenController;
-import com.exa863.anselmo_adna.view.console.Console;
-import com.exa863.anselmo_adna.view.console.SplashScreenView;
 
 public class GameController {
 
     private DataDia dataDia;
-    private Local[] locais;
+
+    private Local mapaGlobal;
     private Local localAtual;
+
     private EstadoGame estadoGame;
     private Player player;
-    private Console console;
-    private SceneController sceneController;
 
-    public GameController(Console console, SceneController sceneController) {
-        this.console = console;
-        this.sceneController = sceneController;
+    public GameController() {
+
         this.dataDia = new DataDia();
         this.estadoGame = EstadoGame.INICIANDO;
-        this.locais = new Local[5];
 
         configurarMundo();
     }
 
-    public void startGame() {
-        SplashScreenController splashController = new SplashScreenController();
-        sceneController.trocarCena(new SplashScreenView(console, sceneController, this, splashController));
-    }
-
     private void configurarMundo() {
 
-        this.locais[0] = new Local(
+
+        // MAPA GLOBAL
+
+        mapaGlobal = new Local(
+                "Mapa Global",
+                "Mapa principal do mundo."
+        );
+
+
+
+        // CIDADE NATAL
+
+        Local cidadeNatal = new Local(
+                "Cidade Natal",
+                "A cidade onde sua história começa."
+        );
+
+
+        Local academia = new Local(
                 "Academia",
-                "Voce ficarar mais forte"
+                "Lugar onde você pode treinar e evoluir."
         );
 
-        this.locais[1] = new Local(
-                "casa",
-                "Seu lugar de descanso"
+        Local casa = new Local(
+                "Casa",
+                "Seu lugar de descanso."
         );
 
-        this.locais[2] = new Local(
+        Local academiaBoxe = new Local(
                 "Academia de Boxe",
-                "Voce farar grandes lutas ou nao"
+                "Lugar onde acontecem grandes lutas."
         );
 
-        this.locais[3] = new Local(
+
+
+        // CIDADE A
+
+
+        Local cidadeA = new Local(
                 "Cidade A",
-                "Cidade rica"
+                "Uma cidade mais pobre."
+        );
+        cidadeA.setCustoAcesso(400);
+
+        Local loja = new Local(
+                "Loja",
+                "Uma loja onde você pode comprar itens."
         );
 
-        this.locais[4] = new Local(
+        Local academiaProfissional = new Local(
+                "Academia Profissional",
+                "Uma academia para lutadores profissionais."
+        );
+
+
+
+        // CIDADE B
+
+        Local cidadeB = new Local(
                 "Cidade B",
-                "Cidade mais pobre"
+                "Uma cidade rica e movimentada."
+        );
+        cidadeB.setCustoAcesso(1000);
+
+        Local campeonatoMundial = new Local(
+                "Campeonato Mundial",
+                "O maior campeonato de boxe do mundo."
         );
 
-        this.localAtual = locais[0];
+        Local abrirAcademia = new Local(
+                "Abrir uma Academia",
+                "Construa sua própria academia."
+        );
 
-        this.estadoGame = EstadoGame.EXPLORANDO;
+        cidadeNatal.adicionarSubLocal(academia);
+        cidadeNatal.adicionarSubLocal(casa);
+        cidadeNatal.adicionarSubLocal(academiaBoxe);
+        cidadeNatal.adicionarSubLocal(cidadeA);
+        cidadeNatal.adicionarSubLocal(cidadeB);
+        cidadeNatal.adicionarSaida();
+
+        academia.adicionarSaida();
+        casa.adicionarSaida();
+        academiaBoxe.adicionarSaida();
+
+        cidadeA.adicionarSubLocal(loja);
+        cidadeA.adicionarSubLocal(academiaProfissional);
+        cidadeA.adicionarSaida();
+
+        loja.adicionarSaida();
+        academiaProfissional.adicionarSaida();
+
+        cidadeB.adicionarSubLocal(campeonatoMundial);
+        cidadeB.adicionarSubLocal(abrirAcademia);
+        cidadeB.adicionarSaida();
+
+        campeonatoMundial.adicionarSaida();
+        abrirAcademia.adicionarSaida();
+
+        mapaGlobal.adicionarSubLocal(cidadeNatal);
+
+        localAtual = cidadeNatal;
+        estadoGame = EstadoGame.EXPLORANDO;
     }
 
     public DataDia getDataDia() {
@@ -71,6 +136,10 @@ public class GameController {
 
     public Local getLocalAtual() {
         return localAtual;
+    }
+
+    public Local getMapaGlobal() {
+        return mapaGlobal;
     }
 
     public EstadoGame getEstadoGame() {
@@ -83,5 +152,31 @@ public class GameController {
 
     public void setPlayer(Player player) {
         this.player = player;
+    }
+
+    public void entrarLocal(Local local) {
+
+        if (local == null) {
+            return;
+        }
+
+        if (local.isLocalDeSaida()) {
+
+            voltarLocal();
+
+        } else {
+
+            localAtual = local;
+        }
+    }
+
+    //Volta para o local pai.
+
+    public void voltarLocal() {
+
+        if (localAtual.getLocalPai() != null) {
+
+            localAtual = localAtual.getLocalPai();
+        }
     }
 }

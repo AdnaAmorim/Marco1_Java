@@ -18,17 +18,17 @@ public class MatchController {
     // roda a matematica e devolve a luta narrada
     public Match executarPartida(Lutador lutador1, Lutador lutador2) {
         ResultadoLuta resultado = motorDeLuta.resolverCombate(lutador1, lutador2);
-        
+
         Match match = new Match(resultado);
         int totalRounds = resultado.getTurnos();
-        
+
         for (int i = 0; i < totalRounds; i++) {
             match.addRound(new Round(i + 1, false));
         }
         match.addRound(new Round(totalRounds + 1, true));
-        
+
         narrador.adicionarNarracao(match);
-        
+
         return match;
     }
 }

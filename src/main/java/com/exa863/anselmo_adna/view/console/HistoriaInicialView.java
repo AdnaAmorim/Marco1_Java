@@ -55,7 +55,7 @@ public class HistoriaInicialView implements View {
         for (char c : texto.toCharArray()) {
             System.out.print(c);
             try {
-                Thread.sleep(80); // Velocidade: 80 milissegundos por letra
+                Thread.sleep(20); // Velocidade: 80 milissegundos por letra
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
