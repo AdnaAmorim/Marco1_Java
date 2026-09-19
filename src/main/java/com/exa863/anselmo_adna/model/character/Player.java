@@ -13,7 +13,6 @@ public class Player extends Personagem {
     private Atributo atributos;
     private Relacionamentos[] relacionamentos;
     private Inventario inventario;
-    private boolean temLuvas;
     private final Set<String> capitulosConcluidos;
 
     public Player(int id, String nome, String descricao, Cores corOlhos, Sexo sexo) {
@@ -22,7 +21,6 @@ public class Player extends Personagem {
         this.atributos = new Atributo();
         this.relacionamentos = new Relacionamentos[10];
         this.inventario = new Inventario();
-        this.temLuvas = false;
         this.capitulosConcluidos = new HashSet<>();
     }
 
@@ -44,14 +42,6 @@ public class Player extends Personagem {
 
     public Inventario getInventario() {
         return inventario;
-    }
-
-    public boolean isTemLuvas() {
-        return temLuvas;
-    }
-
-    public void setTemLuvas(boolean temLuvas) {
-        this.temLuvas = temLuvas;
     }
 
     public void concluirCapitulo(String idCapitulo) {

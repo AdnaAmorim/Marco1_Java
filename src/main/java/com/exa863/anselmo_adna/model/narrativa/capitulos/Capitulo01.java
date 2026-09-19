@@ -6,6 +6,7 @@ import com.exa863.anselmo_adna.model.narrativa.Dialogo;
 import com.exa863.anselmo_adna.model.narrativa.DialogoNarrativo;
 import com.exa863.anselmo_adna.model.narrativa.GatilhoNarrativo;
 import com.exa863.anselmo_adna.model.narrativa.TipoGatilho;
+import com.exa863.anselmo_adna.model.stats.Itens;
 
 import java.util.List;
 
@@ -67,10 +68,10 @@ public class Capitulo01 extends Capitulo {
 
     // Funções separadas para as ações/consequências
     private void acaoPegarLuvas(Player player) {
-        player.setTemLuvas(true);
+        player.getInventario().adicionarItem(Itens.LUVA_DO_PAI);
     }
 
     private void acaoNaoPegarLuvas(Player player) {
-        player.setTemLuvas(false);
+        // O jogador opta por não carregar o item no momento
     }
 }

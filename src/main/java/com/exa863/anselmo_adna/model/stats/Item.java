@@ -33,4 +33,16 @@ public class Item {
         return cura > 0;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Item item = (Item) o;
+        return java.util.Objects.equals(nome, item.nome);
+    }
+
+    @Override
+    public int hashCode() {
+        return java.util.Objects.hashCode(nome);
+    }
 }
