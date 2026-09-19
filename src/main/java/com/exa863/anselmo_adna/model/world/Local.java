@@ -1,17 +1,73 @@
 package com.exa863.anselmo_adna.model.world;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Local {
+
     private String nome;
     private String descricao;
+
+    private Local localPai;
+
+    private List<Local> subLocais;
+
+    private boolean localDeSaida;
+
+    private int custoAcesso;
 
     public Local(String nome, String descricao) {
         this.nome = nome;
         this.descricao = descricao;
+        this.subLocais = new ArrayList<>();
+        this.localDeSaida = false;
+        this.custoAcesso = 0;
     }
+
     public String getNome() {
         return nome;
     }
+
     public String getDescricao() {
         return descricao;
+    }
+
+    public Local getLocalPai() {
+        return localPai;
+    }
+
+    public List<Local> getSubLocais() {
+        return subLocais;
+    }
+
+    public int getCustoAcesso() {
+        return custoAcesso;
+    }
+    public void setCustoAcesso(int custoAcesso) {
+        this.custoAcesso = custoAcesso;
+    }
+
+    public boolean isLocalDeSaida() {
+        return localDeSaida;
+    }
+
+    public void adicionarSubLocal(Local local) {
+
+        local.localPai = this;
+
+        subLocais.add(local);
+    }
+
+    public void adicionarSaida() {
+
+        Local saida = new Local(
+                "Sair daqui",
+                "Voltar para o mapa anterior."
+        );
+
+        saida.localDeSaida = true;
+        saida.localPai = this;
+
+        subLocais.add(saida);
     }
 }

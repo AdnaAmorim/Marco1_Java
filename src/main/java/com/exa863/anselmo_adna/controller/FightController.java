@@ -56,7 +56,7 @@ public class FightController {
 
     // resolve a luta entre dois personagens
     public ResultadoLuta resolverCombate(Lutador lutador1, Lutador lutador2) {
-        
+
         // calcula os atributos de acordo com o estilo de cada um
         AtributosEfetivos eff1 = lutador1.getAtributosEfetivos();
         AtributosEfetivos eff2 = lutador2.getAtributosEfetivos();

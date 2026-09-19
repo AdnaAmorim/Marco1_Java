@@ -39,7 +39,7 @@ public class MatchNarratorController {
 
     // chance de soltar comentario de narrador no round
     private static final double CHANCE_COMENTARIO_ALEATORIO = 0.25;
-    
+
     // vencedor tem mais chance de atacar
     private static final double CHANCE_VENCEDOR_SER_ATOR = 0.75;
 
@@ -50,23 +50,23 @@ public class MatchNarratorController {
 
     public void adicionarNarracao(Match match) {
         this.frasesUsadas.clear(); // limpa frases antigas pra n bugar proximas lutas
-        
+
         ResultadoLuta resultado = match.getResultadoLuta();
         Lutador vencedor = resultado.getVencedor();
         Lutador perdedor = resultado.getPerdedor();
 
         // passa pelos rounds ja criados no match
         for (Round round : match) {
-            
+
             if (round.isUltimo()) {
                 // se for ultimo round falso de finalizacao, poe frase de fim e pronto
                 round.addEvento(gerarFraseFimDeLuta(resultado));
                 continue;
             }
-            
+
             // cada round tem de 2 a 4 interacoes
-            int eventosNoRound = 2 + random.nextInt(3); 
-            
+            int eventosNoRound = 2 + random.nextInt(3);
+
             for (int j = 0; j < eventosNoRound; j++) {
                 boolean vencedorAje = random.nextDouble() < CHANCE_VENCEDOR_SER_ATOR;
                 Lutador ator = vencedorAje ? vencedor : perdedor;
@@ -77,9 +77,9 @@ public class MatchNarratorController {
                 double pesoBruto = eff.forca;
                 double pesoEsquiva = eff.agilidade;
                 double pesoRapido = eff.agilidade;
-                
+
                 double pesoTotal = pesoBruto + pesoEsquiva + pesoRapido;
-                if (pesoTotal <= 0) pesoTotal = 1; 
+                if (pesoTotal <= 0) pesoTotal = 1;
 
                 double sorteio = random.nextDouble() * pesoTotal;
 
@@ -91,7 +91,7 @@ public class MatchNarratorController {
                 } else {
                     fraseTurno = gerarFrase(BancoFrases.DANO_RAPIDO, ator, alvo, eff);
                 }
-                
+
                 round.addEvento(fraseTurno);
             }
 
@@ -105,17 +105,17 @@ public class MatchNarratorController {
     // pega o banco 2d, ve intensidade do cara e sorteia a frase certa pra ele
     private String gerarFrase(String[][] bancoEventos, Lutador ator, Lutador alvo, AtributosEfetivos eff) {
         int intensidade = calcularIntensidadeAtor(eff, bancoEventos);
-        
+
         // Pega o array de frases correspondente àquela intensidade
         String[] frases = bancoEventos[intensidade];
-        
+
         return sortearEAplicar(frases, ator, alvo);
     }
 
     // ve atributos do cara pra definir intensidade da frase
     private int calcularIntensidadeAtor(AtributosEfetivos eff, String[][] bancoEventos) {
         double valorBase = 5.0; // default
-        
+
         if (eff != null) {
             // dano bruto=forca, dano rapido e esquiva=agilidade
             if (bancoEventos == BancoFrases.DANO_BRUTO) {
@@ -127,19 +127,19 @@ public class MatchNarratorController {
 
         // chances de intensidade
         int sorteio = random.nextInt(100);
-        
+
         if (valorBase >= MINIMO_PARA_ATRIBUTO_ALTO) {
             // se for alto quase sempre gera frase foda ou boa
             if (sorteio < CHANCE_FRASE_EPICA_ATRIBUTO_ALTO) return BancoFrases.INTENSIDADE_ALTA;
             if (sorteio < CHANCE_FRASE_BOA_ATRIBUTO_ALTO) return BancoFrases.INTENSIDADE_MEDIA;
             return BancoFrases.INTENSIDADE_BAIXA;
-            
+
         } else if (valorBase >= MINIMO_PARA_ATRIBUTO_MEDIO) {
             // se for medio maioria normal
             if (sorteio < CHANCE_FRASE_EPICA_ATRIBUTO_MEDIO) return BancoFrases.INTENSIDADE_ALTA;
             if (sorteio < CHANCE_FRASE_BOA_ATRIBUTO_MEDIO) return BancoFrases.INTENSIDADE_MEDIA;
             return BancoFrases.INTENSIDADE_BAIXA;
-            
+
         } else {
             // se for baixo so frase fraca, quase nunca acerta algo foda
             if (sorteio < CHANCE_FRASE_EPICA_ATRIBUTO_BAIXO) return BancoFrases.INTENSIDADE_ALTA;
@@ -164,11 +164,11 @@ public class MatchNarratorController {
         if (tipoVitoria == TipoVitoria.NOCAUTE) {
             String frase = sortearFraseUnica(BancoFrases.NOCAUTES);
             return aplicarNomes(frase, vencedor.getNome(), perdedor.getNome());
-            
+
         } else if (tipoVitoria == TipoVitoria.DECISAO_UNANIME) {
             String frase = sortearFraseUnica(BancoFrases.DECISOES_UNANIMES);
             return aplicarNomes(frase, vencedor.getNome(), perdedor.getNome());
-            
+
         } else { // decisao dividida
             String frase = sortearFraseUnica(BancoFrases.DECISOES_DIVIDIDAS);
             return aplicarNomes(frase, vencedor.getNome(), perdedor.getNome());
@@ -178,7 +178,7 @@ public class MatchNarratorController {
     // funçao pra tacar os nomes nas string
     private String aplicarNomes(String frase, String atacante, String adversario) {
         return frase.replace("{atacante}", atacante)
-                    .replace("{adversario}", adversario);
+                .replace("{adversario}", adversario);
     }
 
     // sorteia a frase e ja põe os nomes
@@ -195,7 +195,7 @@ public class MatchNarratorController {
                 disponiveis.add(frase);
             }
         }
-        
+
         // se acabar as frases desse banco a gente limpa so ele
         if (disponiveis.isEmpty()) {
             for (String frase : banco) {
@@ -205,7 +205,7 @@ public class MatchNarratorController {
             frasesUsadas.add(sorteada);
             return sorteada;
         }
-        
+
         String sorteada = disponiveis.get(random.nextInt(disponiveis.size()));
         frasesUsadas.add(sorteada);
         return sorteada;

@@ -23,24 +23,29 @@ public class JogoView implements View {
 
         CMultiplaEscolha menuJogo = new CMultiplaEscolha(console);
         CEscolha[] opcoes = {
-                new CEscolha("Treinar Boxe (Gasta 2 horas)", 0),
+                new CEscolha("Ir para Academia", 0),
                 new CEscolha("Dormir (Gasta 8 horas)", 1),
-                new CEscolha("Voltar ao Menu Principal", 2)
+                new CEscolha("Explorar mapa", 2),
+                new CEscolha("Voltar ao Menu Principal", 3)
         };
-
         try {
             CEscolha escolha = menuJogo.escolha(opcoes);
 
             switch (escolha.index) {
-                case 0 -> {
-                    gameController.getDataDia().avancarMinutos(120);
+
+                case 0 -> {gameController.getDataDia().avancarMinutos(120);
+
                     sceneController.trocarCena(this);
                 }
-                case 1 -> {
-                    gameController.getDataDia().avancarMinutos(480);
-                    sceneController.trocarCena(this);
+
+                case 1 -> {gameController.getDataDia().avancarMinutos(480);sceneController.trocarCena(this);
                 }
-                case 2 -> sceneController.trocarCena(new MenuView(console, sceneController, gameController));
+
+                case 2 -> {sceneController.trocarCena(new MapaView(console, sceneController, gameController));
+                }
+
+                case 3 ->
+                        sceneController.trocarCena(new MenuView(console, sceneController, gameController));
             }
         } catch (IOException e) {
             e.printStackTrace();
