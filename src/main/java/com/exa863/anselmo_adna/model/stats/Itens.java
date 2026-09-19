@@ -20,7 +20,7 @@ public class Itens {
 
     // Itens especiais (não são vendidos — o personagem escolhe pegar ou não)
     public static final Item CONTRATO = new Item(
-            "Contrato", "Um contrato para se tornar um lutador profissional.", TipoItem.ESPECIAL, 0, 0);
+            "Contrato", "Um contrato para se vender.", TipoItem.ESPECIAL, 0, 0);
     public static final Item LUVA_DO_PAI = new Item(
             "Luva do Pai", "A luva de boxe que pertenceu ao seu pai.", TipoItem.ESPECIAL, 0, 0);
 
