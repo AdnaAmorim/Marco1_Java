@@ -1,7 +1,63 @@
 package com.exa863.anselmo_adna.model.stats;
 
-public class Inventario {
-    public Inventario() {
+import com.exa863.anselmo_adna.model.character.Player;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+public class Inventario {
+
+    private final Map<Item, Integer> itens;
+
+    public Inventario() {
+        this.itens = new LinkedHashMap<>();
+    }
+
+    public void adicionarItem(Item item) {
+        adicionarItem(item, 1);
+    }
+
+    public void adicionarItem(Item item, int quantidade) {
+        itens.merge(item, quantidade, Integer::sum);
+    }
+
+    public boolean temItem(Item item) {
+        return getQuantidade(item) > 0;
+    }
+
+    public int getQuantidade(Item item) {
+        return itens.getOrDefault(item, 0);
+    }
+
+    public boolean removerItem(Item item) {
+        int atual = getQuantidade(item);
+
+        if (atual <= 0) {
+            return false;
+        }
+
+        if (atual == 1) {
+            itens.remove(item);
+        } else {
+            itens.put(item, atual - 1);
+        }
+
+        return true;
+    }
+
+    public Map<Item, Integer> getItens() {
+        return itens;
+    }
+
+    // Consome um item (comida/suplemento) e recupera a saúde do player
+    public boolean usarItem(Item item, Player player) {
+        if (!removerItem(item)) {
+            return false;
+        }
+
+        int saudeAtual = player.getAtributos().getSaude();
+        player.getAtributos().setSaude(saudeAtual + item.getCura());
+
+        return true;
     }
 }
