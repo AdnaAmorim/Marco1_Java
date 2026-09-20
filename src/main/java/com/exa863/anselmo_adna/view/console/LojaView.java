@@ -26,12 +26,15 @@ public class LojaView implements View {
         Player player = gameController.getPlayer();
 
         console.clearConsole();
-        console.printlnConsole("========================================");
-        console.printlnConsole("                 LOJA");
-        console.printlnConsole("========================================");
+        console.printlnConsole("╔══════════════════════════════════════════════════════════════════════╗");
+        console.printlnConsole("║                 CONVENIÊNCIA & SUPLEMENTOS (LOJA)                    ║");
+        console.printlnConsole("╠══════════════════════════════════════════════════════════════════════╣");
+        console.printlnConsole("║                                                                      ║");
+        console.printlnConsole("║  ► Dinheiro do Atleta : " + String.format("%-44s", player.getDinheiro() + " Reais") + "║");
+        console.printlnConsole("║                                                                      ║");
+        console.printlnConsole("╚══════════════════════════════════════════════════════════════════════╝");
         console.printlnConsole("");
-        console.printlnConsole("Seu dinheiro: " + player.getDinheiro() + " reais");
-        console.printlnConsole("");
+        console.printlnConsole("  Escolha o item que deseja adquirir com [ ▲ / ▼ ] e [ ENTER ]:\n");
 
         Item[] itensLoja = Itens.ITENS_LOJA;
         CEscolha[] opcoes = new CEscolha[itensLoja.length + 1];
@@ -39,12 +42,12 @@ public class LojaView implements View {
         for (int i = 0; i < itensLoja.length; i++) {
             Item item = itensLoja[i];
             opcoes[i] = new CEscolha(
-                    item.getNome() + " - " + item.getPreco() + " reais (+" + item.getCura() + " saúde)",
+                    item.getNome() + " • " + item.getPreco() + " Reais (+" + item.getCura() + " de Saúde)",
                     i
             );
         }
 
-        opcoes[itensLoja.length] = new CEscolha("Sair da loja", -1);
+        opcoes[itensLoja.length] = new CEscolha("◄ Sair da Loja", -1);
 
         CMultiplaEscolha menu = new CMultiplaEscolha(console);
 
@@ -69,8 +72,12 @@ public class LojaView implements View {
     private void comprarItem(Player player, Item item) {
         if (player.getDinheiro() < item.getPreco()) {
             console.printlnConsole("");
-            console.printlnConsole("Dinheiro insuficiente para comprar " + item.getNome() + ".");
-            console.esperarEnter("Pressione ENTER para continuar...");
+            console.printlnConsole("  [!] Dinheiro insuficiente para adquirir " + item.getNome() + ".");
+            console.printlnConsole("      Preço: " + item.getPreco() + " Reais | Seu Dinheiro: " + player.getDinheiro() + " Reais\n");
+            console.printlnConsole("       ┌────────────────────────────────────────────────────────┐");
+            console.printlnConsole("       │                 [ ENTER ]  Continuar                   │");
+            console.printlnConsole("       └────────────────────────────────────────────────────────┘");
+            console.esperarEnter("");
             return;
         }
 
@@ -78,7 +85,11 @@ public class LojaView implements View {
         player.getInventario().adicionarItem(item);
 
         console.printlnConsole("");
-        console.printlnConsole("Você comprou: " + item.getNome() + "!");
-        console.esperarEnter("Pressione ENTER para continuar...");
+        console.printlnConsole("  [✓] Compra realizada: " + item.getNome() + " adicionado à mochila!");
+        console.printlnConsole("  ► Dinheiro restante: " + player.getDinheiro() + " Reais\n");
+        console.printlnConsole("       ┌────────────────────────────────────────────────────────┐");
+        console.printlnConsole("       │                 [ ENTER ]  Continuar                   │");
+        console.printlnConsole("       └────────────────────────────────────────────────────────┘");
+        console.esperarEnter("");
     }
 }

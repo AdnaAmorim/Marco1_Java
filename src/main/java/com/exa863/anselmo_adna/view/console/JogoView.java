@@ -2,6 +2,7 @@ package com.exa863.anselmo_adna.view.console;
 
 import com.exa863.anselmo_adna.controller.GameController;
 import com.exa863.anselmo_adna.controller.SceneController;
+import com.exa863.anselmo_adna.model.character.Player;
 import com.exa863.anselmo_adna.view.View;
 import java.io.IOException;
 
@@ -19,14 +20,34 @@ public class JogoView implements View {
 
     @Override
     public void render() {
-        console.printlnConsole("=== " + gameController.getDataDia().getDiaFormatado() + " | " + gameController.getDataDia().getHoraFormatada() + " ===");
+        console.clearConsole();
 
-       CMultiplaEscolha menuJogo = new CMultiplaEscolha(console);
+        Player player = gameController.getPlayer();
+        String nomePlayer = player != null ? player.getNome() : "Boxeador";
+        int saude = player != null ? player.getAtributos().getSaude() : 100;
+        int energia = player != null ? player.getAtributos().getEnergia() : 100;
+        int dinheiro = player != null ? player.getDinheiro() : 0;
+        String localNome = gameController.getLocalAtual() != null ? gameController.getLocalAtual().getNome() : "Casa";
+        String dataHora = gameController.getDataDia().getDiaFormatado() + " • " + gameController.getDataDia().getHoraFormatada();
+
+        console.printlnConsole("╔══════════════════════════════════════════════════════════════════════╗");
+        console.printlnConsole("║               CENTRO DE TREINAMENTO & ROTINA (HUB)                   ║");
+        console.printlnConsole("╠══════════════════════════════════════════════════════════════════════╣");
+        console.printlnConsole("║                                                                      ║");
+        console.printlnConsole("║  ► ATLETA  : " + String.format("%-20s", nomePlayer) + " │ DATA   : " + String.format("%-24s", dataHora) + "║");
+        console.printlnConsole("║  ► SAÚDE   : " + String.format("%-20s", saude + " / 100") + " │ LOCAL  : " + String.format("%-24s", localNome) + "║");
+        console.printlnConsole("║  ► ENERGIA : " + String.format("%-20s", energia + " / 100") + " │ BOLSA  : " + String.format("%-24s", dinheiro + " Reais") + "║");
+        console.printlnConsole("║                                                                      ║");
+        console.printlnConsole("╚══════════════════════════════════════════════════════════════════════╝");
+        console.printlnConsole("");
+        console.printlnConsole("  O que deseja fazer hoje? Escolha com [ ▲ / ▼ ] e [ ENTER ]:\n");
+
+        CMultiplaEscolha menuJogo = new CMultiplaEscolha(console);
         CEscolha[] opcoes = {
-                new CEscolha("Ir para Academia", 0),
-                new CEscolha("Dormir (Gasta 8 horas)", 1),
-                new CEscolha("Explorar mapa", 2),
-                new CEscolha("Ver Inventário", 3),
+                new CEscolha("Treinar na Academia (Gasta 2h)", 0),
+                new CEscolha("Dormir e Descansar (Avança 8h)", 1),
+                new CEscolha("Explorar o Mapa (Cidades e Locais)", 2),
+                new CEscolha("Abrir Inventário", 3),
                 new CEscolha("Voltar ao Menu Principal", 4)
         };
         try {

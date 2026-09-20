@@ -28,8 +28,8 @@ public class CMultiplaEscolha {
         this.reader = new BindingReader(terminal.reader());
 
         this.keys = new KeyMap<>();
-        this.keys.bind(KEY_UP, KeyMap.key(terminal, key_up));
-        this.keys.bind(KEY_DOWN, KeyMap.key(terminal, key_down));
+        this.keys.bind(KEY_UP, KeyMap.key(terminal, key_up), "\033[A");
+        this.keys.bind(KEY_DOWN, KeyMap.key(terminal, key_down), "\033[B");
         this.keys.bind(KEY_ENTER, "\r", "\n");
     }
 
@@ -43,7 +43,6 @@ public class CMultiplaEscolha {
         console.limparBufferTeclado();
 
         Attributes atributosOriginais = terminal.enterRawMode();
-
         console.setCursorInvisivel();
 
         int selecionado = 0;
@@ -98,8 +97,7 @@ public class CMultiplaEscolha {
 
     private void limparLinhas(int quantidade) {
         for (int i = 0; i < quantidade; i++) {
-            console.printConsole("\033[1A");
-            console.printConsole("\033[2K");
+            console.printConsole("\033[1A\r\033[2K");
         }
     }
 }

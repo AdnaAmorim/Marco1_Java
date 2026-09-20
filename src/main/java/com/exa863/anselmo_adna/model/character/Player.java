@@ -14,6 +14,7 @@ public class Player extends Personagem {
     private Relacionamentos[] relacionamentos;
     private Inventario inventario;
     private final Set<String> capitulosConcluidos;
+    private int ultimoDiaTreinado;
 
     public Player(int id, String nome, String descricao, Cores corOlhos, Sexo sexo) {
         super(id, nome, descricao, corOlhos, sexo);
@@ -22,6 +23,19 @@ public class Player extends Personagem {
         this.relacionamentos = new Relacionamentos[10];
         this.inventario = new Inventario();
         this.capitulosConcluidos = new HashSet<>();
+        this.ultimoDiaTreinado = 0;
+    }
+
+    public int getUltimoDiaTreinado() {
+        return ultimoDiaTreinado;
+    }
+
+    public void setUltimoDiaTreinado(int ultimoDiaTreinado) {
+        this.ultimoDiaTreinado = ultimoDiaTreinado;
+    }
+
+    public boolean jaTreinouHoje(int diaAtual) {
+        return this.ultimoDiaTreinado == diaAtual;
     }
 
     public int getDinheiro() {

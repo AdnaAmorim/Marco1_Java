@@ -1,5 +1,7 @@
 package com.exa863.anselmo_adna.view.console;
 
+import org.jline.reader.LineReader;
+import org.jline.reader.LineReaderBuilder;
 import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
 import org.jline.utils.InfoCmp;
@@ -9,8 +11,12 @@ import java.io.IOException;
 
 public class Console {
 
+    // MODO DEV: quando true, anula todos os delays de animação e digitação, imprimindo instantaneamente
+    public static boolean MODO_DEV = true;
+
     private final Terminal terminal;
     private final BufferedReader reader;
+    private final LineReader lineReader;
 
     private static final int espacamentoPadrao = 4;
     public static String espacamento = " ".repeat(espacamentoPadrao);
@@ -22,6 +28,9 @@ public class Console {
                     .build();
 
             this.reader = new BufferedReader(terminal.reader());
+            this.lineReader = LineReaderBuilder.builder()
+                    .terminal(terminal)
+                    .build();
 
         } catch (IOException e) {
             throw new IllegalStateException(
@@ -42,11 +51,17 @@ public class Console {
     }
 
     public String getEntrada(String input) {
-        printConsole(input + " ");
-        return getEntradaString();
+        return getEntrada(input, " ");
     }
 
     public String getEntrada(String input, String separacao) {
+        setCursorVisivel();
+        if (lineReader != null) {
+            try {
+                return lineReader.readLine(input + separacao);
+            } catch (Exception ignored) {
+            }
+        }
         printConsole(input + separacao);
         return getEntradaString();
     }
@@ -76,6 +91,13 @@ public class Console {
     // Métodos utilitários
 
     private String getEntradaString() {
+        setCursorVisivel();
+        if (lineReader != null) {
+            try {
+                return lineReader.readLine();
+            } catch (Exception ignored) {
+            }
+        }
         try {
             return reader.readLine();
         } catch (IOException e) {
@@ -83,11 +105,20 @@ public class Console {
         }
     }
 
-    private Integer getEntradaInt() {
+    public Integer getEntradaInt() {
         String entradaString = getEntradaString();
 
         try {
-            return Integer.parseInt(entradaString);
+            return Integer.parseInt(entradaString.trim());
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public Integer getEntradaInt(String prompt) {
+        String entradaString = getEntrada(prompt);
+        try {
+            return Integer.parseInt(entradaString.trim());
         } catch (Exception e) {
             return null;
         }
@@ -116,6 +147,7 @@ public class Console {
     }
 
     public void esperarEnter(String mensagem) {
+        setCursorInvisivel();
         limparBufferTeclado();
         printConsole(mensagem);
         while (!enterPressionado()) {
@@ -186,16 +218,27 @@ public class Console {
     }
 
     public void printDigitado(String texto, long delayMs) {
+        setCursorInvisivel();
+        if (MODO_DEV || delayMs <= 0) {
+            printlnConsole(texto);
+            return;
+        }
         for (char c : texto.toCharArray()) {
             printConsole(String.valueOf(c));
             try {
-                Thread.sleep(delayMs);
+                if (c == '.' || c == '!' || c == '?') {
+                    Thread.sleep(150);
+                } else if (c == ',' || c == ':') {
+                    Thread.sleep(80);
+                } else {
+                    Thread.sleep(delayMs);
+                }
             } catch (InterruptedException ignored) {}
         }
         printlnConsole("");
     }
 
     public void printDigitado(String texto) {
-        printDigitado(texto, 20);
+        printDigitado(texto, 35);
     }
 }

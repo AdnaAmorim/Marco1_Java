@@ -40,8 +40,11 @@ public class CutsceneView implements View {
 
         cutsceneController.finalizarCapitulo();
 
-        console.printlnConsole("\n------------------------------------------------------------");
-        console.esperarEnter("[Capítulo Concluído - Pressione ENTER para continuar]");
+        console.printlnConsole("");
+        console.printlnConsole("       ┌────────────────────────────────────────────────────────┐");
+        console.printlnConsole("       │       [ ENTER ]  Capítulo Concluído : Continuar        │");
+        console.printlnConsole("       └────────────────────────────────────────────────────────┘");
+        console.esperarEnter("");
 
         if (sceneController != null && proximaCena != null) {
             sceneController.trocarCena(proximaCena);
@@ -49,9 +52,10 @@ public class CutsceneView implements View {
     }
 
     private void imprimirCabecalho() {
-        console.printlnConsole("============================================================");
-        console.printlnConsole("               " + cutsceneController.getCapitulo().getTitulo().toUpperCase());
-        console.printlnConsole("============================================================\n");
+        String titulo = cutsceneController.getCapitulo().getTitulo().toUpperCase();
+        console.printlnConsole("╔══════════════════════════════════════════════════════════════════════╗");
+        console.printlnConsole("║" + centralizar("HISTÓRIA : " + titulo, 70) + "║");
+        console.printlnConsole("╚══════════════════════════════════════════════════════════════════════╝\n");
     }
 
     private void processarDialogo(Dialogo dialogo) {
@@ -65,20 +69,20 @@ public class CutsceneView implements View {
     private void exibirFala(Dialogo dialogo) {
         String linha;
         if (dialogo.getTipoEmissor() == TipoEmissor.NARRADOR) {
-            linha = "[Narrador] " + dialogo.getTexto();
+            linha = "  ◈ [Narrador] " + dialogo.getTexto();
         } else if (dialogo.getTipoEmissor() == TipoEmissor.SISTEMA) {
-            linha = ">>> " + dialogo.getTexto();
+            linha = "  ✦ [Sistema] " + dialogo.getTexto();
         } else {
-            linha = dialogo.getNomeEmissor() + ": " + dialogo.getTexto();
+            linha = "  ► " + dialogo.getNomeEmissor() + ": " + dialogo.getTexto();
         }
 
         console.printDigitado(linha);
-        console.esperarEnter(" [ENTER]");
+        console.esperarEnter("  [ENTER]");
         console.printlnConsole("");
     }
 
     private void exibirEscolha(Dialogo escolhaDialogo) {
-        console.printlnConsole("\n" + escolhaDialogo.getTexto());
+        console.printlnConsole("\n  ► " + escolhaDialogo.getTexto() + "\n");
 
         List<Dialogo.Opcao> opcoes = escolhaDialogo.getOpcoes();
         CEscolha[] escolhasUI = new CEscolha[opcoes.size()];
@@ -92,7 +96,7 @@ public class CutsceneView implements View {
             CEscolha selecionada = menu.escolha(escolhasUI);
             Dialogo.Opcao opcaoEscolhida = opcoes.get(selecionada.index);
 
-            console.printlnConsole("> " + opcaoEscolhida.getTexto() + "\n");
+            console.printlnConsole("\n  [✓ Escolha]: " + opcaoEscolhida.getTexto() + "\n");
 
             // O controller processa a ação da escolha
             cutsceneController.processarEscolha(opcaoEscolhida);
@@ -104,5 +108,15 @@ public class CutsceneView implements View {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private String centralizar(String texto, int largura) {
+        if (texto.length() >= largura) {
+            return texto.substring(0, largura);
+        }
+        int espacosTotais = largura - texto.length();
+        int espacosEsquerda = espacosTotais / 2;
+        int espacosDireita = espacosTotais - espacosEsquerda;
+        return " ".repeat(espacosEsquerda) + texto + " ".repeat(espacosDireita);
     }
 }

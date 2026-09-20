@@ -24,6 +24,7 @@ public class HistoriaInicialView implements View {
 
     @Override
     public void render() {
+        console.setCursorInvisivel();
 
         Player player = gameController.getPlayer();
 
@@ -34,8 +35,10 @@ public class HistoriaInicialView implements View {
         cena5(player);
         cena6(player);
 
+        console.setCursorVisivel();
+
         sceneController.trocarCena(
-                new JogoView(
+                new MapaView(
                         console,
                         sceneController,
                         gameController
@@ -44,32 +47,44 @@ public class HistoriaInicialView implements View {
     }
 
     private void esperar() {
+        console.setCursorInvisivel();
         console.printlnConsole("");
-        console.printlnConsole("Pressione ENTER para continuar...");
-        console.getEntrada("");
+        console.printlnConsole("       ┌────────────────────────────────────────────────────────┐");
+        console.printlnConsole("       │              [ ENTER ]  Continuar História             │");
+        console.printlnConsole("       └────────────────────────────────────────────────────────┘");
+        console.esperarEnter("");
         console.clearConsole();
     }
 
-
     private void imprimirDigitando(String texto) {
+        console.setCursorInvisivel();
+        if (Console.MODO_DEV) {
+            console.printlnConsole("  " + texto);
+            return;
+        }
+        console.printConsole("  ");
         for (char c : texto.toCharArray()) {
-            System.out.print(c);
+            console.printConsole(String.valueOf(c));
             try {
-                Thread.sleep(20); // Velocidade: 80 milissegundos por letra
+                if (c == '.' || c == '!' || c == '?') {
+                    Thread.sleep(160);
+                } else if (c == ',' || c == ':') {
+                    Thread.sleep(90);
+                } else {
+                    Thread.sleep(35);
+                }
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
         }
-        System.out.println();
+        console.printlnConsole("");
     }
 
     private void cena1(Player player) {
-
         console.clearConsole();
-
-        console.printlnConsole("========================================");
-        console.printlnConsole("              ANOS ATRÁS");
-        console.printlnConsole("========================================");
+        console.printlnConsole("╔══════════════════════════════════════════════════════════════════════╗");
+        console.printlnConsole("║                              ANOS ATRÁS                              ║");
+        console.printlnConsole("╚══════════════════════════════════════════════════════════════════════╝");
         console.printlnConsole("");
 
         imprimirDigitando("Tudo começou quando " + player.getNome());
@@ -83,10 +98,10 @@ public class HistoriaInicialView implements View {
     }
 
     private void cena2(Player player) {
-
-        console.printlnConsole("========================================");
-        console.printlnConsole("             O SONHO DO PAI");
-        console.printlnConsole("========================================");
+        console.clearConsole();
+        console.printlnConsole("╔══════════════════════════════════════════════════════════════════════╗");
+        console.printlnConsole("║                            O SONHO DO PAI                            ║");
+        console.printlnConsole("╚══════════════════════════════════════════════════════════════════════╝");
         console.printlnConsole("");
 
         imprimirDigitando("Seu pai tinha um grande sonho.");
@@ -106,20 +121,18 @@ public class HistoriaInicialView implements View {
     }
 
     private void cena3(Player player) {
-
-        console.printlnConsole("========================================");
-        console.printlnConsole("              O ACIDENTE");
-        console.printlnConsole("========================================");
+        console.clearConsole();
+        console.printlnConsole("╔══════════════════════════════════════════════════════════════════════╗");
+        console.printlnConsole("║                              O ACIDENTE                              ║");
+        console.printlnConsole("╚══════════════════════════════════════════════════════════════════════╝");
         console.printlnConsole("");
 
         imprimirDigitando("Certa noite, enquanto voltavam para casa,");
         imprimirDigitando("um acidente mudou tudo.");
-
         console.printlnConsole("");
 
         imprimirDigitando("Os pais de " + player.getNome());
         imprimirDigitando("não sobreviveram.");
-
         console.printlnConsole("");
 
         imprimirDigitando("A vida daquela criança nunca mais");
@@ -129,22 +142,17 @@ public class HistoriaInicialView implements View {
     }
 
     private void cena4(Player player) {
-
-        console.printlnConsole("========================================");
-        console.printlnConsole("             UMA NOVA CASA");
-        console.printlnConsole("========================================");
+        console.clearConsole();
+        console.printlnConsole("╔══════════════════════════════════════════════════════════════════════╗");
+        console.printlnConsole("║                            UMA NOVA CASA                             ║");
+        console.printlnConsole("╚══════════════════════════════════════════════════════════════════════╝");
         console.printlnConsole("");
 
-        imprimirDigitando(
-                player.getNome()
-                        + " passou a morar com os avós maternos."
-        );
-
+        imprimirDigitando(player.getNome() + " passou a morar com os avós maternos.");
         console.printlnConsole("");
 
         imprimirDigitando("Os avós fizeram tudo o que podiam");
         imprimirDigitando("para dar uma vida boa à criança.");
-
         console.printlnConsole("");
 
         imprimirDigitando("O tempo passou.");
@@ -153,57 +161,45 @@ public class HistoriaInicialView implements View {
     }
 
     private void cena5(Player player) {
-
-        console.printlnConsole("========================================");
-        console.printlnConsole("              18 ANOS DEPOIS");
-        console.printlnConsole("========================================");
+        console.clearConsole();
+        console.printlnConsole("╔══════════════════════════════════════════════════════════════════════╗");
+        console.printlnConsole("║                            18 ANOS DEPOIS                            ║");
+        console.printlnConsole("╚══════════════════════════════════════════════════════════════════════╝");
         console.printlnConsole("");
 
         imprimirDigitando("Agora, aos 18 anos, " + player.getNome());
         imprimirDigitando("já não é mais uma criança.");
-
         console.printlnConsole("");
 
         imprimirDigitando("Mas nunca esqueceu o sonho do pai.");
-
         console.printlnConsole("");
 
         if (player.getSexo() == Sexo.MASCULINO) {
-
-            imprimirDigitando(
-                    "Ele decidiu seguir o mesmo caminho."
-            );
-
+            imprimirDigitando("Ele decidiu seguir o mesmo caminho.");
         } else {
-
-            imprimirDigitando(
-                    "Ela decidiu seguir o mesmo caminho."
-            );
+            imprimirDigitando("Ela decidiu seguir o mesmo caminho.");
         }
 
         esperar();
     }
 
     private void cena6(Player player) {
-
-        console.printlnConsole("========================================");
-        console.printlnConsole("            O INÍCIO DO SONHO");
-        console.printlnConsole("========================================");
+        console.clearConsole();
+        console.printlnConsole("╔══════════════════════════════════════════════════════════════════════╗");
+        console.printlnConsole("║                          O INÍCIO DO SONHO                           ║");
+        console.printlnConsole("╚══════════════════════════════════════════════════════════════════════╝");
         console.printlnConsole("");
 
         imprimirDigitando("Seu objetivo é simples:");
-
         console.printlnConsole("");
 
         imprimirDigitando("Tornar-se um grande lutador de boxe.");
-
         console.printlnConsole("");
 
         imprimirDigitando("Mas para chegar ao topo,");
         imprimirDigitando("você terá que treinar,");
         imprimirDigitando("fazer escolhas");
         imprimirDigitando("e enfrentar muitos desafios.");
-
         console.printlnConsole("");
 
         imprimirDigitando("O sonho do seu pai agora");

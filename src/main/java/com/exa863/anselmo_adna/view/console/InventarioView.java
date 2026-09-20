@@ -28,20 +28,26 @@ public class InventarioView implements View {
         Map<Item, Integer> itens = player.getInventario().getItens();
 
         console.clearConsole();
-        console.printlnConsole("========================================");
-        console.printlnConsole("               INVENTARIO");
-        console.printlnConsole("========================================");
-        console.printlnConsole("");
-        console.printlnConsole("Dinheiro: " + player.getDinheiro() + " reais");
+        console.printlnConsole("╔══════════════════════════════════════════════════════════════════════╗");
+        console.printlnConsole("║                        INVENTÁRIO DO ATLETA                          ║");
+        console.printlnConsole("╠══════════════════════════════════════════════════════════════════════╣");
+        console.printlnConsole("║                                                                      ║");
+        console.printlnConsole("║  ► MOCHILA DE ITENS : Itens, suprimentos e recursos carregados.      ║");
+        console.printlnConsole("║                                                                      ║");
+        console.printlnConsole("╚══════════════════════════════════════════════════════════════════════╝");
         console.printlnConsole("");
 
         if (itens.isEmpty()) {
-            console.printlnConsole("Seu inventario esta vazio.");
-            console.printlnConsole("");
-            console.esperarEnter("Pressione ENTER para voltar...");
-            sceneController.trocarCena(new JogoView(console, sceneController, gameController));
+            console.printlnConsole("  [i] Sua mochila de itens está vazia no momento.\n");
+            console.printlnConsole("       ┌────────────────────────────────────────────────────────┐");
+            console.printlnConsole("       │              [ ENTER ]  Voltar ao Mapa                 │");
+            console.printlnConsole("       └────────────────────────────────────────────────────────┘");
+            console.esperarEnter("");
+            sceneController.trocarCena(new MapaView(console, sceneController, gameController));
             return;
         }
+
+        console.printlnConsole("  Selecione um item com [ ▲ / ▼ ] para ver detalhes ou usar:\n");
 
         List<Item> listaItens = List.copyOf(itens.keySet());
         CEscolha[] opcoes = new CEscolha[listaItens.size() + 1];
@@ -52,13 +58,15 @@ public class InventarioView implements View {
 
             String rotulo = item.getNome() + " (x" + quantidade + ")";
             if (item.isConsumivel()) {
-                rotulo += " - +" + item.getCura() + " saude";
+                rotulo += " • +" + item.getCura() + " de Saúde";
+            } else {
+                rotulo += " • [Item Especial]";
             }
 
             opcoes[i] = new CEscolha(rotulo, i);
         }
 
-        opcoes[listaItens.size()] = new CEscolha("Voltar", -1);
+        opcoes[listaItens.size()] = new CEscolha("◄ Voltar ao Mapa", -1);
 
         CMultiplaEscolha menu = new CMultiplaEscolha(console);
 
@@ -66,7 +74,7 @@ public class InventarioView implements View {
             CEscolha escolha = menu.escolha(opcoes);
 
             if (escolha.index == -1) {
-                sceneController.trocarCena(new JogoView(console, sceneController, gameController));
+                sceneController.trocarCena(new MapaView(console, sceneController, gameController));
                 return;
             }
 
@@ -81,18 +89,24 @@ public class InventarioView implements View {
     // Mostra a descrição do item e, se for consumivel, da a opcao de usar
     private void detalharItem(Player player, Item item) throws IOException {
         console.printlnConsole("");
-        console.printlnConsole(item.getNome() + ": " + item.getDescricao());
+        console.printlnConsole("  ┌────────────────────────────────────────────────────────────────────┐");
+        console.printlnConsole("  │ Item: " + String.format("%-61s", item.getNome()) + "│");
+        console.printlnConsole("  │ Info: " + String.format("%-61s", item.getDescricao()) + "│");
+        console.printlnConsole("  └────────────────────────────────────────────────────────────────────┘");
         console.printlnConsole("");
 
         if (!item.isConsumivel()) {
-            console.esperarEnter("Pressione ENTER para voltar...");
+            console.printlnConsole("       ┌────────────────────────────────────────────────────────┐");
+            console.printlnConsole("       │                 [ ENTER ]  Voltar                      │");
+            console.printlnConsole("       └────────────────────────────────────────────────────────┘");
+            console.esperarEnter("");
             sceneController.trocarCena(this);
             return;
         }
 
         CEscolha[] opcoesItem = new CEscolha[] {
-                new CEscolha("Usar (+" + item.getCura() + " saude)", 0),
-                new CEscolha("Voltar", 1)
+                new CEscolha("Consumir Item (+" + item.getCura() + " de Saúde)", 0),
+                new CEscolha("Voltar ao Inventário", 1)
         };
 
         CMultiplaEscolha menuItem = new CMultiplaEscolha(console);
@@ -101,9 +115,12 @@ public class InventarioView implements View {
         if (escolha.index == 0) {
             player.getInventario().usarItem(item, player);
             console.printlnConsole("");
-            console.printlnConsole("Você usou " + item.getNome() + ". Saude atual: "
-                    + player.getAtributos().getSaude());
-            console.esperarEnter("Pressione ENTER para continuar...");
+            console.printlnConsole("  [✓] Você utilizou " + item.getNome() + "!");
+            console.printlnConsole("  ► Saúde atual do atleta: " + player.getAtributos().getSaude() + " / 100\n");
+            console.printlnConsole("       ┌────────────────────────────────────────────────────────┐");
+            console.printlnConsole("       │                 [ ENTER ]  Continuar                   │");
+            console.printlnConsole("       └────────────────────────────────────────────────────────┘");
+            console.esperarEnter("");
         }
 
         sceneController.trocarCena(this);

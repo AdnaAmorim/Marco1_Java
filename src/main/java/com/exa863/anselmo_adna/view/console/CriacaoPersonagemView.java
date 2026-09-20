@@ -27,32 +27,33 @@ public class CriacaoPersonagemView implements View {
 
     @Override
     public void render() {
-
         console.clearConsole();
 
-        console.printlnConsole("========================================");
-        console.printlnConsole("        CRIAÇÃO DO PERSONAGEM");
-        console.printlnConsole("========================================");
+        console.printlnConsole("╔══════════════════════════════════════════════════════════════════════╗");
+        console.printlnConsole("║                       CRIAÇÃO DO PERSONAGEM                          ║");
+        console.printlnConsole("╚══════════════════════════════════════════════════════════════════════╝");
         console.printlnConsole("");
-        console.printlnConsole("Antes de começar essa história,");
-        console.printlnConsole("crie o seu personagem.");
+        console.printlnConsole("  ► Antes de entrar no ringue e traçar sua jornada,");
+        console.printlnConsole("    defina a identidade e as características do seu boxeador:");
         console.printlnConsole("");
+        console.printlnConsole("  ┌────────────────────────────────────────────────────────────────────┐");
+        console.printlnConsole("  │ Digite o nome do seu boxeador:                                     │");
+        console.printlnConsole("  └────────────────────────────────────────────────────────────────────┘");
 
-        String nome = console.getEntrada("Digite o nome do personagem:");
+        String nome = console.getEntrada("  ► Nome:");
 
         while (nome.trim().isEmpty()) {
-            console.printlnConsole("");
-            console.printlnConsole("O nome não pode ficar vazio.");
-            nome = console.getEntrada("Digite o nome do personagem:");
+            console.printlnConsole("  [!] O nome do boxeador não pode ficar vazio.");
+            nome = console.getEntrada("  ► Digite novamente:");
         }
 
-        Sexo sexo = escolherSexo();
-        Cores corOlhos = escolherCorOlhos();
+        Sexo sexo = escolherSexo(nome.trim());
+        Cores corOlhos = escolherCorOlhos(nome.trim(), sexo);
 
         Player player = new Player(
                 1,
-                nome,
-                "Jovem que deseja seguir o caminho do pai no boxe.",
+                nome.trim(),
+                "Jovem determinado a seguir os passos do pai nos ringues de boxe.",
                 corOlhos,
                 sexo
         );
@@ -62,9 +63,10 @@ public class CriacaoPersonagemView implements View {
         mostrarPersonagem();
 
         console.printlnConsole("");
-        console.printlnConsole("Pressione ENTER para continuar...");
-
-        console.getEntrada("");
+        console.printlnConsole("       ┌────────────────────────────────────────────────────────┐");
+        console.printlnConsole("       │          [ ENTER ]  Iniciar História Inicial           │");
+        console.printlnConsole("       └────────────────────────────────────────────────────────┘");
+        console.esperarEnter("");
 
         sceneController.trocarCena(
                 new HistoriaInicialView(
@@ -75,40 +77,41 @@ public class CriacaoPersonagemView implements View {
         );
     }
 
-    private Sexo escolherSexo() {
+    private Sexo escolherSexo(String nome) {
+        console.clearConsole();
+        console.printlnConsole("╔══════════════════════════════════════════════════════════════════════╗");
+        console.printlnConsole("║                       CRIAÇÃO DO PERSONAGEM                          ║");
+        console.printlnConsole("╚══════════════════════════════════════════════════════════════════════╝");
+        console.printlnConsole("");
+        console.printlnConsole("  ► Atleta: " + nome);
+        console.printlnConsole("  ► Escolha o sexo do personagem [ ▲ / ▼ ] e tecle [ ENTER ]:\n");
 
         CMultiplaEscolha menu = new CMultiplaEscolha(console);
-
         CEscolha[] opcoes = new CEscolha[]{
                 new CEscolha("Masculino", 0),
                 new CEscolha("Feminino", 1)
         };
 
         try {
-
-            console.printlnConsole("");
-            console.printlnConsole("Escolha o sexo do personagem:");
-
             CEscolha escolha = menu.escolha(opcoes);
-
-            if (escolha.index == 0) {
-                return Sexo.MASCULINO;
-            }
-
-            return Sexo.FEMININO;
-
+            return escolha.index == 0 ? Sexo.MASCULINO : Sexo.FEMININO;
         } catch (IOException e) {
-
             e.printStackTrace();
-
             return Sexo.MASCULINO;
         }
     }
 
-    private Cores escolherCorOlhos() {
+    private Cores escolherCorOlhos(String nome, Sexo sexo) {
+        console.clearConsole();
+        console.printlnConsole("╔══════════════════════════════════════════════════════════════════════╗");
+        console.printlnConsole("║                       CRIAÇÃO DO PERSONAGEM                          ║");
+        console.printlnConsole("╚══════════════════════════════════════════════════════════════════════╝");
+        console.printlnConsole("");
+        String generoTexto = sexo == Sexo.MASCULINO ? "Masculino" : "Feminino";
+        console.printlnConsole("  ► Atleta: " + nome + " (" + generoTexto + ")");
+        console.printlnConsole("  ► Escolha a cor dos olhos [ ▲ / ▼ ] e tecle [ ENTER ]:\n");
 
         CMultiplaEscolha menu = new CMultiplaEscolha(console);
-
         CEscolha[] opcoes = new CEscolha[]{
                 new CEscolha("Castanho", 0),
                 new CEscolha("Preto", 1),
@@ -117,53 +120,48 @@ public class CriacaoPersonagemView implements View {
         };
 
         try {
-
-            console.printlnConsole("");
-            console.printlnConsole("Escolha a cor dos olhos:");
-
             CEscolha escolha = menu.escolha(opcoes);
-
-            switch (escolha.index) {
-                case 0:
-                    return Cores.CASTANHO;
-
-                case 1:
-                    return Cores.PRETO;
-
-                case 2:
-                    return Cores.VERDE;
-
-                case 3:
-                    return Cores.AZUL;
-
-                default:
-                    return Cores.CASTANHO;
-            }
-
+            return switch (escolha.index) {
+                case 0 -> Cores.CASTANHO;
+                case 1 -> Cores.PRETO;
+                case 2 -> Cores.VERDE;
+                case 3 -> Cores.AZUL;
+                default -> Cores.CASTANHO;
+            };
         } catch (IOException e) {
-
             e.printStackTrace();
-
             return Cores.CASTANHO;
         }
     }
 
     private void mostrarPersonagem() {
-
         Player player = gameController.getPlayer();
-
         console.clearConsole();
 
-        console.printlnConsole("========================================");
-        console.printlnConsole("          PERSONAGEM CRIADO!");
-        console.printlnConsole("========================================");
-        console.printlnConsole("");
+        console.printlnConsole("╔══════════════════════════════════════════════════════════════════════╗");
+        console.printlnConsole("║                      FICHA OFICIAL DO BOXEADOR                       ║");
+        console.printlnConsole("╠══════════════════════════════════════════════════════════════════════╣");
+        console.printlnConsole("║                                                                      ║");
+        printLinhaFicha("► DADOS DO ATLETA:");
+        printLinhaFicha("  • Nome          : " + player.getNome());
+        printLinhaFicha("  • Sexo          : " + player.getSexo());
+        printLinhaFicha("  • Cor dos Olhos : " + player.getCorOlhos());
+        console.printlnConsole("║                                                                      ║");
+        printLinhaFicha("► ATRIBUTOS INICIAIS:");
+        printLinhaFicha("  • Saúde: 100/100     • Energia: 100/100");
+        printLinhaFicha("  • Força: 1/10        • Agilidade: 1/10");
+        printLinhaFicha("  • Resistência: 1/10  • Inteligência: 1/10");
+        console.printlnConsole("║                                                                      ║");
+        printLinhaFicha("► HISTÓRICO:");
+        printLinhaFicha("  • Jovem determinado a honrar o legado do pai nos ringues.");
+        console.printlnConsole("║                                                                      ║");
+        console.printlnConsole("╚══════════════════════════════════════════════════════════════════════╝");
+    }
 
-        console.printlnConsole("Nome: " + player.getNome());
-        console.printlnConsole("Sexo: " + player.getSexo());
-        console.printlnConsole("Cor dos olhos: " + player.getCorOlhos());
-
-        console.printlnConsole("");
-        console.printlnConsole("Seu personagem está pronto.");
+    private void printLinhaFicha(String texto) {
+        if (texto.length() > 66) {
+            texto = texto.substring(0, 66);
+        }
+        console.printlnConsole("║  " + String.format("%-66s", texto) + "  ║");
     }
 }
