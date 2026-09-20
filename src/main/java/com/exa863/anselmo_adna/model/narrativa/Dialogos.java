@@ -1,4 +1,4 @@
-package com.exa863.anselmo_adna.model.narrative;
+package com.exa863.anselmo_adna.model.narrativa;
 
 import java.util.Random;
 

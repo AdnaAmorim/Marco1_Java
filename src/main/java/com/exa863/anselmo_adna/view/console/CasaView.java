@@ -5,7 +5,7 @@ import com.exa863.anselmo_adna.controller.SceneController;
 import com.exa863.anselmo_adna.model.character.Player;
 import com.exa863.anselmo_adna.model.stats.Atributo;
 import com.exa863.anselmo_adna.view.View;
-import com.exa863.anselmo_adna.model.narrative.Dialogos;
+import com.exa863.anselmo_adna.model.narrativa.Dialogos;
 
 import java.io.IOException;
 import java.util.ArrayList;
