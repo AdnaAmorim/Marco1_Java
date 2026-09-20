@@ -52,6 +52,7 @@ public class GameController {
         Local academia = new Local("Academia", "Lugar onde você pode treinar e evoluir.");
         Local casa = new Local("Casa", "Seu lugar de descanso.");
         Local academiaBoxe = new Local("Academia de Boxe", "Lugar onde acontecem grandes lutas.");
+        Local clubeLuta = new Local("Clube de Luta", "Lutas de rua clandestinas e apostas rápidas.");
 
         // CIDADE A
         Local cidadeA = new Local("Cidade A", "Uma cidade mais pobre.");
@@ -63,18 +64,18 @@ public class GameController {
         Local cidadeB = new Local("Cidade B", "Uma cidade rica e movimentada.");
         cidadeB.setCustoAcesso(1000);
         Local campeonatoMundial = new Local("Campeonato Mundial", "O maior campeonato de boxe do mundo.");
-        Local abrirAcademia = new Local("Abrir uma Academia", "Construa sua própria academia.");
 
         cidadeNatal.adicionarSubLocal(academia);
         cidadeNatal.adicionarSubLocal(casa);
         cidadeNatal.adicionarSubLocal(academiaBoxe);
+        cidadeNatal.adicionarSubLocal(clubeLuta);
         cidadeNatal.adicionarSubLocal(cidadeA);
         cidadeNatal.adicionarSubLocal(cidadeB);
-        cidadeNatal.adicionarSaida();
 
         academia.adicionarSaida();
         casa.adicionarSaida();
         academiaBoxe.adicionarSaida();
+        clubeLuta.adicionarSaida();
 
         cidadeA.adicionarSubLocal(loja);
         cidadeA.adicionarSubLocal(academiaProfissional);
@@ -84,11 +85,9 @@ public class GameController {
         academiaProfissional.adicionarSaida();
 
         cidadeB.adicionarSubLocal(campeonatoMundial);
-        cidadeB.adicionarSubLocal(abrirAcademia);
         cidadeB.adicionarSaida();
 
         campeonatoMundial.adicionarSaida();
-        abrirAcademia.adicionarSaida();
 
         mapaGlobal.adicionarSubLocal(cidadeNatal);
 

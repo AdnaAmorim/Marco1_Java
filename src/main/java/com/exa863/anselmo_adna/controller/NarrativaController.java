@@ -37,6 +37,17 @@ public class NarrativaController {
         return gatilho.alvo().equalsIgnoreCase(alvo);
     }
 
+    public boolean isLocalBloqueadoPelaNarrativa(String nomeLocal, Player player) {
+        if (player == null || nomeLocal == null) {
+            return false;
+        }
+
+        // Verifica se algum capítulo ativo/pendente bloqueia este local
+        return grafo.getTodosCapitulos().stream()
+                .filter(c -> grafo.estaDisponivel(c.getId(), player.getCapitulosConcluidos()))
+                .anyMatch(c -> c.isLocalBloqueado(nomeLocal));
+    }
+
     public GrafoCapitulos getGrafo() {
         return grafo;
     }

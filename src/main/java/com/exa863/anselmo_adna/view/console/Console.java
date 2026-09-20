@@ -164,6 +164,9 @@ public class Console {
     }
 
     public void animarFramesTempo(String[] frames, long duracaoMs, long intervaloMs) {
+        if (MODO_DEV) {
+            return;
+        }
         setCursorInvisivel();
         long endTime = System.currentTimeMillis() + duracaoMs;
         int frameIndex = 0;
@@ -208,6 +211,12 @@ public class Console {
     }
 
     public void animarTextoSequencial(String[] blocos, long intervaloLetraMs, long intervaloBlocoMs) {
+        if (MODO_DEV) {
+            for (String bloco : blocos) {
+                printConsole(bloco);
+            }
+            return;
+        }
         for (String bloco : blocos) {
             for (char ch : bloco.toCharArray()) {
                 printConsole(String.valueOf(ch));

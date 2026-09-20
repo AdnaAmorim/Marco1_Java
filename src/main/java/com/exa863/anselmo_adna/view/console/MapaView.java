@@ -5,8 +5,10 @@ import com.exa863.anselmo_adna.controller.SceneController;
 import com.exa863.anselmo_adna.controller.cenas.CutsceneController;
 import com.exa863.anselmo_adna.model.character.Player;
 import com.exa863.anselmo_adna.model.narrativa.Capitulo;
+import com.exa863.anselmo_adna.controller.NarrativaController;
 import com.exa863.anselmo_adna.model.narrativa.TipoGatilho;
 import com.exa863.anselmo_adna.model.stats.Atributo;
+import com.exa863.anselmo_adna.model.world.AcaoMenu;
 import com.exa863.anselmo_adna.model.world.Local;
 import com.exa863.anselmo_adna.view.View;
 
@@ -30,12 +32,38 @@ public class MapaView implements View {
     public void render() {
         Local localAtual = gameController.getLocalAtual();
         Player player = gameController.getPlayer();
-        Atributo attr = player != null ? player.getAtributos() : new Atributo();
-        String nomePlayer = player != null ? player.getNome() : "Boxeador";
+
+        renderHUD(localAtual, player);
+
+        List<ItemMenuMapa> itensMenu = construirItensMenu(localAtual, player);
+        CEscolha[] opcoes = new CEscolha[itensMenu.size()];
+        for (int i = 0; i < itensMenu.size(); i++) {
+            opcoes[i] = new CEscolha(itensMenu.get(i).rotulo(), i);
+        }
+
+        try {
+            CMultiplaEscolha menu = new CMultiplaEscolha(console);
+            CEscolha escolha = menu.escolha(opcoes);
+            ItemMenuMapa itemEscolhido = itensMenu.get(escolha.index);
+
+            if (itemEscolhido.ehAcao()) {
+                executarAcao(itemEscolhido.acao());
+            } else {
+                entrarNoLocal(itemEscolhido.local());
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void renderHUD(Local localAtual, Player player) {
+        Atributo attr = player.getAtributos();
+        String nomePlayer = player.getNome();
+        String dataHora = gameController.getDataDia().getDiaFormatado() + " às " + gameController.getDataDia().getHoraFormatada();
         int saude = attr.getSaude();
         int energia = attr.getEnergia();
-        int dinheiro = player != null ? player.getDinheiro() : 0;
-        String dataHora = gameController.getDataDia().getDiaFormatado() + " • " + gameController.getDataDia().getHoraFormatada();
+        int dinheiro = player.getDinheiro();
 
         console.clearConsole();
         console.printlnConsole("╔══════════════════════════════════════════════════════════════════════╗");
@@ -50,77 +78,128 @@ public class MapaView implements View {
         console.printlnConsole("╚══════════════════════════════════════════════════════════════════════╝");
         console.printlnConsole("");
         console.printlnConsole("  Selecione para onde deseja ir com [ ▲ / ▼ ] e [ ENTER ]:\n");
+    }
 
+    private List<ItemMenuMapa> construirItensMenu(Local localAtual, Player player) {
         List<Local> subLocais = localAtual.getSubLocais();
-        int totalOpcoes = subLocais.size() + 1; // + Mochila (Inventário)
-        CEscolha[] opcoes = new CEscolha[totalOpcoes];
+        NarrativaController narrativa = gameController.getNarrativaController();
 
-        for (int i = 0; i < subLocais.size(); i++) {
-            Local local = subLocais.get(i);
-            String rotulo = local.getNome();
-
-            if (local.getCustoAcesso() > 0 && !local.isAcessoLiberado()) {
-                rotulo += " • [Passagem: " + local.getCustoAcesso() + " Reais]";
-            }
-
-            opcoes[i] = new CEscolha(rotulo, i);
+        // Filtra dinamicamente locais bloqueados pelo estado atual da narrativa
+        if (narrativa != null) {
+            subLocais = subLocais.stream()
+                    .filter(l -> l.isLocalDeSaida() || !narrativa.isLocalBloqueadoPelaNarrativa(l.getNome(), player))
+                    .toList();
         }
 
-        int indexMochila = subLocais.size();
-        opcoes[indexMochila] = new CEscolha("Abrir Mochila (Inventário)", indexMochila);
+        List<ItemMenuMapa> itens = new java.util.ArrayList<>();
 
-        CMultiplaEscolha menu = new CMultiplaEscolha(console);
-
-        try {
-            CEscolha escolha = menu.escolha(opcoes);
-
-            if (escolha.index == indexMochila) {
-                sceneController.trocarCena(new InventarioView(console, sceneController, gameController));
-                return;
+        // 1. Locais normais físicos
+        for (Local local : subLocais) {
+            if (!local.isLocalDeSaida()) {
+                String rotulo = local.getNome();
+                if (local.getCustoAcesso() > 0 && !local.isAcessoLiberado()) {
+                    rotulo += " • [Passagem: " + local.getCustoAcesso() + " Reais]";
+                }
+                itens.add(new ItemMenuMapa(rotulo, local, null));
             }
+        }
 
-            Local localEscolhido = subLocais.get(escolha.index);
+        // 2. Ações do jogador (inseridas antes da saída)
+        itens.add(new ItemMenuMapa(AcaoMenu.ABRIR_MOCHILA.getTitulo(), null, AcaoMenu.ABRIR_MOCHILA));
 
-            if (!podeAcessar(localEscolhido)) {
+        if (localAtual.getNome().equalsIgnoreCase("Cidade B")) {
+            itens.add(new ItemMenuMapa(AcaoMenu.ABRIR_ACADEMIA.getTitulo(), null, AcaoMenu.ABRIR_ACADEMIA));
+        }
+
+        // 3. Ação de saída (se o local possuir saída)
+        for (Local local : subLocais) {
+            if (local.isLocalDeSaida()) {
+                itens.add(new ItemMenuMapa(AcaoMenu.SAIR_LOCAL.getTitulo(), local, AcaoMenu.SAIR_LOCAL));
+            }
+        }
+
+        return itens;
+    }
+
+    private void executarAcao(AcaoMenu acao) {
+        switch (acao) {
+            case ABRIR_MOCHILA -> sceneController.trocarCena(new InventarioView(console, sceneController, gameController));
+            case ABRIR_ACADEMIA -> executarAcaoAbrirAcademia();
+            case SAIR_LOCAL -> {
+                gameController.voltarLocal();
                 sceneController.trocarCena(new MapaView(console, sceneController, gameController));
-                return;
             }
+        }
+    }
 
-            gameController.entrarLocal(localEscolhido);
-            String nomeDoLocal = localEscolhido.getNome();
+    private void entrarNoLocal(Local localEscolhido) throws IOException {
+        if (!podeAcessar(localEscolhido)) {
+            sceneController.trocarCena(new MapaView(console, sceneController, gameController));
+            return;
+        }
 
-            // Determina a View correspondente a esse local
-            View viewDestino = resolverViewParaLocal(nomeDoLocal);
+        gameController.entrarLocal(localEscolhido);
+        String nomeDoLocal = localEscolhido.getNome();
 
-            // 1. Verificação de gatilhos da história (Capítulos)
-            Optional<Capitulo> capituloDisponivel = gameController.getNarrativaController()
-                    .obterCapituloDisponivel(
-                            TipoGatilho.ENTRAR_LOCAL,
-                            nomeDoLocal,
-                            gameController.getPlayer()
-                    );
+        // Determina a View correspondente a esse local
+        View viewDestino = resolverViewParaLocal(nomeDoLocal);
 
-            // 2. Se tem história para esse local, roda Cutscene primeiro
-            if (capituloDisponivel.isPresent()) {
-                CutsceneController cc = new CutsceneController(
-                        capituloDisponivel.get(),
+        // 1. Verificação de gatilhos da história (Capítulos)
+        Optional<Capitulo> capituloDisponivel = gameController.getNarrativaController()
+                .obterCapituloDisponivel(
+                        TipoGatilho.ENTRAR_LOCAL,
+                        nomeDoLocal,
                         gameController.getPlayer()
                 );
-                sceneController.trocarCena(new CutsceneView(console, sceneController, cc, viewDestino));
-                return;
-            }
 
-            // 3. Fluxo direto sem cutscene
-            sceneController.trocarCena(viewDestino);
+        // 2. Se tem história para esse local, roda Cutscene primeiro
+        if (capituloDisponivel.isPresent()) {
+            CutsceneController cc = new CutsceneController(
+                    capituloDisponivel.get(),
+                    gameController.getPlayer()
+            );
+            sceneController.trocarCena(new CutsceneView(console, sceneController, cc, viewDestino));
+            return;
+        }
 
-        } catch (IOException e) {
-            e.printStackTrace();
+        // 3. Fluxo direto sem cutscene
+        sceneController.trocarCena(viewDestino);
+    }
+
+    private void executarAcaoAbrirAcademia() {
+        console.clearConsole();
+        Player player = gameController.getPlayer();
+        console.printlnConsole("╔══════════════════════════════════════════════════════════════════════╗");
+        console.printlnConsole("║                  PROJETO: ABRIR UMA ACADEMIA                         ║");
+        console.printlnConsole("╚══════════════════════════════════════════════════════════════════════╝\n");
+        console.printlnConsole("  Construir sua própria academia de boxe profissional na Cidade B");
+        console.printlnConsole("  é o seu maior sonho como atleta e mestre!\n");
+        console.printlnConsole("  ► Requisitos necessários:");
+        console.printlnConsole("    • Conquistar o Campeonato Mundial");
+        console.printlnConsole("    • Capital inicial : 5.000 Reais");
+        console.printlnConsole("    • Seu Dinheiro    : " + player.getDinheiro() + " Reais\n");
+        console.printlnConsole("       ┌────────────────────────────────────────────────────────┐");
+        console.printlnConsole("       │                 [ ENTER ]  Voltar                      │");
+        console.printlnConsole("       └────────────────────────────────────────────────────────┘");
+        console.esperarEnter("");
+        sceneController.trocarCena(new MapaView(console, sceneController, gameController));
+    }
+
+    private record ItemMenuMapa(String rotulo, Local local, com.exa863.anselmo_adna.model.world.AcaoMenu acao) {
+        public boolean ehAcao() {
+            return acao != null;
         }
     }
 
     private View resolverViewParaLocal(String nomeLocal) {
         if (nomeLocal.equalsIgnoreCase("Academia") || nomeLocal.equalsIgnoreCase("Academia Profissional")) {
             return new AcademiaView(console, sceneController, gameController);
+        }
+        if (nomeLocal.equalsIgnoreCase("Academia de Boxe")) {
+            return new AcademiaBoxeView(console, sceneController, gameController);
+        }
+        if (nomeLocal.equalsIgnoreCase("Clube de Luta")) {
+            return new ClubeDeLutaView(console, sceneController, gameController);
         }
         if (nomeLocal.equalsIgnoreCase("Casa")) {
             return new CasaView(console, sceneController, gameController);

@@ -8,6 +8,9 @@ import com.exa863.anselmo_adna.view.console.art.LutasASCII;
 import com.exa863.anselmo_adna.controller.SceneController;
 import com.exa863.anselmo_adna.controller.GameController;
 
+import com.exa863.anselmo_adna.model.combat.ResultadoLuta;
+import java.util.function.Consumer;
+
 public class MatchView implements View {
 
     private final Console console;
@@ -16,19 +19,47 @@ public class MatchView implements View {
     private final Match match;
     private final Lutador lutador1;
     private final Lutador lutador2;
+    private final View viewRetorno;
+    private final Consumer<ResultadoLuta> aoFinalizar;
 
     public MatchView(Console console, SceneController sceneController, GameController gameController, Match match,
                      Lutador lutador1, Lutador lutador2) {
+        this(console, sceneController, gameController, match, lutador1, lutador2, null, null);
+    }
+
+    public MatchView(Console console, SceneController sceneController, GameController gameController, Match match,
+                     Lutador lutador1, Lutador lutador2, View viewRetorno, Consumer<ResultadoLuta> aoFinalizar) {
         this.console = console;
         this.sceneController = sceneController;
         this.gameController = gameController;
         this.match = match;
         this.lutador1 = lutador1;
         this.lutador2 = lutador2;
+        this.viewRetorno = viewRetorno;
+        this.aoFinalizar = aoFinalizar;
     }
 
     @Override
     public void render() {
+        if (Console.MODO_DEV) {
+            console.clearConsole();
+            imprimirHUD(null);
+            console.printlnConsole("\n--- RESULTADO OFICIAL [MODO DEV ATIVO - ANIMAÇÕES PULADAS] ---");
+            console.printlnConsole(match.getResultadoLuta().getDescricao() + "\n");
+
+            if (aoFinalizar != null) {
+                aoFinalizar.accept(match.getResultadoLuta());
+            }
+
+            console.esperarEnter("\n[Pressione ENTER para continuar]");
+
+            if (sceneController != null) {
+                View destino = (viewRetorno != null) ? viewRetorno : new MapaView(console, sceneController, gameController);
+                sceneController.trocarCena(destino);
+            }
+            return;
+        }
+
         for (Round round : match) {
             console.clearConsole();
 
@@ -55,10 +86,16 @@ public class MatchView implements View {
         imprimirHUD(null);
         console.printlnConsole("\n--- RESULTADO OFICIAL ---");
         console.printlnConsole(match.getResultadoLuta().getDescricao() + "\n");
-        console.esperarEnter("\n[Pressione ENTER para voltar]");
+
+        if (aoFinalizar != null) {
+            aoFinalizar.accept(match.getResultadoLuta());
+        }
+
+        console.esperarEnter("\n[Pressione ENTER para continuar]");
 
         if (sceneController != null) {
-            sceneController.trocarCena(new MenuView(console, sceneController, gameController));
+            View destino = (viewRetorno != null) ? viewRetorno : new MapaView(console, sceneController, gameController);
+            sceneController.trocarCena(destino);
         }
     }
 
@@ -227,12 +264,14 @@ public class MatchView implements View {
     }
 
     private void animarEspera() {
+        if (Console.MODO_DEV) return;
         String[] frames = { ".", "..", "...", ".." };
         console.animarFramesTempo(frames, 2000, 100);
         console.printConsole("\r   \r");
     }
 
     private void animarFimDeRound() {
+        if (Console.MODO_DEV) return;
         console.printlnConsole("");
         String base = "FIM DE ROUND";
         String[] frames = { base + "   ", base + ".  ", base + ".. ", base + "..." };
@@ -241,6 +280,7 @@ public class MatchView implements View {
     }
 
     private void animarDing() {
+        if (Console.MODO_DEV) return;
         String[] frames = {
                 "        )))   D I N G   (((",
                 "         ))   D I N G   (( ",

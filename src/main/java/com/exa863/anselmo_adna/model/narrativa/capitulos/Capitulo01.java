@@ -7,6 +7,7 @@ import com.exa863.anselmo_adna.model.narrativa.DialogoNarrativo;
 import com.exa863.anselmo_adna.model.narrativa.GatilhoNarrativo;
 import com.exa863.anselmo_adna.model.narrativa.TipoGatilho;
 import com.exa863.anselmo_adna.model.stats.Itens;
+import com.exa863.anselmo_adna.model.world.NomeLocal;
 
 import java.util.List;
 
@@ -20,6 +21,17 @@ public class Capitulo01 extends Capitulo {
                 "Origens",
                 new GatilhoNarrativo(TipoGatilho.ENTRAR_LOCAL, "casa"),
                 List.of()
+        );
+    }
+
+    @Override
+    public List<NomeLocal> getLocaisBloqueados() {
+        return List.of(
+                NomeLocal.ACADEMIA,
+                NomeLocal.ACADEMIA_BOXE,
+                NomeLocal.CLUBE_LUTA,
+                NomeLocal.CIDADE_A,
+                NomeLocal.CIDADE_B
         );
     }
 

@@ -15,6 +15,7 @@ public class Player extends Personagem {
     private Inventario inventario;
     private final Set<String> capitulosConcluidos;
     private int ultimoDiaTreinado;
+    private int ultimoDiaLutaBoxe;
 
     public Player(int id, String nome, String descricao, Cores corOlhos, Sexo sexo) {
         super(id, nome, descricao, corOlhos, sexo);
@@ -24,6 +25,7 @@ public class Player extends Personagem {
         this.inventario = new Inventario();
         this.capitulosConcluidos = new HashSet<>();
         this.ultimoDiaTreinado = 0;
+        this.ultimoDiaLutaBoxe = -1;
     }
 
     public int getUltimoDiaTreinado() {
@@ -36,6 +38,32 @@ public class Player extends Personagem {
 
     public boolean jaTreinouHoje(int diaAtual) {
         return this.ultimoDiaTreinado == diaAtual;
+    }
+
+    public int getUltimoDiaLutaBoxe() {
+        return ultimoDiaLutaBoxe;
+    }
+
+    public void setUltimoDiaLutaBoxe(int ultimoDiaLutaBoxe) {
+        this.ultimoDiaLutaBoxe = ultimoDiaLutaBoxe;
+    }
+
+    public boolean podeLutarBoxe(int diaAtual) {
+        if (this.ultimoDiaLutaBoxe == -1) {
+            return true;
+        }
+        return (diaAtual - this.ultimoDiaLutaBoxe) >= 2;
+    }
+
+    public int getProximoDiaLutaBoxe() {
+        if (this.ultimoDiaLutaBoxe == -1) {
+            return 1;
+        }
+        return this.ultimoDiaLutaBoxe + 2;
+    }
+
+    public void registrarLutaBoxe(int diaAtual) {
+        this.ultimoDiaLutaBoxe = diaAtual;
     }
 
     public int getDinheiro() {
