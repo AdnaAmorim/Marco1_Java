@@ -9,6 +9,7 @@ import com.exa863.anselmo_adna.model.narrativa.Dialogo;
 import com.exa863.anselmo_adna.model.narrativa.DialogoNarrativo;
 import com.exa863.anselmo_adna.model.narrativa.GatilhoNarrativo;
 import com.exa863.anselmo_adna.model.narrativa.TipoGatilho;
+import com.exa863.anselmo_adna.model.world.NomeLocal;
 
 import java.util.List;
 
@@ -20,6 +21,11 @@ public class Capitulo07 extends Capitulo {
     public Capitulo07() {
         super(ID, "A Sombra da Corrupção", new GatilhoNarrativo(TipoGatilho.ENTRAR_LOCAL, "Casa"), List.of(Capitulo06.ID));
         this.alexandra = new Personagem(8, "Alexandra Cruz", "Repórter investigativa implacável.", Cores.VERDE, Sexo.FEMININO);
+    }
+
+    @Override
+    public List<NomeLocal> getLocaisBloqueados() {
+        return List.of(NomeLocal.CIDADE_B);
     }
 
     @Override

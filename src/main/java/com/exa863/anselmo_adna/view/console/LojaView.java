@@ -60,6 +60,7 @@ public class LojaView implements View {
             CEscolha escolha = menu.escolha(opcoes);
 
             if (escolha.index == -1) {
+                gameController.voltarLocal();
                 sceneController.trocarCena(new MapaView(console, sceneController, gameController));
                 return;
             }

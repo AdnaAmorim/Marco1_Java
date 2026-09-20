@@ -10,6 +10,7 @@ import com.exa863.anselmo_adna.model.narrativa.DialogoNarrativo;
 import com.exa863.anselmo_adna.model.narrativa.GatilhoNarrativo;
 import com.exa863.anselmo_adna.model.narrativa.TipoGatilho;
 import com.exa863.anselmo_adna.model.stats.Itens;
+import com.exa863.anselmo_adna.model.world.NomeLocal;
 
 import java.util.List;
 
@@ -26,6 +27,14 @@ public class Capitulo04 extends Capitulo {
                 List.of(Capitulo03.ID)
         );
         this.victorNoor = new Personagem(5, "Victor Noor", "Um empresário rico do submundo das apostas.", Cores.PRETO, Sexo.MASCULINO);
+    }
+
+    @Override
+    public List<NomeLocal> getLocaisBloqueados() {
+        return List.of(
+                NomeLocal.CIDADE_A,
+                NomeLocal.CIDADE_B
+        );
     }
 
     @Override

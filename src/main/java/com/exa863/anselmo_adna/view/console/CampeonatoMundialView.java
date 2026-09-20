@@ -136,8 +136,8 @@ public class CampeonatoMundialView implements View {
     // Mostra qual caminho de relacionamento o jogador seguiu e a afinidade final com cada personagem
     private void exibirResumoRelacionamentos(Player player) {
         console.printlnConsole("\n╔══════════════════════════════════════════════════════════════════════╗");
-        console.printlnConsole("  ║                       RELACIONAMENTOS FINAIS                         ║");
-        console.printlnConsole("  ╚══════════════════════════════════════════════════════════════════════╝");
+        console.printlnConsole("║                       RELACIONAMENTOS FINAIS                         ║");
+        console.printlnConsole("╚══════════════════════════════════════════════════════════════════════╝");
 
         if (player.possuiRomance()) {
             console.printlnConsole("  ✦ Romance : Você seguiu o caminho do relacionamento com " + player.getPersonagemRomance() + ".");
@@ -235,7 +235,7 @@ public class CampeonatoMundialView implements View {
 
             exibirResumoRelacionamentos(player);
 
-            console.printlnConsole("\n     ┌────────────────────────────────────────────────────────┐");
+            console.printlnConsole("\n       ┌────────────────────────────────────────────────────────┐");
             console.printlnConsole("       │           [ ENTER ]  Voltar ao Menu Principal          │");
             console.printlnConsole("       └────────────────────────────────────────────────────────┘");
             console.esperarEnter("");

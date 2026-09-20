@@ -9,6 +9,7 @@ import com.exa863.anselmo_adna.model.narrativa.Dialogo;
 import com.exa863.anselmo_adna.model.narrativa.DialogoNarrativo;
 import com.exa863.anselmo_adna.model.narrativa.GatilhoNarrativo;
 import com.exa863.anselmo_adna.model.narrativa.TipoGatilho;
+import com.exa863.anselmo_adna.model.world.NomeLocal;
 
 import java.util.List;
 
@@ -25,6 +26,16 @@ public class Capitulo02 extends Capitulo {
                 List.of(Capitulo01.ID)
         );
         this.olivia = new Personagem(2, "Olivia", "Estudante de fisioterapia", Cores.CASTANHO, Sexo.FEMININO);
+    }
+
+    @Override
+    public List<NomeLocal> getLocaisBloqueados() {
+        return List.of(
+                NomeLocal.ACADEMIA_BOXE,
+                NomeLocal.CLUBE_LUTA,
+                NomeLocal.CIDADE_A,
+                NomeLocal.CIDADE_B
+        );
     }
 
     @Override
