@@ -69,9 +69,11 @@ public class Capitulo03 extends Capitulo {
 
     private void acaoSeguirChris(Player player) {
         player.getAtributos().setEnergia(player.getAtributos().getEnergia() + 15);
+        player.alterarAfinidade(chris, 1);
     }
 
     private void acaoSeguirMestre(Player player) {
         player.getAtributos().setResistencia(player.getAtributos().getResistencia() + 1);
+        player.alterarAfinidade(mestreSmith, 1);
     }
 }

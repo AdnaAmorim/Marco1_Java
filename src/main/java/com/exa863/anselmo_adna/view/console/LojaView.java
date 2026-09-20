@@ -41,8 +41,13 @@ public class LojaView implements View {
 
         for (int i = 0; i < itensLoja.length; i++) {
             Item item = itensLoja[i];
+
+            String efeitos = "";
+            if (item.getCura() > 0) efeitos += "+" + item.getCura() + " Saúde ";
+            if (item.getEnergia() > 0) efeitos += "+" + item.getEnergia() + " Energia ";
+
             opcoes[i] = new CEscolha(
-                    item.getNome() + " • " + item.getPreco() + " Reais (+" + item.getCura() + " de Saúde)",
+                    item.getNome() + " • " + item.getPreco() + " Reais (" + efeitos.trim() + ")",
                     i
             );
         }
@@ -60,8 +65,6 @@ public class LojaView implements View {
             }
 
             comprarItem(player, itensLoja[escolha.index]);
-
-            // volta pra loja pra poder comprar mais coisas
             sceneController.trocarCena(this);
 
         } catch (IOException e) {

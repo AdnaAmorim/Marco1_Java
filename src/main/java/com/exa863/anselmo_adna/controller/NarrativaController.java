@@ -23,6 +23,7 @@ public class NarrativaController {
 
         return grafo.getTodosCapitulos().stream()
                 .filter(c -> grafo.estaDisponivel(c.getId(), player.getCapitulosConcluidos()))
+                .filter(c -> c.podeIniciar(player))
                 .filter(c -> matchGatilho(c.getGatilho(), tipo, alvo))
                 .findFirst();
     }
@@ -45,6 +46,7 @@ public class NarrativaController {
         // Verifica se algum capítulo ativo/pendente bloqueia este local
         return grafo.getTodosCapitulos().stream()
                 .filter(c -> grafo.estaDisponivel(c.getId(), player.getCapitulosConcluidos()))
+                .filter(c -> c.podeIniciar(player))
                 .anyMatch(c -> c.isLocalBloqueado(nomeLocal));
     }
 

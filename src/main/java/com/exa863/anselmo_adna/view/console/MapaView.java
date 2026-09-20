@@ -207,6 +207,9 @@ public class MapaView implements View {
         if (nomeLocal.equalsIgnoreCase("Loja")) {
             return new LojaView(console, sceneController, gameController);
         }
+        if (nomeLocal.equalsIgnoreCase("Campeonato Mundial")) {
+            return new CampeonatoMundialView(console, sceneController, gameController);
+        }
         return new MapaView(console, sceneController, gameController);
     }
 

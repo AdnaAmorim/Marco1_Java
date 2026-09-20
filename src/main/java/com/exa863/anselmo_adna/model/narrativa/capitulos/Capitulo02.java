@@ -67,6 +67,7 @@ public class Capitulo02 extends Capitulo {
 
     private void acaoPedirAjuda(Player player) {
         player.getAtributos().setSaude(player.getAtributos().getSaude() + 10);
+        player.alterarAfinidade(olivia, 1);
     }
 
     private void acaoTreinarSozinho(Player player) {

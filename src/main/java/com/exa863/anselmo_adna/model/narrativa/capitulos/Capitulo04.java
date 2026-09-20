@@ -67,12 +67,11 @@ public class Capitulo04 extends Capitulo {
     }
 
     private void acaoOuvirNoor(Player player) {
-        // Aumenta reputação sombria adicionando dinheiro e o item especial "Contrato"
         player.setDinheiro(player.getDinheiro() + 1500);
         player.getInventario().adicionarItem(Itens.CONTRATO);
+        player.alterarAfinidade(victorNoor, 10);
     }
 
     private void acaoRecusar(Player player) {
-        // O jogador mantém-se limpo, sem bónus financeiro
     }
 }

@@ -2,12 +2,17 @@ package com.exa863.anselmo_adna.view.console;
 
 import com.exa863.anselmo_adna.controller.SceneController;
 import com.exa863.anselmo_adna.controller.cenas.CutsceneController;
+import com.exa863.anselmo_adna.model.character.Personagem;
+import com.exa863.anselmo_adna.model.character.Player;
 import com.exa863.anselmo_adna.model.narrativa.Dialogo;
 import com.exa863.anselmo_adna.model.narrativa.TipoEmissor;
+import com.exa863.anselmo_adna.model.stats.Relacionamentos;
 import com.exa863.anselmo_adna.view.View;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CutsceneView implements View {
 
@@ -98,8 +103,13 @@ public class CutsceneView implements View {
 
             console.printlnConsole("\n  [✓ Escolha]: " + opcaoEscolhida.getTexto() + "\n");
 
+            Player player = cutsceneController.getPlayer();
+            Map<Integer, Integer> afinidadesAntes = capturarAfinidades(player);
+
             // O controller processa a ação da escolha
             cutsceneController.processarEscolha(opcaoEscolhida);
+
+            exibirVariacoesDeReputacao(player, afinidadesAntes);
 
             // Exibe os diálogos de desfecho
             for (Dialogo falaDesfecho : opcaoEscolhida.getDesfecho()) {
@@ -108,6 +118,49 @@ public class CutsceneView implements View {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    // Captura o nível de afinidade atual do jogador com cada personagem conhecido
+    private Map<Integer, Integer> capturarAfinidades(Player player) {
+        Map<Integer, Integer> afinidades = new HashMap<>();
+        if (player == null) {
+            return afinidades;
+        }
+        for (Relacionamentos relacionamento : player.getRelacionamentos()) {
+            if (relacionamento != null && relacionamento.getPersonagem() != null) {
+                afinidades.put(relacionamento.getPersonagem().getId(), relacionamento.getNivelAmizade());
+            }
+        }
+        return afinidades;
+    }
+
+    // Compara a afinidade antes/depois da escolha e informa ao jogador o que mudou
+    private void exibirVariacoesDeReputacao(Player player, Map<Integer, Integer> afinidadesAntes) {
+        if (player == null) {
+            return;
+        }
+
+        for (Relacionamentos relacionamento : player.getRelacionamentos()) {
+            if (relacionamento == null || relacionamento.getPersonagem() == null) {
+                continue;
+            }
+
+            Personagem personagem = relacionamento.getPersonagem();
+            int depois = relacionamento.getNivelAmizade();
+            int antes = afinidadesAntes.getOrDefault(personagem.getId(), 0);
+            int delta = depois - antes;
+
+            if (delta == 0) {
+                continue;
+            }
+
+            if (delta > 0) {
+                console.printlnConsole("  ✦ [Reputação] Você ganhou reputação com " + personagem.getNome() + " (+" + delta + ")");
+            } else {
+                console.printlnConsole("  ✦ [Reputação] Você perdeu reputação com " + personagem.getNome() + " (" + delta + ")");
+            }
+        }
+        console.printlnConsole("");
     }
 
     private String centralizar(String texto, int largura) {

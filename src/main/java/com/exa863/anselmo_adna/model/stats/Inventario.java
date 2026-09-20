@@ -49,7 +49,7 @@ public class Inventario {
         return itens;
     }
 
-    // Consome um item (comida/suplemento) e recupera a saúde do player
+    // Consome um item e recupera a saúde e a energia do player
     public boolean usarItem(Item item, Player player) {
         if (!removerItem(item)) {
             return false;
@@ -57,6 +57,9 @@ public class Inventario {
 
         int saudeAtual = player.getAtributos().getSaude();
         player.getAtributos().setSaude(saudeAtual + item.getCura());
+
+        int energiaAtual = player.getAtributos().getEnergia();
+        player.getAtributos().setEnergia(energiaAtual + item.getEnergia());
 
         return true;
     }

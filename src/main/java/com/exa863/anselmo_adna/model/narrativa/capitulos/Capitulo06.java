@@ -37,7 +37,10 @@ public class Capitulo06 extends Capitulo {
                 Dialogo.escolha(
                         "O que você faz?",
                         List.of(
-                                Dialogo.opcao("Treinar com foco em análise com James", p -> p.concluirCapitulo("FLAG_JAMES"), List.of(
+                                Dialogo.opcao("Treinar com foco em análise com James", p -> {
+                                    p.concluirCapitulo("FLAG_JAMES");
+                                    p.alterarAfinidade(james, 1);
+                                }, List.of(
                                         new Dialogo(player, "'Certo. Me mostre o que você encontrou nesses dados. Preciso de toda ajuda possível para não cair.'"),
                                         new Dialogo(james, "(Ajustando os óculos com um sorriso empolgado) 'Excelente decisão. Vamos transformar você em uma máquina eficiente.'"),
                                         DialogoNarrativo.narrador("As próximas horas de treino são intensamente focadas em corrigir micro-movimentos que você nem sabia que fazia.")
@@ -50,5 +53,9 @@ public class Capitulo06 extends Capitulo {
                         )
                 )
         );
+    }
+    @Override
+    public boolean podeIniciar(Player player) {
+        return player != null && player.getLutasEstaduais() >= 2;
     }
 }

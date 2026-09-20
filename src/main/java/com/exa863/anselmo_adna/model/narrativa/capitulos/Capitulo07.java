@@ -51,4 +51,8 @@ public class Capitulo07 extends Capitulo {
                 )
         );
     }
+    @Override
+    public boolean podeIniciar(Player player) {
+        return player != null && player.getLutasEstaduais() >= 2;
+    }
 }

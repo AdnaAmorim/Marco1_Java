@@ -17,10 +17,14 @@ public class Capitulo09 extends Capitulo {
 
     public static final String ID = "CAPITULO_09";
     private final Personagem mestreSmith;
+    private final Personagem olivia;
+    private final Personagem james;
 
     public Capitulo09() {
         super(ID, "O Passaporte", new GatilhoNarrativo(TipoGatilho.ENTRAR_LOCAL, "Cidade B"), List.of(Capitulo08.ID));
         this.mestreSmith = new Personagem(3, "Mestre Smith", "Um veterano rigoroso do boxe.", Cores.PRETO, Sexo.MASCULINO);
+        this.olivia = new Personagem(2, "Olivia", "Estudante de fisioterapia", Cores.CASTANHO, Sexo.FEMININO);
+        this.james = new Personagem(7, "James", "Analista de desempenho esportivo.", Cores.AZUL, Sexo.MASCULINO);
     }
 
     @Override
@@ -36,20 +40,26 @@ public class Capitulo09 extends Capitulo {
 
         List<Dialogo.Opcao> opcoes = new ArrayList<>();
 
-        // Olivia assumimos estar ativa se a saúde foi upada no Capítulo 2
-        if (player.getAtributos().getSaude() >= 100) {
-            opcoes.add(Dialogo.opcao("Passar a noite conversando com Olivia", p -> {}, List.of(
+
+        if (player.getAfinidade(olivia) > 0 && player.podeRomancearCom(olivia.getNome())) {
+            opcoes.add(Dialogo.opcao("Passar a noite conversando com Olivia", p -> {
+                p.definirRomance(olivia.getNome());
+                p.concluirCapitulo("ROMANCE_OLIVIA");
+            }, List.of(
                     new Dialogo(player, "(Sentando vagarosamente ao lado dela) 'Olivia, eu tenho certeza de que não teria chegado até aqui vivo sem você cuidando de mim.'"),
-                    DialogoNarrativo.sistema("[Olivia]: (Sorrindo suavemente e segurando a mão do protagonista) 'Você lutou cada round sangrento sozinho. Eu só cuidei dos arranhões depois que o gongo tocava.'"),
-                    DialogoNarrativo.sistema("[Olivia]: 'E eu vou continuar aqui, fiel, em todas as lutas, vencendo ou perdendo. Você nunca mais estará lutando sozinho.'")
+                    new Dialogo(olivia, "(Sorrindo suavemente e segurando a mão do protagonista) 'Você lutou cada round sangrento sozinho. Eu só cuidei dos arranhões depois que o gongo tocava.'"),
+                    new Dialogo(olivia, "'E eu vou continuar aqui, fiel, em todas as lutas, vencendo ou perdendo. Você nunca mais estará lutando sozinho.'")
             )));
         }
 
-        if (player.isCapituloConcluido("FLAG_JAMES")) {
-            opcoes.add(Dialogo.opcao("Revisar táticas com James", p -> {}, List.of(
+        if (player.getAfinidade(james) > 0 && player.podeRomancearCom(james.getNome())) {
+            opcoes.add(Dialogo.opcao("Revisar táticas com James", p -> {
+                p.definirRomance(james.getNome());
+                p.concluirCapitulo("ROMANCE_JAMES");
+            }, List.of(
                     new Dialogo(player, "(Sentando ao lado dele enquanto a tela do tablet ilumina seu rosto) 'James, você me fez ver o boxe de um jeito genial e completamente novo. Muito obrigado.'"),
-                    DialogoNarrativo.sistema("[James]: (Sorrindo de forma tímida, fechando o laptop lentamente) 'A matemática por trás das lutas é bonita, não vou negar... mas o enorme coração que você coloca nela...'"),
-                    DialogoNarrativo.sistema("[James]: 'Isso é o que realmente impressiona. Sinceramente? Quero continuar analisando suas lutas... e você.'")
+                    new Dialogo(james, "(Sorrindo de forma tímida, fechando o laptop lentamente) 'A matemática por trás das lutas é bonita, não vou negar... mas o enorme coração que você coloca nela...'"),
+                    new Dialogo(james, "'Isso é o que realmente impressiona. Sinceramente? Quero continuar analisando suas lutas... e você.'")
             )));
         }
 

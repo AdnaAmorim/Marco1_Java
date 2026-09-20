@@ -58,7 +58,10 @@ public class InventarioView implements View {
 
             String rotulo = item.getNome() + " (x" + quantidade + ")";
             if (item.isConsumivel()) {
-                rotulo += " • +" + item.getCura() + " de Saúde";
+                String efeitos = "";
+                if (item.getCura() > 0) efeitos += "+" + item.getCura() + " Saúde ";
+                if (item.getEnergia() > 0) efeitos += "+" + item.getEnergia() + " Energia";
+                rotulo += " • " + efeitos.trim();
             } else {
                 rotulo += " • [Item Especial]";
             }
@@ -86,7 +89,6 @@ public class InventarioView implements View {
         }
     }
 
-    // Mostra a descrição do item e, se for consumivel, da a opcao de usar
     private void detalharItem(Player player, Item item) throws IOException {
         console.printlnConsole("");
         console.printlnConsole("  ┌────────────────────────────────────────────────────────────────────┐");
@@ -104,8 +106,12 @@ public class InventarioView implements View {
             return;
         }
 
+        String labelEfeitos = "";
+        if (item.getCura() > 0) labelEfeitos += "+" + item.getCura() + " de Saúde ";
+        if (item.getEnergia() > 0) labelEfeitos += "+" + item.getEnergia() + " de Energia";
+
         CEscolha[] opcoesItem = new CEscolha[] {
-                new CEscolha("Consumir Item (+" + item.getCura() + " de Saúde)", 0),
+                new CEscolha("Consumir Item (" + labelEfeitos.trim() + ")", 0),
                 new CEscolha("Voltar ao Inventário", 1)
         };
 
@@ -116,7 +122,8 @@ public class InventarioView implements View {
             player.getInventario().usarItem(item, player);
             console.printlnConsole("");
             console.printlnConsole("  [✓] Você utilizou " + item.getNome() + "!");
-            console.printlnConsole("  ► Saúde atual do atleta: " + player.getAtributos().getSaude() + " / 100\n");
+            console.printlnConsole("  ► Saúde atual   : " + player.getAtributos().getSaude() + " / 100");
+            console.printlnConsole("  ► Energia atual : " + player.getAtributos().getEnergia() + " / 100\n");
             console.printlnConsole("       ┌────────────────────────────────────────────────────────┐");
             console.printlnConsole("       │                 [ ENTER ]  Continuar                   │");
             console.printlnConsole("       └────────────────────────────────────────────────────────┘");

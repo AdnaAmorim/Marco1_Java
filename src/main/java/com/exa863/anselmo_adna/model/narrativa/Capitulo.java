@@ -38,6 +38,12 @@ public abstract class Capitulo {
     // Retorna a lista linear de diálogos do capítulo
     public abstract List<Dialogo> getDialogos(Player player);
 
+    // Requisito extra além das dependências do grafo (lutas disputadas, dinheiro, atributos...)
+    // Por padrão não exige nada; cada capítulo sobrescreve se precisar.
+    public boolean podeIniciar(Player player) {
+        return true;
+    }
+
     // Retorna a lista de locais bloqueados enquanto este capítulo estiver ativo/pendente
     public List<NomeLocal> getLocaisBloqueados() {
         return List.of();
