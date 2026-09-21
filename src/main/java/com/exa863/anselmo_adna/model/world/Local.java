@@ -3,6 +3,12 @@ package com.exa863.anselmo_adna.model.world;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Representa um local do mapa (cidade, academia, casa etc.).
+ * Um local pode ter sublocais dentro dele e opcionalmente um custo para entrar.
+ *
+ * @author Anselmo e Adna
+ */
 public class Local {
 
     private String nome;

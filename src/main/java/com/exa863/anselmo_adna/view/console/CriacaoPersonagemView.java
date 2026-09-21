@@ -9,6 +9,12 @@ import com.exa863.anselmo_adna.view.View;
 
 import java.io.IOException;
 
+/**
+ * Tela de criação do personagem.
+ * Pede o nome, sexo e cor dos olhos para criar o Player antes de começar o jogo.
+ *
+ * @author Anselmo e Adna
+ */
 public class CriacaoPersonagemView implements View {
 
     private final Console console;

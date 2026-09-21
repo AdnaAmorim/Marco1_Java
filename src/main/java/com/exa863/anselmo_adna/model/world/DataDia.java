@@ -1,5 +1,11 @@
 package com.exa863.anselmo_adna.model.world;
 
+/**
+ * Controla o tempo do jogo em dias, horas e minutos.
+ * O dia começa às 6h e avança automaticamente ao realizar ações.
+ *
+ * @author Anselmo e Adna
+ */
 public class DataDia {
     private int dias = 1;
     private int horas = 6;  // O dia começa às 6h

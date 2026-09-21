@@ -4,6 +4,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * Representa uma luta completa com seus rounds e o resultado final.
+ *
+ * @author Anselmo e Adna
+ */
 public class Match implements Iterable<Round> {
     private ResultadoLuta resultadoLuta;
     private List<Round> rounds;

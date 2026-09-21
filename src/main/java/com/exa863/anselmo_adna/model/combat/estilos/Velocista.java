@@ -4,6 +4,12 @@ import com.exa863.anselmo_adna.model.combat.AtributosEfetivos;
 import com.exa863.anselmo_adna.model.combat.EstiloLuta;
 import com.exa863.anselmo_adna.model.stats.Atributo;
 
+/**
+ * Estilo de luta que foca em agilidade e energia.
+ * Se movimenta bastante e cansa menos, mas bate mais fraco.
+ *
+ * @author Anselmo e Adna
+ */
 public class Velocista extends EstiloLuta {
 
     public static final double MULTIPLICADOR_PENALIDADE_FORCA = 0.80; // -20% de força, bate mais fraco

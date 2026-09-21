@@ -6,6 +6,11 @@ import com.exa863.anselmo_adna.view.View;
 import com.exa863.anselmo_adna.view.console.art.MenuInicialASCII;
 import java.io.IOException;
 
+/**
+ * Menu principal do jogo (Novo Jogo, Continuar, Sair).
+ *
+ * @author Anselmo e Adna
+ */
 public class MenuView implements View {
 
     private final Console console;

@@ -4,6 +4,12 @@ import com.exa863.anselmo_adna.model.combat.AtributosEfetivos;
 import com.exa863.anselmo_adna.model.combat.EstiloLuta;
 import com.exa863.anselmo_adna.model.stats.Atributo;
 
+/**
+ * Estilo de luta que foca em força bruta.
+ * Bate mais forte mas perde agilidade e gasta mais energia nos golpes.
+ *
+ * @author Anselmo e Adna
+ */
 public class Nocauteador extends EstiloLuta {
 
     public static final double MULTIPLICADOR_PENALIDADE_AGILIDADE = 0.80; // -20% de agilidade, se mexe mais devagar

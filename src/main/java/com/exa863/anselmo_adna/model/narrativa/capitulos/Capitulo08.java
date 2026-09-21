@@ -14,6 +14,11 @@ import com.exa863.anselmo_adna.model.world.NomeLocal;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Capítulo 8: O Palco Nacional. Acontece na academia de boxe.
+ *
+ * @author Anselmo e Adna
+ */
 public class Capitulo08 extends Capitulo {
 
     public static final String ID = "CAPITULO_08";

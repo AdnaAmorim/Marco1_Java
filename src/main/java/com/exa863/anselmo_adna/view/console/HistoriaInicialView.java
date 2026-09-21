@@ -6,6 +6,12 @@ import com.exa863.anselmo_adna.model.character.Player;
 import com.exa863.anselmo_adna.model.character.Sexo;
 import com.exa863.anselmo_adna.view.View;
 
+/**
+ * Tela da história inicial antes de criar o personagem.
+ * Apresenta o contexto do jogo por texto e encaminha para a criação de personagem.
+ *
+ * @author Anselmo e Adna
+ */
 public class HistoriaInicialView implements View {
 
     private final Console console;

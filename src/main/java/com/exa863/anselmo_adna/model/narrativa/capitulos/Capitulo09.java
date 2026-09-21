@@ -14,6 +14,11 @@ import com.exa863.anselmo_adna.model.world.NomeLocal;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Capítulo 9: O Passaporte. Acontece na Cidade B.
+ *
+ * @author Anselmo e Adna
+ */
 public class Capitulo09 extends Capitulo {
 
     public static final String ID = "CAPITULO_09";

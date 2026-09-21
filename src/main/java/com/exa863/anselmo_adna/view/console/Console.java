@@ -9,6 +9,12 @@ import org.jline.utils.InfoCmp;
 import java.io.BufferedReader;
 import java.io.IOException;
 
+/**
+ * Abstração do terminal do jogo.
+ * Centraliza todas as operações de leitura, escrita, limpeza de tela, controle de cursor e delays de animação.
+ *
+ * @author Anselmo e Adna
+ */
 public class Console {
 
     // MODO DEV: quando true, anula todos os delays de animação e digitação, imprimindo instantaneamente

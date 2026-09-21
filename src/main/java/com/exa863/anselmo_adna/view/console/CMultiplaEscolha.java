@@ -10,6 +10,12 @@ import java.io.IOException;
 import static org.jline.utils.InfoCmp.Capability.key_down;
 import static org.jline.utils.InfoCmp.Capability.key_up;
 
+/**
+ * Componente de menu interativo com seleção por teclado (setas ↑↓ e Enter).
+ * Exibe as opções no console e retorna a escolha do usuário.
+ *
+ * @author Anselmo e Adna
+ */
 public class CMultiplaEscolha {
 
     private static final String KEY_UP = "UP";

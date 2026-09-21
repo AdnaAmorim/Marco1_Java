@@ -13,6 +13,11 @@ import com.exa863.anselmo_adna.model.world.NomeLocal;
 
 import java.util.List;
 
+/**
+ * Capítulo 5: O Encontro com o Trovão. Acontece na academia de boxe.
+ *
+ * @author Anselmo e Adna
+ */
 public class Capitulo05 extends Capitulo {
 
     public static final String ID = "CAPITULO_05";

@@ -4,6 +4,12 @@ import com.exa863.anselmo_adna.model.combat.AtributosEfetivos;
 import com.exa863.anselmo_adna.model.combat.EstiloLuta;
 import com.exa863.anselmo_adna.model.stats.Atributo;
 
+/**
+ * Estilo de luta que foca em resistência e inteligência.
+ * Defende bem e ataca quando o adversário erra. Perde um pouco de agilidade.
+ *
+ * @author Anselmo e Adna
+ */
 public class Contragolpeador extends EstiloLuta {
 
     public static final double MULTIPLICADOR_PENALIDADE_AGILIDADE = 0.85; // -15% de agilidade, perde um pouco de velocidade pra defender

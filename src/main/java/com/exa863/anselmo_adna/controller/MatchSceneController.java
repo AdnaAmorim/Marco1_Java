@@ -5,6 +5,12 @@ import com.exa863.anselmo_adna.model.combat.Match;
 import com.exa863.anselmo_adna.view.console.Console;
 import com.exa863.anselmo_adna.view.console.MatchView;
 
+/**
+ * Liga o MatchController com a tela de luta.
+ * Quando chamado, executa a partida e carrega a MatchView para mostrar o resultado.
+ *
+ * @author Anselmo e Adna
+ */
 public class MatchSceneController {
 
     private final MatchController matchController;

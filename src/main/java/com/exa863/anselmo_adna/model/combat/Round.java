@@ -3,6 +3,11 @@ package com.exa863.anselmo_adna.model.combat;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Representa um round da luta com os eventos narrados e se foi o último round.
+ *
+ * @author Anselmo e Adna
+ */
 public class Round {
     private int numero;
     private boolean ultimo;

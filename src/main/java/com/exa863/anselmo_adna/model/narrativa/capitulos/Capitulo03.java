@@ -13,6 +13,11 @@ import com.exa863.anselmo_adna.model.world.NomeLocal;
 
 import java.util.List;
 
+/**
+ * Capítulo 3: O Teste do Mestre. Acontece na academia de boxe.
+ *
+ * @author Anselmo e Adna
+ */
 public class Capitulo03 extends Capitulo {
 
     public static final String ID = "CAPITULO_03";

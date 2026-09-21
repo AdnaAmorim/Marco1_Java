@@ -14,6 +14,11 @@ import com.exa863.anselmo_adna.model.world.NomeLocal;
 
 import java.util.List;
 
+/**
+ * Capítulo 4: O Submundo. Acontece na academia de boxe.
+ *
+ * @author Anselmo e Adna
+ */
 public class Capitulo04 extends Capitulo {
 
     public static final String ID = "CAPITULO_04";

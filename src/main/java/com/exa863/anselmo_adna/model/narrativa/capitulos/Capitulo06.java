@@ -13,6 +13,11 @@ import com.exa863.anselmo_adna.model.world.NomeLocal;
 
 import java.util.List;
 
+/**
+ * Capítulo 6: Novos Horizontes. Acontece na academia profissional.
+ *
+ * @author Anselmo e Adna
+ */
 public class Capitulo06 extends Capitulo {
 
     public static final String ID = "CAPITULO_06";

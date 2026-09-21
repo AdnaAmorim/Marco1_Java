@@ -2,6 +2,13 @@ package com.exa863.anselmo_adna.model.combat;
 
 import com.exa863.anselmo_adna.model.stats.Atributo;
 
+/**
+ * Classe base para os estilos de luta (Velocista, Nocauteador, Contragolpeador).
+ * Cada estilo aplica bônus e penalidades nos atributos do lutador antes da luta começar.
+ * O bônus escala de acordo com o nível do atributo principal do estilo.
+ *
+ * @author Anselmo e Adna
+ */
 public abstract class EstiloLuta {
 
     // nivel do atributo do lutador em relacao ao maximo (ex: 50% significa 5 de 10, ou 50 de 100)

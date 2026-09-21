@@ -1,5 +1,11 @@
 package com.exa863.anselmo_adna.controller.cenas;
 
+/**
+ * Confere se o terminal do usuário tem o tamanho mínimo para rodar o jogo (80x32).
+ * Também permite forçar a continuação mesmo que o tamanho esteja errado.
+ *
+ * @author Anselmo e Adna
+ */
 public class SplashScreenController {
 
     public static final int LARGURA_MINIMA_PADRAO = 80;

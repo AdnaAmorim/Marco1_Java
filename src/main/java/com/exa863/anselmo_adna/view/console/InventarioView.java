@@ -10,6 +10,12 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Tela da mochila do jogador.
+ * Mostra os itens disponíveis e permite usar ou descartar.
+ *
+ * @author Anselmo e Adna
+ */
 public class InventarioView implements View {
 
     private final Console console;
