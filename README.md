@@ -111,7 +111,7 @@ Com o **JDK 21 já instalado**, siga o [guia oficial de instalação do Apache M
 
 Para Linux e macOS, o mesmo guia oficial apresenta as opções de instalação por gerenciador de pacotes.
 
-O Maven só é necessário para preparar o jogo a partir do código-fonte. Quem recebeu o JAR e a pasta de dependências já prontos pode seguir diretamente a seção **Como executar uma versão já compilada**.
+O Maven só é necessário para preparar o jogo a partir do código-fonte. Quem recebeu o JAR já pronto pode seguir diretamente a seção **Como executar uma versão já compilada**.
 
 ### 1. Confira as instalações
 
@@ -133,62 +133,40 @@ Baixe ou clone o repositório e entre na pasta que contém o arquivo `pom.xml`. 
 cd "C:\caminho\Marco1_Java"
 ```
 
-### 3. Compile e copie as dependências
+### 3. Compile e abra o jogo
 
 ```powershell
-mvn clean package dependency:copy-dependencies -DincludeScope=runtime
+mvn compile exec:java
 ```
 
-Esse comando compila o código, gera o JAR e copia as bibliotecas necessárias para `target/dependency`. A primeira execução pode demorar por causa dos downloads.
+Esse é o jeito mais simples de jogar pelo código-fonte: o Maven baixa as dependências necessárias, compila e inicia o jogo. A primeira execução pode demorar por causa dos downloads. Use um terminal externo.
 
-O resultado esperado é:
+### 4. Gere um JAR para compartilhar
 
-```text
-target/
-├── PBLGame-1.0-SNAPSHOT.jar
-└── dependency/
-    └── ... bibliotecas necessárias à execução
-```
-
-### 4. Abra o jogo
-
-Ainda na pasta do projeto, execute:
+Para reunir o jogo e todas as dependências de execução em um único arquivo:
 
 ```powershell
-java -Dfile.encoding=UTF-8 -cp "target/PBLGame-1.0-SNAPSHOT.jar;target/dependency/*" com.exa863.anselmo_adna.Main
+mvn clean package
 ```
 
-No Linux/macOS, o separador do classpath é `:`:
-
-```sh
-java -Dfile.encoding=UTF-8 -cp "target/PBLGame-1.0-SNAPSHOT.jar:target/dependency/*" com.exa863.anselmo_adna.Main
-```
-
-O comando para outros sistemas é fornecido como referência; o funcionamento interativo nesses ambientes não foi validado nesta documentação.
+O arquivo final é `target/PBLGame-1.0-SNAPSHOT.jar`. O Maven Shade inclui as bibliotecas e configura a classe principal. Compartilhe esse arquivo; o arquivo com prefixo `original-`, também gerado no processo, não contém as dependências.
 
 ## Como executar uma versão já compilada
 
-Quem recebe a distribuição completa **não precisa instalar Maven nem compilar o código**. É necessário ter Java compatível com a versão 21 e receber tanto o JAR do jogo quanto as dependências.
+Você só precisa do arquivo **PBLGame-1.0-SNAPSHOT.jar** e de **Java 21 ou compatível instalado**. Não precisa de Maven, código-fonte nem pasta de dependências.
 
-Para preparar essa distribuição, compile conforme a seção anterior e reúna estes arquivos em uma pasta:
-
-```text
-BoxingGame/
-├── PBLGame-1.0-SNAPSHOT.jar
-└── dependency/
-    └── ... todos os JARs de target/dependency
-```
-
-Essa pasta pode ser compactada e compartilhada. Após extrair **todo o conteúdo**, abra um terminal externo, entre nela e execute:
+Abra um terminal externo na pasta onde salvou o JAR e execute:
 
 ```powershell
 cd "C:\caminho\BoxingGame"
-java -Dfile.encoding=UTF-8 -cp "PBLGame-1.0-SNAPSHOT.jar;dependency/*" com.exa863.anselmo_adna.Main
+java -jar PBLGame-1.0-SNAPSHOT.jar
 ```
 
-**Não basta dar dois cliques no JAR ou usar `java -jar`.** A configuração atual não gera um JAR executável com `Main-Class` no manifesto nem incorpora as dependências. Por isso, os comandos acima informam a classe principal e a pasta das bibliotecas explicitamente.
+Se ainda estiver na pasta do projeto, use `java -jar target/PBLGame-1.0-SNAPSHOT.jar`.
 
-Depois que a distribuição estiver completa, o jogo não precisa de conexão com a internet para funcionar.
+**Abra pelo terminal, não por duplo clique:** no Windows, o duplo clique pode usar o Java sem uma janela de console, impedindo a interação. O JAR inclui as bibliotecas do jogo, mas não inclui o próprio Java. Confira `java -version` antes de abrir. O comando é o mesmo no Linux/macOS, mas a interação nesses ambientes ainda precisa de validação.
+
+O jogo compilado não precisa de conexão com a internet para funcionar.
 
 ## Guia rápido de jogo
 
@@ -203,27 +181,15 @@ Depois que a distribuição estiver completa, o jogo não precisa de conexão co
 9. Para disputar o Mundial, são exigidas pelo menos duas lutas estaduais, uma nacional, R$ 3.000 de inscrição e 70 pontos de saúde e energia, além da liberação do acesso pela narrativa.
 10. Ao concluir a luta final, acompanhe o desfecho e o resumo dos relacionamentos. O jogo oferece retorno ao menu principal.
 
-## Estado atual e limitações
-
-- **Modo de desenvolvimento ativo:** `Console.MODO_DEV` está definido como `true`. O protagonista começa com R$ 20.000 e habilidades no máximo, e a narração animada das lutas é pulada. Para jogar com os valores iniciais normais, altere essa opção para `false` em `src/main/java/com/exa863/anselmo_adna/view/console/Console.java` **antes de compilar**. Isso não elimina todos os problemas conhecidos abaixo.
-- **Sem salvamento/carregamento:** o progresso existe apenas em memória e é perdido quando o programa termina. Esse requisito da proposta geral ainda está pendente.
-- **Sem testes de unidade implementados:** o JUnit está declarado no Maven, mas não há uma suíte de testes em `src/test`. Uma compilação bem-sucedida não comprova a validação das regras do jogo.
-- **Empates:** há uma falha conhecida na geração da narração que pode interromper a partida quando uma luta termina empatada, inclusive no modo de desenvolvimento.
-- **Sessões longas:** as trocas de tela acumulam chamadas e podem causar estouro da pilha de execução.
-- **Contagem de lutas:** os requisitos de progressão consideram participações, inclusive derrotas, embora alguns diálogos descrevam essas participações como vitórias.
-- **Treino no máximo:** escolher um atributo já no limite na academia ainda consome o valor da entrada e uma tentativa diária.
-- **Abrir uma Academia:** a opção mostra os requisitos, mas a construção ainda não foi implementada.
-- **Apresentação:** telas usam larguras fixas; nomes longos, fontes incompatíveis e janelas pequenas podem prejudicar o alinhamento. Não há interface gráfica nem áudio.
-
-### Problemas ao abrir
+## Problemas ao abrir
 
 | Problema | O que conferir |
 | --- | --- |
 | `java` ou `mvn` não reconhecido | Instalação e `PATH`; abra um novo terminal após configurar |
 | Erro de versão do Java | Compare `java -version`, `javac -version` e o Java mostrado por `mvn -version` |
-| Classe principal não encontrada | Pasta atual, nome do JAR e comando completo com `-cp` |
-| `NoClassDefFoundError` para JLine ou JGraphT | Presença de todos os JARs na pasta `dependency` e inclusão dela no classpath |
-| Mensagem sobre ausência de manifesto principal | Use o comando com `-cp` e `com.exa863.anselmo_adna.Main`, em vez de `java -jar` |
+| JAR não encontrado | Pasta atual e caminho informado depois de `java -jar` |
+| `NoClassDefFoundError` para JLine ou JGraphT | Use o JAR completo gerado por `mvn clean package`, sem o prefixo `original-` |
+| Mensagem sobre ausência de manifesto principal | Confira se está usando o JAR completo atualizado, e não um artefato antigo ou com prefixo `original-` |
 | Setas, molduras ou limpeza de tela não funcionam | Execute em terminal externo, amplie a janela e confira a fonte |
 
 ## Relação com o PBL — Fase 1
@@ -245,4 +211,4 @@ Depois que a distribuição estiver completa, o jogo não precisa de conexão co
 
 A Fase 1 também exige **diagrama de classes em dupla**, separado e anexado ao relatório, e **relatório individual no padrão SBC, de seis a dez páginas**. Este README documenta o projeto e seu uso; não substitui esses entregáveis.
 
-Os procedimentos de execução foram descritos a partir do `pom.xml` e da estrutura do código. Não foram executados builds ou testes interativos para a elaboração deste documento.
+Uma compilação bem-sucedida valida a geração do artefato, mas não substitui testes das regras nem uma partida completa no terminal.

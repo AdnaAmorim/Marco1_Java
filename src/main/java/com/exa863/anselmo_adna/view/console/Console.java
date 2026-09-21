@@ -18,7 +18,7 @@ import java.io.IOException;
 public class Console {
 
     // MODO DEV: quando true, anula todos os delays de animação e digitação, imprimindo instantaneamente
-    public static boolean MODO_DEV = true;
+    public static boolean MODO_DEV = false;
 
     private final Terminal terminal;
     private final BufferedReader reader;
