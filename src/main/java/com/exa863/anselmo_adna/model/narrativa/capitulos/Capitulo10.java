@@ -50,6 +50,6 @@ public class Capitulo10 extends Capitulo {
     }
     @Override
     public boolean podeIniciar(Player player) {
-        return player != null && player.getLutasNacionais() >= 2;
+        return player != null && player.getLutasNacionais() >= 1;
     }
 }

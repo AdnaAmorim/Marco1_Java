@@ -23,9 +23,9 @@ import java.util.function.Consumer;
 
 public class CampeonatoMundialView implements View {
 
-    // Só libera o Mundial depois que o personagem disputou as 2 lutas estaduais e as 2 nacionais
+    // Só libera o Mundial depois que o personagem disputou as 2 lutas estaduais e a luta nacional
     private static final int LUTAS_ESTADUAIS_NECESSARIAS = 2;
-    private static final int LUTAS_NACIONAIS_NECESSARIAS = 2;
+    private static final int LUTAS_NACIONAIS_NECESSARIAS = 1;
 
     private final Console console;
     private final SceneController sceneController;
@@ -195,7 +195,7 @@ public class CampeonatoMundialView implements View {
 
             // Avaliar o Contrato com Noor (ID 5)
             Personagem victorNoor = new Personagem(5, "Victor Noor", "", Cores.PRETO, Sexo.MASCULINO);
-            boolean aceitouContrato = player.getAfinidade(victorNoor) >= 50;
+            boolean aceitouContrato = player.isCapituloConcluido("FLAG_CONTRATO_ACEITO") || player.getAfinidade(victorNoor) >= 50;
             boolean investigacaoCompleta = player.isCapituloConcluido("INVESTIGACAO_COMPLETA");
 
             console.clearConsole();

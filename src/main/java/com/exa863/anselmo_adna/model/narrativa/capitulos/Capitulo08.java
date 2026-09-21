@@ -74,6 +74,6 @@ public class Capitulo08 extends Capitulo {
     }
     @Override
     public boolean podeIniciar(Player player) {
-        return player != null && player.getLutasNacionais() >= 1;
+        return player != null && player.getLutasEstaduais() >= 2;
     }
 }
