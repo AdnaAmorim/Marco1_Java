@@ -1,8 +1,5 @@
 package com.exa863.anselmo_adna.controller;
 
-import com.exa863.anselmo_adna.model.character.Cores;
-import com.exa863.anselmo_adna.model.character.Personagem;
-import com.exa863.anselmo_adna.model.character.Sexo;
 import com.exa863.anselmo_adna.model.combat.AtributosEfetivos;
 import com.exa863.anselmo_adna.model.combat.Lutador;
 import com.exa863.anselmo_adna.model.combat.ResultadoLuta;
