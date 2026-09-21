@@ -10,6 +10,9 @@
 
 **Dupla:** Anselmo Anjos e Adna Amorim.
 
+> 📦 **Download rápido (executável pronto para jogar):**  
+> Baixe a versão compilada (`.jar`) diretamente na página de **[Releases do Projeto](https://github.com/AdnaAmorim/Marco1_Java/releases)**.
+
 ## Sobre o projeto
 
 Boxing Game é um jogo narrativo de terminal que combina drama esportivo, escolhas e elementos de RPG. O jogador assume o papel de um jovem de 18 anos que, após perder os pais e crescer com os avós, decide seguir o sonho do pai e construir uma carreira no boxe.
@@ -128,7 +131,7 @@ Com o **JDK 21 já instalado**, o processo básico no Windows é:
 
 Para Linux e macOS, o mesmo guia oficial apresenta as opções de instalação por gerenciador de pacotes.
 
-O Maven só é necessário para preparar o jogo a partir do código-fonte. Quem recebeu o JAR já pronto pode seguir diretamente a seção **Como executar uma versão já compilada**.
+O Maven só é necessário para preparar o jogo a partir do código-fonte. Quem quiser apenas jogar pode baixar o JAR diretamente na [página de releases do projeto](https://github.com/AdnaAmorim/Marco1_Java/releases) e seguir a seção **Como executar uma versão já compilada**.
 
 ### 1. Confira as instalações
 
@@ -170,7 +173,9 @@ O arquivo final é `target/PBLGame-1.0-SNAPSHOT.jar`. O Maven Shade inclui as bi
 
 ## Como executar uma versão já compilada
 
-Você só precisa do arquivo **PBLGame-1.0-SNAPSHOT.jar** e de **Java 21 ou compatível instalado**. Não precisa de Maven, código-fonte nem pasta de dependências.
+Baixe a versão publicada diretamente na página de **[Releases do GitHub](https://github.com/AdnaAmorim/Marco1_Java/releases)**.
+
+Você só precisa baixar o arquivo **`PBLGame-1.0-SNAPSHOT.jar`** (disponível na seção de *Assets* da release) e ter o **Java 21 instalado**. Não precisa de Maven, código-fonte nem pasta de dependências.
 
 Abra um terminal externo na pasta onde salvou o JAR e execute:
 
@@ -224,7 +229,7 @@ O jogo compilado não precisa de conexão com a internet para funcionar.
 | Condições de acesso | Dependências de capítulos, participações em lutas e escolhas anteriores |
 | Ao menos três finais e retorno ao menu | Quatro finais principais implementados; fluxo completo ainda requer validação em execução |
 | POO e MVC | Organização presente, com regras ainda concentradas em algumas views |
-| Testes de unidade | Pendentes |
+| Testes de unidade | Implementados com JUnit 5 (cobrindo regras críticas de atributos, inventário, combate, estilos de boxe, passagem de tempo e grafo da história) |
 
 A Fase 1 também exige **diagrama de classes em dupla**, separado e anexado ao relatório, e **relatório individual no padrão SBC, de seis a dez páginas**. Este README documenta o projeto e seu uso; não substitui esses entregáveis.
 
