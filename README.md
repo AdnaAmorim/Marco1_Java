@@ -95,13 +95,30 @@ No Windows, abra o **Windows Terminal com PowerShell** e execute os comandos por
 
 Use uma fonte monoespaçada que exiba os caracteres das molduras. A tela inicial verifica as dimensões da janela e permite continuar com Enter mesmo abaixo do mínimo, mas o conteúdo pode ficar desalinhado ou cortado.
 
+### Acentos e caracteres especiais (UTF-8)
+
+O jogo usa acentos, setas e caracteres especiais como `╔`, `║`, `►` e `✓`. Para exibi-los corretamente, use um terminal configurado para **UTF-8** e uma fonte com suporte a esses símbolos. UTF-8 é a codificação de texto; não confundir com UTC, que é uma referência de horário.
+
+Se aparecerem letras trocadas ou símbolos estranhos no Windows, configure a sessão do terminal para UTF-8 e abra o JAR assim, na pasta onde ele está:
+
+```powershell
+chcp 65001
+java -Dfile.encoding=UTF-8 -jar PBLGame-1.0-SNAPSHOT.jar
+```
+
+Se estiver na pasta do projeto, use `target/PBLGame-1.0-SNAPSHOT.jar` no comando. No Linux/macOS, configure o terminal e a localidade do sistema para UTF-8; `chcp` é exclusivo do Windows.
+
+Se os caracteres aparecerem como quadradinhos mesmo com UTF-8, confira a fonte do terminal: mudar a codificação não adiciona símbolos que a fonte não possui. Se as molduras estiverem cortadas, aumente também o tamanho da janela.
+
 ## Como compilar e abrir pelo código-fonte
 
 Os exemplos abaixo usam PowerShell no Windows.
 
 ### Onde baixar e como preparar o Maven
 
-Com o **JDK 21 já instalado**, siga o [guia oficial de instalação do Apache Maven](https://maven.apache.org/install.html). No Windows, o caminho básico é:
+**As orientações abaixo são um resumo genérico**, com exemplos para Windows. Os caminhos, a versão disponível e a configuração podem variar entre computadores. Para instalar, **siga o [guia oficial de instalação do Apache Maven](https://maven.apache.org/install.html)**, usando as instruções correspondentes ao seu sistema operacional. O guia oficial é a referência principal; esta seção serve apenas para orientar o que será necessário.
+
+Com o **JDK 21 já instalado**, o processo básico no Windows é:
 
 1. Abra a [página oficial de downloads](https://maven.apache.org/download.cgi) e baixe a distribuição estável do Maven na opção **Binary zip archive**.
 2. Extraia o ZIP em uma pasta permanente, como `C:\Ferramentas`. A pasta extraída terá um nome como `apache-maven-3.9.x`, conforme a versão baixada.
