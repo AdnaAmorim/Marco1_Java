@@ -31,7 +31,7 @@ public class Player extends Personagem {
 
     public Player(int id, String nome, String descricao, Cores corOlhos, Sexo sexo) {
         super(id, nome, descricao, corOlhos, sexo);
-        this.dinheiro = 20000;
+        this.dinheiro = 100;
         this.atributos = new Atributo();
         this.relacionamentos = new Relacionamentos[10];
         this.inventario = new Inventario();
@@ -146,6 +146,16 @@ public class Player extends Personagem {
 
     public Atributo getAtributos() {
         return atributos;
+    }
+
+    public void ativarModoDev() {
+        this.dinheiro = 20000;
+        this.atributos.setSaude(Atributo.MAX_SAUDE);
+        this.atributos.setEnergia(Atributo.MAX_ENERGIA);
+        this.atributos.setForca(Atributo.MAX_HABILIDADE);
+        this.atributos.setAgilidade(Atributo.MAX_HABILIDADE);
+        this.atributos.setResistencia(Atributo.MAX_HABILIDADE);
+        this.atributos.setInteligencia(Atributo.MAX_HABILIDADE);
     }
 
     public Relacionamentos[] getRelacionamentos() {

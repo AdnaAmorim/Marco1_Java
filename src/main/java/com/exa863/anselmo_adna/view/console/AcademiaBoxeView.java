@@ -272,7 +272,7 @@ public class AcademiaBoxeView implements View {
             }
         };
 
-        View destinoRetorno = new MapaView(console, sceneController, gameController);
+        View destinoRetorno = new AcademiaBoxeView(console, sceneController, gameController);
         sceneController.trocarCena(new MatchView(console, sceneController, gameController, match,
                 lutadorPlayer, lutadorOponente, destinoRetorno, callbackPosLuta));
     }

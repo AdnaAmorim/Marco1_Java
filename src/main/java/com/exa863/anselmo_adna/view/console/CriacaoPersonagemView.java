@@ -58,6 +58,10 @@ public class CriacaoPersonagemView implements View {
                 sexo
         );
 
+        if (Console.MODO_DEV) {
+            player.ativarModoDev();
+        }
+
         gameController.setPlayer(player);
 
         mostrarPersonagem();
@@ -148,9 +152,9 @@ public class CriacaoPersonagemView implements View {
         printLinhaFicha("  • Cor dos Olhos : " + player.getCorOlhos());
         console.printlnConsole("║                                                                      ║");
         printLinhaFicha("► ATRIBUTOS INICIAIS:");
-        printLinhaFicha("  • Saúde: 100/100     • Energia: 100/100");
-        printLinhaFicha("  • Força: 1/10        • Agilidade: 1/10");
-        printLinhaFicha("  • Resistência: 1/10  • Inteligência: 1/10");
+        printLinhaFicha("  • Saúde: " + player.getAtributos().getSaude() + "/100     • Energia: " + player.getAtributos().getEnergia() + "/100");
+        printLinhaFicha("  • Força: " + player.getAtributos().getForca() + "/10        • Agilidade: " + player.getAtributos().getAgilidade() + "/10");
+        printLinhaFicha("  • Resistência: " + player.getAtributos().getResistencia() + "/10  • Inteligência: " + player.getAtributos().getInteligencia() + "/10");
         console.printlnConsole("║                                                                      ║");
         printLinhaFicha("► HISTÓRICO:");
         printLinhaFicha("  • Jovem determinado a honrar o legado do pai nos ringues.");

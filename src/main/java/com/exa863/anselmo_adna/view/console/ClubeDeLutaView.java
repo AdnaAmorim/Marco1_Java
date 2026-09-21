@@ -214,7 +214,7 @@ public class ClubeDeLutaView implements View {
             }
         };
 
-        View destinoRetorno = new MapaView(console, sceneController, gameController);
+        View destinoRetorno = new ClubeDeLutaView(console, sceneController, gameController);
         sceneController.trocarCena(new MatchView(console, sceneController, gameController, match,
                 lutadorPlayer, lutadorOponente, destinoRetorno, callbackPosBriga));
     }

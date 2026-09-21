@@ -31,6 +31,13 @@ public class MapaView implements View {
     @Override
     public void render() {
         Local localAtual = gameController.getLocalAtual();
+
+        View viewDedicada = resolverViewParaLocal(localAtual.getNome());
+        if (!(viewDedicada instanceof MapaView)) {
+            sceneController.trocarCena(viewDedicada);
+            return;
+        }
+
         Player player = gameController.getPlayer();
 
         renderHUD(localAtual, player);

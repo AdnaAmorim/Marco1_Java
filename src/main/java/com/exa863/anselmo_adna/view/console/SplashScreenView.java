@@ -31,18 +31,6 @@ public class SplashScreenView implements View {
 
     @Override
     public void render() {
-        if (Console.MODO_DEV) {
-            console.setCursorVisivel();
-            sceneController.trocarCena(
-                    new MenuView(
-                            console,
-                            sceneController,
-                            gameController
-                    )
-            );
-            return;
-        }
-
         try {
             validarTamanho();
 
