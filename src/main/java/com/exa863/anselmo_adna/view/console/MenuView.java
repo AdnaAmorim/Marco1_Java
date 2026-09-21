@@ -85,8 +85,8 @@ public class MenuView implements View {
                     console.printlnConsole("╠══════════════════════════════════════════════════════════════════════╣");
                     console.printlnConsole("║                                                                      ║");
                     console.printlnConsole("║  ► DESENVOLVIMENTO & AUTORIA:                                        ║");
-                    console.printlnConsole("║    • Anselmo dos Anjos Santos Filho                                  ║");
-                    console.printlnConsole("║    • Adna Amorim da Silva Conceição                                  ║");
+                    console.printlnConsole("║    • Anselmo Anjos                                                   ║");
+                    console.printlnConsole("║    • Adna Amorim                                                     ║");
                     console.printlnConsole("║                                                                      ║");
                     console.printlnConsole("║  ► DISCIPLINA & PROJETO ACADÊMICO:                                   ║");
                     console.printlnConsole("║    • 2026.2 - EXA 863 - TP04 - MI - Programação                      ║");

@@ -1,5 +1,10 @@
 package com.exa863.anselmo_adna.model.stats;
 
+/**
+ * Um item do jogo com nome, descrição, tipo, preço e quanto cura de vida/energia.
+ *
+ * @author Anselmo e Adna
+ */
 public class Item {
     private final String nome;
     private final String descricao;

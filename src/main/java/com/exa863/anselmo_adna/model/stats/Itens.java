@@ -1,5 +1,11 @@
 package com.exa863.anselmo_adna.model.stats;
 
+/**
+ * Catálogo central de itens do jogo.
+ * Define os alimentos, suplementos e itens especiais disponíveis.
+ *
+ * @author Anselmo e Adna
+ */
 public class Itens {
 
     // Alimentos (vendidos na loja)

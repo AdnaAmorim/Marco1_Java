@@ -1,5 +1,10 @@
 package com.exa863.anselmo_adna.view.console.art;
 
+/**
+ * Artes em ASCII exibidas no menu inicial e splash screen.
+ *
+ * @author Anselmo e Adna
+ */
 public class MenuInicialASCII {
     public static final String tituloArt = """
              ____             _                ______                  \s

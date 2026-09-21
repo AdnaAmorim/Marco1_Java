@@ -1,5 +1,10 @@
 package com.exa863.anselmo_adna.model.world;
 
+/**
+ * Nomes e identificadores dos locais visitáveis no mapa do jogo.
+ *
+ * @author Anselmo e Adna
+ */
 public enum NomeLocal {
     CIDADE_NATAL("Cidade Natal"),
     ACADEMIA("Academia"),

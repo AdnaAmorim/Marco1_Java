@@ -2,9 +2,14 @@ package com.exa863.anselmo_adna.utils;
 
 import org.jline.utils.AttributedString;
 
-/*
+/**
+ * Utilitário para desenhar caixas e molduras em texto ASCII no terminal.
+ * Permite configurar tamanho, bordas e cantos customizados.
+ *
  * Criado e desenvolvido por: Anselmo (18 de Junho de 2020)
  * Código livre / Open Source
+ *
+ * @author Anselmo e Adna
  */
 public class AsciiBox {
 

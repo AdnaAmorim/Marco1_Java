@@ -5,6 +5,12 @@ import com.exa863.anselmo_adna.controller.SceneController;
 import com.exa863.anselmo_adna.view.console.Console;
 import com.exa863.anselmo_adna.view.console.SplashScreenView;
 
+/**
+ * Ponto de entrada principal da aplicação.
+ * Inicializa os controladores e abre a tela de splash inicial.
+ *
+ * @author Anselmo e Adna
+ */
 public class Main {
 
     public static void main(String[] args) {

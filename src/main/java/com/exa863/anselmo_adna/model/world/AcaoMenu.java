@@ -1,5 +1,10 @@
 package com.exa863.anselmo_adna.model.world;
 
+/**
+ * Ações gerais disponíveis no menu de exploração dos locais.
+ *
+ * @author Anselmo e Adna
+ */
 public enum AcaoMenu {
     ABRIR_MOCHILA("Abrir Mochila (Inventário)", "Acessa os itens, equipamentos e consumíveis."),
     ABRIR_ACADEMIA("Abrir uma Academia", "Construa sua própria academia de boxe profissional."),
