@@ -3,10 +3,7 @@ package com.exa863.anselmo_adna.view.console;
 import com.exa863.anselmo_adna.controller.GameController;
 import com.exa863.anselmo_adna.controller.MatchController;
 import com.exa863.anselmo_adna.controller.SceneController;
-import com.exa863.anselmo_adna.model.character.Cores;
-import com.exa863.anselmo_adna.model.character.Personagem;
 import com.exa863.anselmo_adna.model.character.Player;
-import com.exa863.anselmo_adna.model.character.Sexo;
 import com.exa863.anselmo_adna.model.combat.EstiloLuta;
 import com.exa863.anselmo_adna.model.combat.Lutador;
 import com.exa863.anselmo_adna.model.combat.Match;
@@ -246,6 +243,8 @@ public class AcademiaBoxeView implements View {
                 player.registrarLutaEstadual();
             } else if (tipoCampeonato == 2) {
                 player.registrarLutaNacional();
+            } else if (tipoCampeonato == 0) {
+                player.registrarLutaLocal();
             }
 
             player.registrarLutaBoxe(diaAtual);

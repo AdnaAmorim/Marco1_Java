@@ -22,7 +22,8 @@ public class Player extends Personagem {
 
     private int ultimoDiaLutaBoxe;
 
-    // Contadores de campeonatos disputados (vitória ou derrota contam igual)
+    // Contadores de lutas disputadas
+    private int lutasLocais;
     private int lutasEstaduais;
     private int lutasNacionais;
 
@@ -41,13 +42,22 @@ public class Player extends Personagem {
         this.treinosRealizadosHoje = 0;
         this.ultimoDiaLutaBoxe = -1;
 
+        this.lutasLocais = 0;
         this.lutasEstaduais = 0;
         this.lutasNacionais = 0;
 
         this.personagemRomance = null;
     }
 
-    // --- Campeonatos (Estadual / Nacional) ---
+    // --- Lutas e Campeonatos ---
+    public int getLutasLocais() {
+        return lutasLocais;
+    }
+
+    public void registrarLutaLocal() {
+        this.lutasLocais++;
+    }
+
     public int getLutasEstaduais() {
         return lutasEstaduais;
     }

@@ -38,6 +38,11 @@ public class Capitulo04 extends Capitulo {
     }
 
     @Override
+    public boolean podeIniciar(Player player) {
+        return player != null && player.getLutasLocais() >= 2;
+    }
+
+    @Override
     public List<Dialogo> getDialogos(Player player) {
         return List.of(
                 DialogoNarrativo.narrador("O vestiário está silencioso e cheira a arnica após a sua segunda vitória nas lutas locais."),
