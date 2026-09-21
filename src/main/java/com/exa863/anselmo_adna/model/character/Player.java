@@ -7,6 +7,12 @@ import com.exa863.anselmo_adna.model.stats.Relacionamentos;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Representa o jogador principal.
+ * Guarda atributos, inventário, relacionamentos, limites de treino por dia e capítulos concluídos.
+ *
+ * @author Anselmo e Adna
+ */
 public class Player extends Personagem {
 
     private int dinheiro;
@@ -15,19 +21,17 @@ public class Player extends Personagem {
     private Inventario inventario;
     private final Set<String> capitulosConcluidos;
 
-    // Sistema de Limite de Treinos Diários
     public static final int MAX_TREINOS_POR_DIA = 5;
     private int diaUltimoTreino;
     private int treinosRealizadosHoje;
 
     private int ultimoDiaLutaBoxe;
 
-    // Contadores de lutas disputadas
     private int lutasLocais;
     private int lutasEstaduais;
     private int lutasNacionais;
 
-    // Romance: guarda o nome do personagem escolhido; null = nenhum romance seguido
+    // Só dá para namorar um personagem por jogo
     private String personagemRomance;
 
     public Player(int id, String nome, String descricao, Cores corOlhos, Sexo sexo) {
@@ -74,14 +78,23 @@ public class Player extends Personagem {
         this.lutasNacionais++;
     }
 
-    // --- Romance (exclusivo: só é possível seguir um único caminho) ---
+    // --- Romance e Afinidade ---
 
-    // Retorna true se ainda não há romance definido, ou se já é o mesmo personagem
+    /**
+     * Confere se o jogador pode namorar com esse personagem (ou se já está namorando ele).
+     *
+     * @param nomePersonagem Nome do personagem.
+     * @return true se ainda não estiver namorando ninguém ou se for a mesma pessoa.
+     */
     public boolean podeRomancearCom(String nomePersonagem) {
         return personagemRomance == null || personagemRomance.equalsIgnoreCase(nomePersonagem);
     }
 
-    // Define o romance apenas na primeira vez; tentativas posteriores com outro nome são ignoradas
+    /**
+     * Define o par romântico do jogador.
+     *
+     * @param nomePersonagem Nome do personagem escolhido.
+     */
     public void definirRomance(String nomePersonagem) {
         if (nomePersonagem != null && personagemRomance == null) {
             personagemRomance = nomePersonagem;
@@ -96,7 +109,8 @@ public class Player extends Personagem {
         return personagemRomance;
     }
 
-    // --- Métodos de Treino (Limite 5 por dia) ---
+    // --- Treinos Diários ---
+
     public int getTreinosRestantes(int diaAtual) {
         if (this.diaUltimoTreino != diaAtual) {
             return MAX_TREINOS_POR_DIA;
@@ -104,6 +118,12 @@ public class Player extends Personagem {
         return MAX_TREINOS_POR_DIA - this.treinosRealizadosHoje;
     }
 
+    /**
+     * Confere se o jogador ainda pode treinar no dia de hoje.
+     *
+     * @param diaAtual Dia atual no jogo.
+     * @return true se ainda não atingiu o limite de treinos do dia.
+     */
     public boolean podeTreinarHoje(int diaAtual) {
         return getTreinosRestantes(diaAtual) > 0;
     }
@@ -117,7 +137,6 @@ public class Player extends Personagem {
         }
     }
 
-    // --- Outros Métodos ---
     public int getUltimoDiaLutaBoxe() {
         return ultimoDiaLutaBoxe;
     }
@@ -126,7 +145,12 @@ public class Player extends Personagem {
         this.ultimoDiaLutaBoxe = ultimoDiaLutaBoxe;
     }
 
-    // Alterado para intervalo de 1 dia (diariamente)
+    /**
+     * Confere se o jogador já pode lutar boxe de novo (precisa de pelo menos 1 dia de intervalo).
+     *
+     * @param diaAtual Dia atual no jogo.
+     * @return true se puder lutar hoje.
+     */
     public boolean podeLutarBoxe(int diaAtual) {
         if (this.ultimoDiaLutaBoxe == -1) {
             return true;
@@ -134,7 +158,6 @@ public class Player extends Personagem {
         return (diaAtual - this.ultimoDiaLutaBoxe) >= 1;
     }
 
-    // Alterado para refletir o novo intervalo
     public int getProximoDiaLutaBoxe() {
         if (this.ultimoDiaLutaBoxe == -1) {
             return 1;

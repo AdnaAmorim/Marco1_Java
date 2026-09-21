@@ -7,6 +7,12 @@ import com.exa863.anselmo_adna.model.combat.TipoVitoria;
 
 import java.util.Random;
 
+/**
+ * Calcula o resultado das lutas entre dois lutadores.
+ * Compara os atributos de cada um e decide quem venceu e por qual tipo de vitória (KO, decisão ou empate).
+ *
+ * @author Anselmo e Adna
+ */
 public class FightController {
 
     private final Random random;
@@ -15,46 +21,56 @@ public class FightController {
         this.random = new Random();
     }
 
-    // pesos dos atributos na luta
+    // Pesos dos atributos no cálculo dos golpes
     public static final double PESO_AGILIDADE = 1.5;
     public static final double PESO_INTELIGENCIA = 1.0;
     public static final double PESO_FORCA = 2.0;
     public static final double PESO_RESISTENCIA = 1.0;
-    public static final double PESO_SAUDE = 0.10;      // 100 de saude vira ate 10 pontos
-    public static final double PESO_ENERGIA = 0.05;    // 100 de energia vira ate 5 pontos
+    public static final double PESO_SAUDE = 0.10;
+    public static final double PESO_ENERGIA = 0.05;
 
-    // pesos de cada aspecto no resultado final
+    // Pesos de acerto, dano e fôlego no total de pontos
     public static final double PESO_ACERTO = 2.0;
     public static final double PESO_DANO = 1.5;
     public static final double PESO_FOLEGO = 1.0;
 
-    // diferenca de pontos pra definir o vencedor
+    // Diferença de pontos para definir o tipo de vitória
     public static final double PONTOS_NOCAUTE = 25.0;
     public static final double PONTOS_DECISAO = 8.0;
-    public static final double PONTOS_EMPATE = 1.0;   // zona morta: entre -1.0 e 1.0 e empate
+    // Se a diferença for menor que isso, a luta termina empatada
+    public static final double PONTOS_EMPATE = 1.0;
 
-    // calcula os pontos de um lutador contra o outro
+    /**
+     * Calcula os pontos de ataque de um lutador contra a defesa do outro.
+     * Leva em conta chance de acerto, força do golpe e a saúde/energia restante.
+     *
+     * @param atacante Lutador que está desferindo os golpes.
+     * @param defensor Lutador que está defendendo.
+     * @return Pontuação calculada para o lutador.
+     */
     public double calcularPontos(AtributosEfetivos atacante, AtributosEfetivos defensor) {
-        // acertos de golpes
         double acerto = (atacante.agilidade * PESO_AGILIDADE)
                 + (atacante.inteligencia * PESO_INTELIGENCIA);
 
-        // dano dos golpes (evita dano negativo)
         double dano = (atacante.forca * PESO_FORCA)
                 - (defensor.resistencia * PESO_RESISTENCIA);
         if (dano < 0) dano = 0;
 
-        // folego e disposicao
         double folego = (atacante.saude * PESO_SAUDE)
                 + (atacante.energia * PESO_ENERGIA);
 
         return (acerto * PESO_ACERTO) + (dano * PESO_DANO) + (folego * PESO_FOLEGO);
     }
 
-    // resolve a luta entre dois personagens
+    /**
+     * Resolve a luta completa entre dois atletas.
+     *
+     * @param lutador1 Primeiro lutador.
+     * @param lutador2 Segundo lutador.
+     * @return O resultado da luta com o vencedor, tipo de vitória e quantos rounds durou.
+     */
     public ResultadoLuta resolverCombate(Lutador lutador1, Lutador lutador2) {
 
-        // calcula os atributos de acordo com o estilo de cada um
         AtributosEfetivos eff1 = lutador1.getAtributosEfetivos();
         AtributosEfetivos eff2 = lutador2.getAtributosEfetivos();
 
@@ -68,7 +84,7 @@ public class FightController {
         TipoVitoria tipoVitoria;
         String descricao;
 
-        if (saldoFinal == 0) {
+        if (Math.abs(saldoFinal) <= PONTOS_EMPATE) {
             tipoVitoria = TipoVitoria.EMPATE;
             descricao = "A luta terminou em Empate.";
         } else if (saldoFinal > 0) {
@@ -85,7 +101,6 @@ public class FightController {
                 descricao = String.format("%s venceu por Nocaute (KO).", lutador1.getNome());
             }
         } else {
-            // saldoFinal < 0 -> lutador2 ganhou
             vencedor = lutador2;
             perdedor = lutador1;
             if (saldoFinal > -PONTOS_DECISAO) {

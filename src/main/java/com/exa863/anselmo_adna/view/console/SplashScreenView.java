@@ -11,6 +11,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Tela de abertura do jogo.
+ * Mostra a animação ASCII inicial e confere se a largura do terminal aguenta pelo menos 72 colunas.
+ *
+ * @author Anselmo e Adna
+ */
 public class SplashScreenView implements View {
 
     private final Console console;
@@ -59,7 +65,7 @@ public class SplashScreenView implements View {
     }
 
     private void validarTamanho() throws InterruptedException {
-        // se a tela ja comecou no tamanho certo, a gente pula o aviso e ja vai direto
+        // Avança diretamente se a tela já atender às dimensões mínimas
         if (controller.validarDimensoes(console.getLargura(), console.getAltura())) {
             return;
         }
@@ -71,14 +77,14 @@ public class SplashScreenView implements View {
             int largura = console.getLargura();
             int altura = console.getAltura();
 
-            // fica checando o tamanho em tempo real enquanto o jogador redimensiona a janela
+            // Monitora o redimensionamento do terminal em tempo real
             if (largura != ultimaLargura || altura != ultimaAltura) {
                 ultimaLargura = largura;
                 ultimaAltura = altura;
                 exibirTabela(false);
             }
 
-            // deixa o cara forcar o inicio com enter, mesmo com a tela muito apertada
+            // Permite ao jogador prosseguir com Enter mesmo com resolução reduzida
             if (console.enterPressionado()) {
                 return;
             }
@@ -86,7 +92,7 @@ public class SplashScreenView implements View {
             Thread.sleep(100);
         }
 
-        // se a janela finalmente ficou do tamanho ideal, da o sinal verde pro jogador
+        // Dimensões adequadas atingidas: exibe confirmação visual
         exibirTabela(true);
         Thread.sleep(2500);
     }
@@ -117,13 +123,13 @@ public class SplashScreenView implements View {
         String[] conteudo = new String[totalLinhas];
         Arrays.fill(conteudo, "");
 
-        // centraliza o texto de informacao bem no meio da nossa caixa ascii
+        // Centraliza as informações no corpo da moldura ASCII
         int inicioMeio = Math.max(0, (totalLinhas / 2) - (linhasMeio.size() / 2));
         for (int i = 0; i < linhasMeio.size(); i++) {
             conteudo[inicioMeio + i] = linhasMeio.get(i);
         }
 
-        // o aviso mais importante fica colado no rodape pra ninguem ter que dar scroll pra ler
+        // Posiciona o aviso de rodapé sem exigir rolagem no terminal
         int inicioBaixo = Math.max(0, totalLinhas - linhasBaixo.size() - 1);
         for (int i = 0; i < linhasBaixo.size(); i++) {
             conteudo[inicioBaixo + i] = linhasBaixo.get(i);

@@ -3,6 +3,12 @@ package com.exa863.anselmo_adna.model.combat;
 import com.exa863.anselmo_adna.model.character.Personagem;
 import com.exa863.anselmo_adna.model.stats.Atributo;
 
+/**
+ * Representa um lutador pronto para o combate.
+ * Guarda os dados do personagem, seu estilo de boxe e os atributos com os bônus do estilo aplicados.
+ *
+ * @author Anselmo e Adna
+ */
 public class Lutador {
     private final Personagem personagem;
     private final EstiloLuta estiloLuta;
@@ -11,7 +17,6 @@ public class Lutador {
     public Lutador(Personagem personagem, Atributo atributosBase, EstiloLuta estiloLuta) {
         this.personagem = personagem;
         this.estiloLuta = estiloLuta;
-        // Calcula e armazena os atributos efetivos de forma definitiva para essa luta
         this.atributosEfetivos = estiloLuta.aplicarModificadores(atributosBase);
     }
 

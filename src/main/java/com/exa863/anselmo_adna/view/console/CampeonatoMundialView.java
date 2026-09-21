@@ -21,9 +21,16 @@ import com.exa863.anselmo_adna.view.View;
 import java.io.IOException;
 import java.util.function.Consumer;
 
+/**
+ * Tela do Campeonato Mundial de Boxe (final do jogo).
+ * Confere se o jogador tem as lutas necessárias, inicia a luta contra Anthony Campbell
+ * e mostra o final da história.
+ *
+ * @author Anselmo e Adna
+ */
 public class CampeonatoMundialView implements View {
 
-    // Só libera o Mundial depois que o personagem disputou as 2 lutas estaduais e a luta nacional
+    // Precisa de 2 lutas estaduais e 1 nacional para participar
     private static final int LUTAS_ESTADUAIS_NECESSARIAS = 2;
     private static final int LUTAS_NACIONAIS_NECESSARIAS = 1;
 
@@ -189,11 +196,10 @@ public class CampeonatoMundialView implements View {
         MatchController matchController = new MatchController();
         Match match = matchController.executarPartida(lutadorPlayer, lutadorOponente);
 
-        // Aqui transferimos o processamento do final do jogo baseado na mecânica real
         Consumer<ResultadoLuta> callbackPosLuta = resultado -> {
             boolean venceuLuta = resultado.isVencedor(lutadorPlayer);
 
-            // Avaliar o Contrato com Noor (ID 5)
+            // Verifica os possíveis finais: contrato com Victor Noor vs investigação com Chloe
             Personagem victorNoor = new Personagem(5, "Victor Noor", "", Cores.PRETO, Sexo.MASCULINO);
             boolean aceitouContrato = player.isCapituloConcluido("FLAG_CONTRATO_ACEITO") || player.getAfinidade(victorNoor) >= 50;
             boolean investigacaoCompleta = player.isCapituloConcluido("INVESTIGACAO_COMPLETA");
@@ -240,7 +246,6 @@ public class CampeonatoMundialView implements View {
             console.printlnConsole("       └────────────────────────────────────────────────────────┘");
             console.esperarEnter("");
 
-            // Reinicia o jogo voltando ao menu principal com um estado limpo
             sceneController.trocarCena(new MenuView(console, sceneController, new GameController()));
         };
 

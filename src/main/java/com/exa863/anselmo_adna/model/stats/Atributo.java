@@ -1,17 +1,24 @@
 package com.exa863.anselmo_adna.model.stats;
 
+/**
+ * Guarda os atributos dos personagens (vida, energia, força, agilidade, resistência e inteligência).
+ * Não deixa nenhum atributo passar do limite máximo ou ficar negativo.
+ *
+ * @author Anselmo e Adna
+ */
 public class Atributo {
     public static final int MIN_VALOR = 0;
-    public static final int MAX_HABILIDADE = 10; // para forca, agilidade, resistencia, inteligencia
+    // Limite máximo para os atributos de combate (força, agilidade, resistência e inteligência)
+    public static final int MAX_HABILIDADE = 10;
     public static final int MAX_SAUDE = 100;
     public static final int MAX_ENERGIA = 100;
 
-    private int saude;        // 0-100
-    private int forca;        // 0-10
-    private int agilidade;    // 0-10
-    private int resistencia;  // 0-10
-    private int inteligencia; // 0-10
-    private int energia;      // 0-100
+    private int saude;
+    private int forca;
+    private int agilidade;
+    private int resistencia;
+    private int inteligencia;
+    private int energia;
 
     public Atributo() {
         setSaude(MAX_SAUDE);
@@ -31,7 +38,6 @@ public class Atributo {
         setEnergia(energia);
     }
 
-    // garante que o valor nao passe do maximo nem fique negativo
     private int limitar(int valor, int max) {
         return Math.max(MIN_VALOR, Math.min(valor, max));
     }

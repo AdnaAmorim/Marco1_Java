@@ -16,6 +16,13 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Tela do mapa da cidade.
+ * Mostra os dados do jogador, a lista de locais para visitar, a mochila de itens
+ * e inicia as cutscenes ao entrar nos lugares.
+ *
+ * @author Anselmo e Adna
+ */
 public class MapaView implements View {
 
     private final Console console;
@@ -100,7 +107,6 @@ public class MapaView implements View {
 
         List<ItemMenuMapa> itens = new java.util.ArrayList<>();
 
-        // 1. Locais normais físicos
         for (Local local : subLocais) {
             if (!local.isLocalDeSaida()) {
                 String rotulo = local.getNome();
@@ -111,14 +117,12 @@ public class MapaView implements View {
             }
         }
 
-        // 2. Ações do jogador (inseridas antes da saída)
         itens.add(new ItemMenuMapa(AcaoMenu.ABRIR_MOCHILA.getTitulo(), null, AcaoMenu.ABRIR_MOCHILA));
 
         if (localAtual.getNome().equalsIgnoreCase("Cidade B")) {
             itens.add(new ItemMenuMapa(AcaoMenu.ABRIR_ACADEMIA.getTitulo(), null, AcaoMenu.ABRIR_ACADEMIA));
         }
 
-        // 3. Ação de saída (se o local possuir saída)
         for (Local local : subLocais) {
             if (local.isLocalDeSaida()) {
                 itens.add(new ItemMenuMapa(AcaoMenu.SAIR_LOCAL.getTitulo(), local, AcaoMenu.SAIR_LOCAL));
@@ -148,10 +152,8 @@ public class MapaView implements View {
         gameController.entrarLocal(localEscolhido);
         String nomeDoLocal = localEscolhido.getNome();
 
-        // Determina a View correspondente a esse local
         View viewDestino = resolverViewParaLocal(nomeDoLocal);
 
-        // 1. Verificação de gatilhos da história (Capítulos)
         Optional<Capitulo> capituloDisponivel = gameController.getNarrativaController()
                 .obterCapituloDisponivel(
                         TipoGatilho.ENTRAR_LOCAL,
@@ -159,7 +161,6 @@ public class MapaView implements View {
                         gameController.getPlayer()
                 );
 
-        // 2. Se tem história para esse local, roda Cutscene primeiro
         if (capituloDisponivel.isPresent()) {
             CutsceneController cc = new CutsceneController(
                     capituloDisponivel.get(),
@@ -169,7 +170,6 @@ public class MapaView implements View {
             return;
         }
 
-        // 3. Fluxo direto sem cutscene
         sceneController.trocarCena(viewDestino);
     }
 

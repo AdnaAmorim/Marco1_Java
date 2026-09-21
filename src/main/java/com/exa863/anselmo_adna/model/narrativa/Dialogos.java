@@ -2,6 +2,11 @@ package com.exa863.anselmo_adna.model.narrativa;
 
 import java.util.Random;
 
+/**
+ * Falas dos avós quando o jogador está em casa.
+ *
+ * @author Anselmo e Adna
+ */
 public class Dialogos {
 
     private static final String[] FALAS_AVOS = {
@@ -19,9 +24,11 @@ public class Dialogos {
 
     private static final Random RANDOM = new Random();
 
-    // Construtor privado para evitar instanciação, já que só usaremos métodos estáticos
     private Dialogos() {}
 
+    /**
+     * Sorteia uma fala dos avós para exibir na casa.
+     */
     public static String obterDialogoAleatorioAvos() {
         return FALAS_AVOS[RANDOM.nextInt(FALAS_AVOS.length)];
     }

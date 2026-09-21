@@ -14,6 +14,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Tela de cutscene e diálogos da história.
+ * Mostra as falas dos personagens, exibe as opções de escolha e avisa quando a amizade sobe ou desce.
+ *
+ * @author Anselmo e Adna
+ */
 public class CutsceneView implements View {
 
     private final Console console;
@@ -106,12 +112,10 @@ public class CutsceneView implements View {
             Player player = cutsceneController.getPlayer();
             Map<Integer, Integer> afinidadesAntes = capturarAfinidades(player);
 
-            // O controller processa a ação da escolha
             cutsceneController.processarEscolha(opcaoEscolhida);
 
             exibirVariacoesDeReputacao(player, afinidadesAntes);
 
-            // Exibe os diálogos de desfecho
             for (Dialogo falaDesfecho : opcaoEscolhida.getDesfecho()) {
                 exibirFala(falaDesfecho);
             }
@@ -120,7 +124,9 @@ public class CutsceneView implements View {
         }
     }
 
-    // Captura o nível de afinidade atual do jogador com cada personagem conhecido
+    /**
+     * Mapeia os níveis de amizade/afinidade prévios para calcular variações pós-escolha.
+     */
     private Map<Integer, Integer> capturarAfinidades(Player player) {
         Map<Integer, Integer> afinidades = new HashMap<>();
         if (player == null) {
@@ -134,7 +140,9 @@ public class CutsceneView implements View {
         return afinidades;
     }
 
-    // Compara a afinidade antes/depois da escolha e informa ao jogador o que mudou
+    /**
+     * Compara os níveis de afinidade e exibe as notificações de reputação alterada.
+     */
     private void exibirVariacoesDeReputacao(Player player, Map<Integer, Integer> afinidadesAntes) {
         if (player == null) {
             return;

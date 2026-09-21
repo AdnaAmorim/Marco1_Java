@@ -11,6 +11,11 @@ import com.exa863.anselmo_adna.model.world.NomeLocal;
 
 import java.util.List;
 
+/**
+ * Capítulo 1: Origens. Acontece na casa do protagonista, onde ele encontra as luvas do pai.
+ *
+ * @author Anselmo e Adna
+ */
 public class Capitulo01 extends Capitulo {
 
     public static final String ID = "CAPITULO_01";
@@ -38,7 +43,6 @@ public class Capitulo01 extends Capitulo {
     @Override
     public List<Dialogo> getDialogos(Player player) {
         return List.of(
-                // 1 a 7: Diálogos e ambientação
                 DialogoNarrativo.narrador("O cheiro de poeira e suor antigo ainda paira no ar do velho quarto."),
                 new Dialogo(player, "(Olhando para a velha caixa de papelão) 'Essas coisas estão aqui há anos...'"),
                 DialogoNarrativo.narrador("A luz do fim de tarde entra pela janela, iluminando recortes de jornais desbotados na parede."),
@@ -47,7 +51,6 @@ public class Capitulo01 extends Capitulo {
                 DialogoNarrativo.sistema("Você encontrou as Luvas do Pai. Elas estão gastas, mas carregam um peso enorme."),
                 new Dialogo(player, "(Passando o polegar sobre o couro rachado) 'Ele sempre dizia que o verdadeiro combate acontece na mente.'"),
 
-                // 8: Escolha entre pegar ou não as luvas
                 Dialogo.escolha(
                         "O que você faz diante das luvas?",
                         List.of(
@@ -72,18 +75,15 @@ public class Capitulo01 extends Capitulo {
                         )
                 ),
 
-                // 15 e 16: Conclusão
                 new Dialogo(player, "(Respirando fundo e pegando a mochila) 'De qualquer forma, o torneio estadual não vai esperar por mim.'"),
                 DialogoNarrativo.sistema("Novo local desbloqueado: Academia Física.")
         );
     }
 
-    // Funções separadas para as ações/consequências
     private void acaoPegarLuvas(Player player) {
         player.getInventario().adicionarItem(Itens.LUVA_DO_PAI);
     }
 
     private void acaoNaoPegarLuvas(Player player) {
-        // O jogador opta por não carregar o item no momento
     }
 }

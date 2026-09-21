@@ -6,6 +6,12 @@ import com.exa863.anselmo_adna.model.narrativa.Dialogo;
 
 import java.util.List;
 
+/**
+ * Controla a exibição dos diálogos e escolhas de um capítulo.
+ * Aplica o resultado das escolhas do jogador e marca o capítulo como concluído no final.
+ *
+ * @author Anselmo e Adna
+ */
 public class CutsceneController {
 
     private final Capitulo capitulo;

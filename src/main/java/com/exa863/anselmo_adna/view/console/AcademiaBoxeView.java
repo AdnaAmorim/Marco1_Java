@@ -19,9 +19,14 @@ import com.exa863.anselmo_adna.view.View;
 import java.io.IOException;
 import java.util.function.Consumer;
 
+/**
+ * Tela da academia de boxe.
+ * Gerencia as lutas amadoras dos circuitos Local, Estadual e Nacional.
+ *
+ * @author Anselmo e Adna
+ */
 public class AcademiaBoxeView implements View {
 
-    // Limite de lutas (vitória ou derrota contam igual) permitidas em cada campeonato
     private static final int LIMITE_LUTAS_ESTADUAIS = 2;
     private static final int LIMITE_LUTAS_NACIONAIS = 2;
 
@@ -181,7 +186,7 @@ public class AcademiaBoxeView implements View {
             CEscolha escolha = menu.escolha(opcoes);
 
             if (escolha.index == 1) {
-                sceneController.trocarCena(this); // Volta pro menu de campeonatos
+                sceneController.trocarCena(this);
                 return;
             }
 

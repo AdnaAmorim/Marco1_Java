@@ -5,7 +5,12 @@ import com.exa863.anselmo_adna.model.combat.ResultadoLuta;
 import com.exa863.anselmo_adna.model.combat.Match;
 import com.exa863.anselmo_adna.model.combat.Round;
 
-// gerencia a porra toda da luta (matematica e texto)
+/**
+ * Junta a matemática do combate com a narração dos rounds.
+ * Roda a luta e monta a partida com os textos de cada round.
+ * 
+ * @author Anselmo e Adna
+ */
 public class MatchController {
     private FightController motorDeLuta;
     private MatchNarratorController narrador;
@@ -15,7 +20,13 @@ public class MatchController {
         this.narrador = new MatchNarratorController();
     }
 
-    // roda a matematica e devolve a luta narrada
+    /**
+     * Roda a luta entre dois lutadores e gera a partida completa com a narração dos rounds.
+     *
+     * @param lutador1 Primeiro lutador.
+     * @param lutador2 Segundo lutador.
+     * @return Partida montada com todos os rounds narrados.
+     */
     public Match executarPartida(Lutador lutador1, Lutador lutador2) {
         ResultadoLuta resultado = motorDeLuta.resolverCombate(lutador1, lutador2);
 

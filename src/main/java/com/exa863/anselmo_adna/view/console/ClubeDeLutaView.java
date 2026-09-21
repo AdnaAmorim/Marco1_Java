@@ -21,6 +21,12 @@ import java.io.IOException;
 import java.util.Random;
 import java.util.function.Consumer;
 
+/**
+ * Tela do Clube de Luta clandestino.
+ * Permite apostar dinheiro em lutas de rua, com mais risco de perder vida e energia.
+ *
+ * @author Anselmo e Adna
+ */
 public class ClubeDeLutaView implements View {
 
     private final Console console;
@@ -46,7 +52,6 @@ public class ClubeDeLutaView implements View {
         console.printlnConsole("  O ambiente é sombrio, com cheiro de fumaça, apostas clandestinas e suor.");
         console.printlnConsole("  Aqui não existem nomes, juízes ou regras: apenas a lei da rua.\n");
 
-        // Validação física mínima para briga de rua
         if (attr.getSaude() <= 25 || attr.getEnergia() < 20) {
             console.printlnConsole("  [!] Um apostador empurra você para longe do círculo:\n");
             console.printlnConsole("      \"Ei, parceiro, você mal consegue parar em pé! Não dura 10 segundos aqui.\"");
@@ -62,13 +67,11 @@ public class ClubeDeLutaView implements View {
             return;
         }
 
-        // Clube de luta: oponentes são fracos com atributos entre 1 e 2
         int forcaOponente = 1 + random.nextInt(2);
         int agilidadeOponente = 1 + random.nextInt(2);
         int resistenciaOponente = 1 + random.nextInt(2);
         int inteligenciaOponente = 1;
 
-        // Dinheiro de aposta: 50 a 100 Reais
         int dinheiroAposta = 50 + random.nextInt(51);
 
         EstiloLuta estiloOponente = switch (random.nextInt(3)) {
@@ -77,7 +80,6 @@ public class ClubeDeLutaView implements View {
             default -> new Contragolpeador();
         };
 
-        // Card focado estritamente em estilo de luta e atributos (sem nome nem lore)
         console.printlnConsole("  ┌────────────────────────────────────────────────────────────────────┐");
         console.printlnConsole("  │ INFORMAÇÕES DO ADVERSÁRIO                                          │");
         console.printlnConsole("  ├────────────────────────────────────────────────────────────────────┤");
@@ -176,7 +178,7 @@ public class ClubeDeLutaView implements View {
             console.printlnConsole("");
             if (resultado.isVencedor(lutadorPlayer)) {
                 player.setDinheiro(player.getDinheiro() + dinheiroAposta);
-                // Consequência da briga de rua: fica com pouca saúde
+                // Penalidade severa de saúde característica das brigas clandestinas (redução de 50 com piso em 15)
                 int novaSaude = Math.max(15, player.getAtributos().getSaude() - 50);
                 player.getAtributos().setSaude(novaSaude);
 
