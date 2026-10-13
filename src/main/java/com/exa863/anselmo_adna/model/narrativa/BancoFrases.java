@@ -1,11 +1,5 @@
 package com.exa863.anselmo_adna.model.narrativa;
 
-/**
- * Banco de frases usadas pelo narrador durante as lutas.
- * Contém frases de nocaute, decisões, empates, eventos de round e comentários aleatórios.
- *
- * @author Anselmo e Adna
- */
 public class BancoFrases {
 
     // indices da intensidade das frases

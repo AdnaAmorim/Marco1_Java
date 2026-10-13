@@ -13,11 +13,6 @@ import com.exa863.anselmo_adna.model.narrativa.TipoGatilho;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Capítulo 10: O Julgamento Final. Acontece no Campeonato Mundial.
- *
- * @author Anselmo e Adna
- */
 public class Capitulo10 extends Capitulo {
 
     public static final String ID = "CAPITULO_10";
@@ -55,6 +50,6 @@ public class Capitulo10 extends Capitulo {
     }
     @Override
     public boolean podeIniciar(Player player) {
-        return player != null && player.getLutasNacionais() >= 1;
+        return player != null && player.getLutasNacionais() >= 2;
     }
 }

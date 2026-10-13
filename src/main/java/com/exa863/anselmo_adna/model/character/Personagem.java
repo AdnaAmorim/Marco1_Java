@@ -1,11 +1,5 @@
 package com.exa863.anselmo_adna.model.character;
 
-/**
- * Classe base de todos os personagens do jogo.
- * Guarda id, nome, descrição, cor dos olhos e sexo.
- *
- * @author Anselmo e Adna
- */
 public class Personagem {
 
     private int id;

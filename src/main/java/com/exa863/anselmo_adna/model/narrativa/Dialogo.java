@@ -6,12 +6,6 @@ import com.exa863.anselmo_adna.model.character.Player;
 import java.util.List;
 import java.util.function.Consumer;
 
-/**
- * Representa uma fala na história ou uma escolha para o jogador tomar.
- * Pode ser dita por um personagem, pelo narrador ou pelo sistema.
- *
- * @author Anselmo e Adna
- */
 public class Dialogo {
 
     private final Personagem personagem;
@@ -19,6 +13,7 @@ public class Dialogo {
     private final String texto;
     private final List<Opcao> opcoes;
 
+    // Construtor principal para fala de um personagem
     public Dialogo(Personagem personagem, String texto) {
         this.personagem = personagem;
         this.tipoEmissor = TipoEmissor.PERSONAGEM;
@@ -26,6 +21,7 @@ public class Dialogo {
         this.opcoes = List.of();
     }
 
+    // Construtor para emissores com tipo específico (ex: Narrador ou Sistema)
     public Dialogo(TipoEmissor tipoEmissor, String texto) {
         this.personagem = null;
         this.tipoEmissor = tipoEmissor != null ? tipoEmissor : TipoEmissor.NARRADOR;
@@ -33,6 +29,7 @@ public class Dialogo {
         this.opcoes = List.of();
     }
 
+    // Construtor para pontos de escolha interativa
     public Dialogo(String pergunta, List<Opcao> opcoes) {
         this.personagem = null;
         this.tipoEmissor = TipoEmissor.SISTEMA;
@@ -78,9 +75,7 @@ public class Dialogo {
         return "Narrador";
     }
 
-    /**
-     * Representa uma opção de escolha que o jogador pode selecionar.
-     */
+    // Opção de escolha interna ao Diálogo, reutilizável para qualquer personagem
     public static class Opcao {
         private final String texto;
         private final Consumer<Player> acao;

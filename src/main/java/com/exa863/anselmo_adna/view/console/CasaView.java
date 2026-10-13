@@ -5,22 +5,16 @@ import com.exa863.anselmo_adna.controller.SceneController;
 import com.exa863.anselmo_adna.model.character.Player;
 import com.exa863.anselmo_adna.model.stats.Atributo;
 import com.exa863.anselmo_adna.view.View;
-import com.exa863.anselmo_adna.model.narrativa.Dialogos;
+import com.exa863.anselmo_adna.model.narrative.Dialogos;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-/**
- * Tela da casa do jogador.
- * Permite descansar para recuperar energia e passar o tempo, fazer treinos caseiros
- * e conversar com os avós.
- *
- * @author Anselmo e Adna
- */
 public class CasaView implements View {
 
+    // Chance de a fala aleatória dos avós aparecer quando o jogador chega em casa
     private static final int CHANCE_FALA_AVOS = 40;
 
     private final Console console;
@@ -28,7 +22,7 @@ public class CasaView implements View {
     private final GameController gameController;
     private final Random random = new Random();
 
-    // Sorteia a fala dos avós só uma vez por visita
+    // Garante que a fala só é sorteada uma vez por visita (não a cada redesenho do menu)
     private boolean falaAvosJaTentada = false;
 
     public CasaView(Console console, SceneController sceneController, GameController gameController) {
@@ -127,6 +121,7 @@ public class CasaView implements View {
             return;
         }
 
+        // Executa o treino caseiro
         attr.setEnergia(attr.getEnergia() - 25);
         gameController.getDataDia().avancarMinutos(120);
         player.registrarTreino(diaAtual);

@@ -1,10 +1,5 @@
 package com.exa863.anselmo_adna.view.console.art;
 
-/**
- * Artes em ASCII exibidas durante os eventos das lutas.
- *
- * @author Anselmo e Adna
- */
 public class LutasASCII {
     public static final String fimDeRound = """
    __________  ___   ___  ____   ___  ____  __  ___  _____ 

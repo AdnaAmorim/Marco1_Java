@@ -11,12 +11,6 @@ import com.exa863.anselmo_adna.controller.GameController;
 import com.exa863.anselmo_adna.model.combat.ResultadoLuta;
 import java.util.function.Consumer;
 
-/**
- * Tela da luta.
- * Exibe os rounds com as narrações e o resultado final da partida.
- *
- * @author Anselmo e Adna
- */
 public class MatchView implements View {
 
     private final Console console;

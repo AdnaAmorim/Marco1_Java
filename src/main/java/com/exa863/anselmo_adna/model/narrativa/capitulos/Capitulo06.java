@@ -9,15 +9,9 @@ import com.exa863.anselmo_adna.model.narrativa.Dialogo;
 import com.exa863.anselmo_adna.model.narrativa.DialogoNarrativo;
 import com.exa863.anselmo_adna.model.narrativa.GatilhoNarrativo;
 import com.exa863.anselmo_adna.model.narrativa.TipoGatilho;
-import com.exa863.anselmo_adna.model.world.NomeLocal;
 
 import java.util.List;
 
-/**
- * Capítulo 6: Novos Horizontes. Acontece na academia profissional.
- *
- * @author Anselmo e Adna
- */
 public class Capitulo06 extends Capitulo {
 
     public static final String ID = "CAPITULO_06";
@@ -26,11 +20,6 @@ public class Capitulo06 extends Capitulo {
     public Capitulo06() {
         super(ID, "Novos Horizontes", new GatilhoNarrativo(TipoGatilho.ENTRAR_LOCAL, "Academia Profissional"), List.of(Capitulo05.ID));
         this.james = new Personagem(7, "James", "Analista de desempenho esportivo.", Cores.AZUL, Sexo.MASCULINO);
-    }
-
-    @Override
-    public List<NomeLocal> getLocaisBloqueados() {
-        return List.of(NomeLocal.CIDADE_B);
     }
 
     @Override

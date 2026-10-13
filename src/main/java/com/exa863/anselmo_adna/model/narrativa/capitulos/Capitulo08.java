@@ -9,29 +9,18 @@ import com.exa863.anselmo_adna.model.narrativa.Dialogo;
 import com.exa863.anselmo_adna.model.narrativa.DialogoNarrativo;
 import com.exa863.anselmo_adna.model.narrativa.GatilhoNarrativo;
 import com.exa863.anselmo_adna.model.narrativa.TipoGatilho;
-import com.exa863.anselmo_adna.model.world.NomeLocal;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Capítulo 8: O Palco Nacional. Acontece na academia de boxe.
- *
- * @author Anselmo e Adna
- */
 public class Capitulo08 extends Capitulo {
 
     public static final String ID = "CAPITULO_08";
     private final Personagem victorNoor;
 
     public Capitulo08() {
-        super(ID, "O Palco Nacional", new GatilhoNarrativo(TipoGatilho.ENTRAR_LOCAL, "Academia de Boxe"), List.of(Capitulo07.ID));
+        super(ID, "O Palco Nacional", new GatilhoNarrativo(TipoGatilho.ENTRAR_LOCAL, "Campeonato Mundial"), List.of(Capitulo07.ID));
         this.victorNoor = new Personagem(5, "Victor Noor", "Empresário rico do submundo das apostas.", Cores.PRETO, Sexo.MASCULINO);
-    }
-
-    @Override
-    public List<NomeLocal> getLocaisBloqueados() {
-        return List.of(NomeLocal.CIDADE_B);
     }
 
     @Override
@@ -79,6 +68,6 @@ public class Capitulo08 extends Capitulo {
     }
     @Override
     public boolean podeIniciar(Player player) {
-        return player != null && player.getLutasEstaduais() >= 2;
+        return player != null && player.getLutasNacionais() >= 1;
     }
 }

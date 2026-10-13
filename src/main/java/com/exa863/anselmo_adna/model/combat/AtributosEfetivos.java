@@ -1,11 +1,8 @@
 package com.exa863.anselmo_adna.model.combat;
 
-/**
- * Guarda os atributos do lutador só durante a luta, já com os bônus e penalidades do estilo aplicados.
- * Não altera os atributos reais e permanentes do personagem.
- *
- * @author Anselmo e Adna
- */
+// guarda os atributos temporarios so durante a luta
+// junta os atributos base com os bonus e penalidades do estilo de luta,
+// sem mexer nos atributos reais e permanentes do lutador
 public class AtributosEfetivos {
     public final double forca;
     public final double agilidade;

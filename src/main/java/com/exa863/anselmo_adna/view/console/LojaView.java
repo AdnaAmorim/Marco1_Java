@@ -9,12 +9,6 @@ import com.exa863.anselmo_adna.view.View;
 
 import java.io.IOException;
 
-/**
- * Tela da loja de itens.
- * Permite comprar itens de recuperação de vida e energia com o dinheiro do jogador.
- *
- * @author Anselmo e Adna
- */
 public class LojaView implements View {
 
     private final Console console;
@@ -66,7 +60,6 @@ public class LojaView implements View {
             CEscolha escolha = menu.escolha(opcoes);
 
             if (escolha.index == -1) {
-                gameController.voltarLocal();
                 sceneController.trocarCena(new MapaView(console, sceneController, gameController));
                 return;
             }

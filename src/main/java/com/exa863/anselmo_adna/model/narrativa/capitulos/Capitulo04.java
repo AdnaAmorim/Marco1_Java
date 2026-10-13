@@ -10,15 +10,9 @@ import com.exa863.anselmo_adna.model.narrativa.DialogoNarrativo;
 import com.exa863.anselmo_adna.model.narrativa.GatilhoNarrativo;
 import com.exa863.anselmo_adna.model.narrativa.TipoGatilho;
 import com.exa863.anselmo_adna.model.stats.Itens;
-import com.exa863.anselmo_adna.model.world.NomeLocal;
 
 import java.util.List;
 
-/**
- * Capítulo 4: O Submundo. Acontece na academia de boxe.
- *
- * @author Anselmo e Adna
- */
 public class Capitulo04 extends Capitulo {
 
     public static final String ID = "CAPITULO_04";
@@ -32,19 +26,6 @@ public class Capitulo04 extends Capitulo {
                 List.of(Capitulo03.ID)
         );
         this.victorNoor = new Personagem(5, "Victor Noor", "Um empresário rico do submundo das apostas.", Cores.PRETO, Sexo.MASCULINO);
-    }
-
-    @Override
-    public List<NomeLocal> getLocaisBloqueados() {
-        return List.of(
-                NomeLocal.CIDADE_A,
-                NomeLocal.CIDADE_B
-        );
-    }
-
-    @Override
-    public boolean podeIniciar(Player player) {
-        return player != null && player.getLutasLocais() >= 2;
     }
 
     @Override

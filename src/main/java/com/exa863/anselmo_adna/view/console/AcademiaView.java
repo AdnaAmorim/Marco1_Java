@@ -9,12 +9,6 @@ import com.exa863.anselmo_adna.view.View;
 import java.io.IOException;
 import java.util.Random;
 
-/**
- * Tela da academia de musculação.
- * O jogador paga uma taxa para treinar atributos básicos, gastando energia e respeitando o limite diário.
- *
- * @author Anselmo e Adna
- */
 public class AcademiaView implements View {
 
     private static final int CUSTO_ENTRADA = 50;
@@ -37,6 +31,7 @@ public class AcademiaView implements View {
         Atributo attr = player.getAtributos();
         int diaAtual = gameController.getDataDia().getDias();
 
+        // 1. Validação de Limite de Treinos Diários
         if (!player.podeTreinarHoje(diaAtual)) {
             console.printlnConsole("╔══════════════════════════════════════════════════════════════════════╗");
             console.printlnConsole("║                        LIMITE DIÁRIO ATINGIDO                        ║");
@@ -51,6 +46,7 @@ public class AcademiaView implements View {
             return;
         }
 
+        // 2. Validação de Energia (Exige apenas o custo do treino: 25)
         if (attr.getEnergia() < 25) {
             console.printlnConsole("╔══════════════════════════════════════════════════════════════════════╗");
             console.printlnConsole("║                  ENERGIA INSUFICIENTE (EXIGE 25)                     ║");
@@ -66,6 +62,7 @@ public class AcademiaView implements View {
             return;
         }
 
+        // 3. Recepção e Pagamento da Taxa
         console.printlnConsole("╔══════════════════════════════════════════════════════════════════════╗");
         console.printlnConsole("║                       RECEPÇÃO DA ACADEMIA                           ║");
         console.printlnConsole("╚══════════════════════════════════════════════════════════════════════╝\n");
@@ -96,6 +93,7 @@ public class AcademiaView implements View {
                 return;
             }
 
+            // Paga a entrada e avança para os aparelhos
             player.setDinheiro(player.getDinheiro() - CUSTO_ENTRADA);
             mostrarAparelhos(player, attr, diaAtual);
 

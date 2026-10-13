@@ -1,10 +1,9 @@
 package com.exa863.anselmo_adna.model.combat;
 
-/**
- * Resultado de uma luta: quem ganhou, como ganhou, a pontuação de cada lutador e quantos rounds durou.
- *
- * @author Anselmo e Adna
- */
+import com.exa863.anselmo_adna.model.character.Personagem;
+import com.exa863.anselmo_adna.model.combat.EstiloLuta;
+import com.exa863.anselmo_adna.model.stats.Atributo;
+
 public class ResultadoLuta {
     private final Lutador lutador1;
     private final Lutador lutador2;

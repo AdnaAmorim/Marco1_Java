@@ -10,12 +10,6 @@ import com.exa863.anselmo_adna.model.narrativa.capitulos.*;
 
 import java.util.List;
 
-/**
- * Controlador principal do jogo. Guarda o jogador, o relógio do jogo,
- * o local atual no mapa e o fluxo da história.
- *
- * @author Anselmo e Adna
- */
 public class GameController {
 
     private DataDia dataDia;
@@ -23,6 +17,8 @@ public class GameController {
     private Local localAtual;
     private EstadoGame estadoGame;
     private Player player;
+
+    // Controlador que eh responsável pela gestão da história
     private NarrativaController narrativaController;
 
     public GameController() {
@@ -34,6 +30,7 @@ public class GameController {
     }
 
     private void configurarNarrativa() {
+        // Carrega todos os capítulos respeitando as dependências do Grafo
         List<Capitulo> listaCapitulos = List.of(
                 new Capitulo01(), new Capitulo02(), new Capitulo03(),
                 new Capitulo04(), new Capitulo05(), new Capitulo06(),
@@ -126,11 +123,6 @@ public class GameController {
         return narrativaController;
     }
 
-    /**
-     * Muda o jogador para o local escolhido, ou volta um nível se for uma saída.
-     *
-     * @param local Local para onde o jogador quer ir.
-     */
     public void entrarLocal(Local local) {
         if (local == null) {
             return;
@@ -143,9 +135,7 @@ public class GameController {
         }
     }
 
-    /**
-     * Volta para o local anterior no mapa (local pai).
-     */
+    // Volta para o local pai.
     public void voltarLocal() {
         if (localAtual.getLocalPai() != null) {
             localAtual = localAtual.getLocalPai();

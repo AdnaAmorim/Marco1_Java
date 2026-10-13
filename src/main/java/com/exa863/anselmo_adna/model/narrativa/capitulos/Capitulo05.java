@@ -9,15 +9,9 @@ import com.exa863.anselmo_adna.model.narrativa.Dialogo;
 import com.exa863.anselmo_adna.model.narrativa.DialogoNarrativo;
 import com.exa863.anselmo_adna.model.narrativa.GatilhoNarrativo;
 import com.exa863.anselmo_adna.model.narrativa.TipoGatilho;
-import com.exa863.anselmo_adna.model.world.NomeLocal;
 
 import java.util.List;
 
-/**
- * Capítulo 5: O Encontro com o Trovão. Acontece na academia de boxe.
- *
- * @author Anselmo e Adna
- */
 public class Capitulo05 extends Capitulo {
 
     public static final String ID = "CAPITULO_05";
@@ -28,14 +22,6 @@ public class Capitulo05 extends Capitulo {
         super(ID, "O Encontro com o Trovão", new GatilhoNarrativo(TipoGatilho.ENTRAR_LOCAL, "Academia de Boxe"), List.of(Capitulo04.ID));
         this.anthony = new Personagem(6, "Anthony", "O Trovão, estrela arrogante do torneio.", Cores.CASTANHO, Sexo.MASCULINO);
         this.mestreSmith = new Personagem(3, "Mestre Smith", "Um veterano rigoroso do boxe.", Cores.PRETO, Sexo.MASCULINO);
-    }
-
-    @Override
-    public List<NomeLocal> getLocaisBloqueados() {
-        return List.of(
-                NomeLocal.CIDADE_A,
-                NomeLocal.CIDADE_B
-        );
     }
 
     @Override

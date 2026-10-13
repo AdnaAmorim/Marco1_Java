@@ -3,7 +3,10 @@ package com.exa863.anselmo_adna.view.console;
 import com.exa863.anselmo_adna.controller.GameController;
 import com.exa863.anselmo_adna.controller.MatchController;
 import com.exa863.anselmo_adna.controller.SceneController;
+import com.exa863.anselmo_adna.model.character.Cores;
+import com.exa863.anselmo_adna.model.character.Personagem;
 import com.exa863.anselmo_adna.model.character.Player;
+import com.exa863.anselmo_adna.model.character.Sexo;
 import com.exa863.anselmo_adna.model.combat.EstiloLuta;
 import com.exa863.anselmo_adna.model.combat.Lutador;
 import com.exa863.anselmo_adna.model.combat.Match;
@@ -19,14 +22,9 @@ import com.exa863.anselmo_adna.view.View;
 import java.io.IOException;
 import java.util.function.Consumer;
 
-/**
- * Tela da academia de boxe.
- * Gerencia as lutas amadoras dos circuitos Local, Estadual e Nacional.
- *
- * @author Anselmo e Adna
- */
 public class AcademiaBoxeView implements View {
 
+    // Limite de lutas (vitória ou derrota contam igual) permitidas em cada campeonato
     private static final int LIMITE_LUTAS_ESTADUAIS = 2;
     private static final int LIMITE_LUTAS_NACIONAIS = 2;
 
@@ -186,7 +184,7 @@ public class AcademiaBoxeView implements View {
             CEscolha escolha = menu.escolha(opcoes);
 
             if (escolha.index == 1) {
-                sceneController.trocarCena(this);
+                sceneController.trocarCena(this); // Volta pro menu de campeonatos
                 return;
             }
 
@@ -248,8 +246,6 @@ public class AcademiaBoxeView implements View {
                 player.registrarLutaEstadual();
             } else if (tipoCampeonato == 2) {
                 player.registrarLutaNacional();
-            } else if (tipoCampeonato == 0) {
-                player.registrarLutaLocal();
             }
 
             player.registrarLutaBoxe(diaAtual);
@@ -276,7 +272,7 @@ public class AcademiaBoxeView implements View {
             }
         };
 
-        View destinoRetorno = new AcademiaBoxeView(console, sceneController, gameController);
+        View destinoRetorno = new MapaView(console, sceneController, gameController);
         sceneController.trocarCena(new MatchView(console, sceneController, gameController, match,
                 lutadorPlayer, lutadorOponente, destinoRetorno, callbackPosLuta));
     }

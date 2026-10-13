@@ -2,8 +2,10 @@ package com.exa863.anselmo_adna.view.console;
 
 import com.exa863.anselmo_adna.controller.GameController;
 import com.exa863.anselmo_adna.controller.SceneController;
+import com.exa863.anselmo_adna.persistencia.ConfiguracaoXML;
 import com.exa863.anselmo_adna.view.View;
 import com.exa863.anselmo_adna.view.console.art.MenuInicialASCII;
+import com.exa863.anselmo_adna.persistencia.Configuracao;
 import java.io.IOException;
 
 /**
@@ -11,16 +13,28 @@ import java.io.IOException;
  *
  * @author Anselmo e Adna
  */
+
+
 public class MenuView implements View {
 
     private final Console console;
     private final SceneController sceneController;
     private final GameController gameController;
+    private final Configuracao config = new Configuracao();
 
     public MenuView(Console console, SceneController sceneController, GameController gameController) {
         this.console = console;
         this.sceneController = sceneController;
         this.gameController = gameController;
+
+        ConfiguracaoXML xml = new ConfiguracaoXML();
+
+        try {
+            xml.carregar(config);
+
+        } catch (IOException e) {
+            console.printlnConsole("Erro ao carregar configurações!");
+        }
     }
 
     @Override
@@ -35,7 +49,8 @@ public class MenuView implements View {
                 new CEscolha("Jogar (Iniciar Carreira)", 0),
                 new CEscolha("Tutorial (Guia do Boxeador)", 1),
                 new CEscolha("Créditos & Autoria", 2),
-                new CEscolha("Sair do Jogo", 3)
+                new  CEscolha("Configurações", 3),
+                new CEscolha("Sair do Jogo", 4)
         };
 
         try {
@@ -85,8 +100,8 @@ public class MenuView implements View {
                     console.printlnConsole("╠══════════════════════════════════════════════════════════════════════╣");
                     console.printlnConsole("║                                                                      ║");
                     console.printlnConsole("║  ► DESENVOLVIMENTO & AUTORIA:                                        ║");
-                    console.printlnConsole("║    • Anselmo Anjos                                                   ║");
-                    console.printlnConsole("║    • Adna Amorim                                                     ║");
+                    console.printlnConsole("║    • Anselmo dos Anjos Santos Filho                                  ║");
+                    console.printlnConsole("║    • Adna Amorim da Silva Conceição                                  ║");
                     console.printlnConsole("║                                                                      ║");
                     console.printlnConsole("║  ► DISCIPLINA & PROJETO ACADÊMICO:                                   ║");
                     console.printlnConsole("║    • 2026.2 - EXA 863 - TP04 - MI - Programação                      ║");
@@ -106,6 +121,14 @@ public class MenuView implements View {
                     sceneController.trocarCena(this);
                 }
                 case 3 -> {
+                    MenuConfiguracao menuConfig =
+                            new MenuConfiguracao(console, config);
+
+                    menuConfig.mostrar();
+
+                    sceneController.trocarCena(this);
+                }
+                case 4 -> {
                     console.clearConsole();
                     console.printlnConsole("╔══════════════════════════════════════════════════════════════════════╗");
                     console.printlnConsole("║         Obrigado por jogar Boxing Game! Até a próxima luta!          ║");

@@ -21,18 +21,11 @@ import com.exa863.anselmo_adna.view.View;
 import java.io.IOException;
 import java.util.function.Consumer;
 
-/**
- * Tela do Campeonato Mundial de Boxe (final do jogo).
- * Confere se o jogador tem as lutas necessárias, inicia a luta contra Anthony Campbell
- * e mostra o final da história.
- *
- * @author Anselmo e Adna
- */
 public class CampeonatoMundialView implements View {
 
-    // Precisa de 2 lutas estaduais e 1 nacional para participar
+    // Só libera o Mundial depois que o personagem disputou as 2 lutas estaduais e as 2 nacionais
     private static final int LUTAS_ESTADUAIS_NECESSARIAS = 2;
-    private static final int LUTAS_NACIONAIS_NECESSARIAS = 1;
+    private static final int LUTAS_NACIONAIS_NECESSARIAS = 2;
 
     private final Console console;
     private final SceneController sceneController;
@@ -143,8 +136,8 @@ public class CampeonatoMundialView implements View {
     // Mostra qual caminho de relacionamento o jogador seguiu e a afinidade final com cada personagem
     private void exibirResumoRelacionamentos(Player player) {
         console.printlnConsole("\n╔══════════════════════════════════════════════════════════════════════╗");
-        console.printlnConsole("║                       RELACIONAMENTOS FINAIS                         ║");
-        console.printlnConsole("╚══════════════════════════════════════════════════════════════════════╝");
+        console.printlnConsole("  ║                       RELACIONAMENTOS FINAIS                         ║");
+        console.printlnConsole("  ╚══════════════════════════════════════════════════════════════════════╝");
 
         if (player.possuiRomance()) {
             console.printlnConsole("  ✦ Romance : Você seguiu o caminho do relacionamento com " + player.getPersonagemRomance() + ".");
@@ -196,12 +189,13 @@ public class CampeonatoMundialView implements View {
         MatchController matchController = new MatchController();
         Match match = matchController.executarPartida(lutadorPlayer, lutadorOponente);
 
+        // Aqui transferimos o processamento do final do jogo baseado na mecânica real
         Consumer<ResultadoLuta> callbackPosLuta = resultado -> {
             boolean venceuLuta = resultado.isVencedor(lutadorPlayer);
 
-            // Verifica os possíveis finais: contrato com Victor Noor vs investigação com Chloe
+            // Avaliar o Contrato com Noor (ID 5)
             Personagem victorNoor = new Personagem(5, "Victor Noor", "", Cores.PRETO, Sexo.MASCULINO);
-            boolean aceitouContrato = player.isCapituloConcluido("FLAG_CONTRATO_ACEITO") || player.getAfinidade(victorNoor) >= 50;
+            boolean aceitouContrato = player.getAfinidade(victorNoor) >= 50;
             boolean investigacaoCompleta = player.isCapituloConcluido("INVESTIGACAO_COMPLETA");
 
             console.clearConsole();
@@ -241,11 +235,12 @@ public class CampeonatoMundialView implements View {
 
             exibirResumoRelacionamentos(player);
 
-            console.printlnConsole("\n       ┌────────────────────────────────────────────────────────┐");
+            console.printlnConsole("\n     ┌────────────────────────────────────────────────────────┐");
             console.printlnConsole("       │           [ ENTER ]  Voltar ao Menu Principal          │");
             console.printlnConsole("       └────────────────────────────────────────────────────────┘");
             console.esperarEnter("");
 
+            // Reinicia o jogo voltando ao menu principal com um estado limpo
             sceneController.trocarCena(new MenuView(console, sceneController, new GameController()));
         };
 

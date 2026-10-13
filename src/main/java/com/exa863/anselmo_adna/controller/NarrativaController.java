@@ -8,12 +8,6 @@ import com.exa863.anselmo_adna.model.narrativa.TipoGatilho;
 
 import java.util.Optional;
 
-/**
- * Controla o fluxo da história usando o grafo de capítulos.
- * Checa quais capítulos já foram liberados e quais locais estão bloqueados.
- *
- * @author Anselmo e Adna
- */
 public class NarrativaController {
 
     private final GrafoCapitulos grafo;
@@ -22,14 +16,6 @@ public class NarrativaController {
         this.grafo = grafo;
     }
 
-    /**
-     * Procura o próximo capítulo disponível para o evento atual (ex: ao entrar em um local).
-     *
-     * @param tipo Tipo de evento (ex: ENTRAR_LOCAL).
-     * @param alvo Nome do local ou evento.
-     * @param player O jogador atual.
-     * @return O capítulo pronto para começar, ou vazio se não houver nenhum.
-     */
     public Optional<Capitulo> obterCapituloDisponivel(TipoGatilho tipo, String alvo, Player player) {
         if (player == null) {
             return Optional.empty();
@@ -57,9 +43,10 @@ public class NarrativaController {
             return false;
         }
 
-        // Verifica se algum capítulo ativo/pendente no grafo bloqueia este local
+        // Verifica se algum capítulo ativo/pendente bloqueia este local
         return grafo.getTodosCapitulos().stream()
                 .filter(c -> grafo.estaDisponivel(c.getId(), player.getCapitulosConcluidos()))
+                .filter(c -> c.podeIniciar(player))
                 .anyMatch(c -> c.isLocalBloqueado(nomeLocal));
     }
 

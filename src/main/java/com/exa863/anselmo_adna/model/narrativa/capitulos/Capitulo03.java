@@ -9,15 +9,9 @@ import com.exa863.anselmo_adna.model.narrativa.Dialogo;
 import com.exa863.anselmo_adna.model.narrativa.DialogoNarrativo;
 import com.exa863.anselmo_adna.model.narrativa.GatilhoNarrativo;
 import com.exa863.anselmo_adna.model.narrativa.TipoGatilho;
-import com.exa863.anselmo_adna.model.world.NomeLocal;
 
 import java.util.List;
 
-/**
- * Capítulo 3: O Teste do Mestre. Acontece na academia de boxe.
- *
- * @author Anselmo e Adna
- */
 public class Capitulo03 extends Capitulo {
 
     public static final String ID = "CAPITULO_03";
@@ -33,14 +27,6 @@ public class Capitulo03 extends Capitulo {
         );
         this.mestreSmith = new Personagem(3, "Mestre Smith", "Um veterano rigoroso do boxe.", Cores.PRETO, Sexo.MASCULINO);
         this.chris = new Personagem(4, "Chris", "Lutador surdo e muito veloz.", Cores.VERDE, Sexo.MASCULINO);
-    }
-
-    @Override
-    public List<NomeLocal> getLocaisBloqueados() {
-        return List.of(
-                NomeLocal.CIDADE_A,
-                NomeLocal.CIDADE_B
-        );
     }
 
     @Override

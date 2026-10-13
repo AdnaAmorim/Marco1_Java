@@ -12,9 +12,7 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Lista dos oponentes da academia de boxe com seus atributos, estilos e prêmios.
- *
- * @author Anselmo e Adna
+ * Catálogo dos 15 oponentes pré-definidos da Academia de Boxe (circuito amador).
  */
 public class OponentesBoxe {
 
@@ -33,6 +31,7 @@ public class OponentesBoxe {
         public Lutador criarLutador() {
             String nomeCompleto = nome + " \"" + apelido + "\"";
             Personagem p = new Personagem(id, nomeCompleto, descricao, Cores.CASTANHO, Sexo.MASCULINO);
+            // Ordem do construtor: saude, forca, agilidade, resistencia, inteligencia, energia
             Atributo attr = new Atributo(100, forca, agilidade, resistencia, inteligencia, 100);
             return new Lutador(p, attr, estilo);
         }
@@ -123,7 +122,7 @@ public class OponentesBoxe {
     }
 
     public static InfoOponente obterPorDia(int dia) {
-        // Escolhe o mesmo oponente para o mesmo dia
+        // Gera um oponente consistente para o mesmo dia, evitando rerolls imediatos
         int indice = Math.abs((dia * 31 + 7) % OPONENTES.size());
         return OPONENTES.get(indice);
     }

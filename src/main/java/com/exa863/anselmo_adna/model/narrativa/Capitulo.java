@@ -5,12 +5,6 @@ import com.exa863.anselmo_adna.model.world.NomeLocal;
 
 import java.util.List;
 
-/**
- * Classe base para os capítulos da história.
- * Cada capítulo tem suas dependências, onde acontece, seus diálogos e o que precisa para liberar.
- *
- * @author Anselmo e Adna
- */
 public abstract class Capitulo {
 
     private final String id;
@@ -41,28 +35,16 @@ public abstract class Capitulo {
         return dependencias;
     }
 
-    /**
-     * Retorna os diálogos e opções deste capítulo.
-     *
-     * @param player O jogador atual.
-     * @return Lista com as falas e escolhas da cena.
-     */
+    // Retorna a lista linear de diálogos do capítulo
     public abstract List<Dialogo> getDialogos(Player player);
 
-    /**
-     * Confere se o jogador cumpre os requisitos extras para começar este capítulo
-     * (como ter dinheiro suficiente, lutas feitas ou amizade com alguém).
-     *
-     * @param player O jogador atual.
-     * @return true se o capítulo puder começar.
-     */
+    // Requisito extra além das dependências do grafo (lutas disputadas, dinheiro, atributos...)
+    // Por padrão não exige nada; cada capítulo sobrescreve se precisar.
     public boolean podeIniciar(Player player) {
         return true;
     }
 
-    /**
-     * Lista de locais que ficam bloqueados enquanto este capítulo não for feito.
-     */
+    // Retorna a lista de locais bloqueados enquanto este capítulo estiver ativo/pendente
     public List<NomeLocal> getLocaisBloqueados() {
         return List.of();
     }
@@ -75,9 +57,6 @@ public abstract class Capitulo {
                 .anyMatch(bloqueado -> bloqueado.corresponde(nomeLocal));
     }
 
-    /**
-     * Marca o capítulo como concluído para o jogador.
-     */
     public void finalizar(Player player) {
         if (player != null) {
             player.concluirCapitulo(id);
