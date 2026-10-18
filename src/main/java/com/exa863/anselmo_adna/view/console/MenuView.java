@@ -2,12 +2,16 @@ package com.exa863.anselmo_adna.view.console;
 
 import com.exa863.anselmo_adna.controller.GameController;
 import com.exa863.anselmo_adna.controller.SceneController;
+import com.exa863.anselmo_adna.controller.SaveGameController;
 import com.exa863.anselmo_adna.view.View;
 import com.exa863.anselmo_adna.view.console.art.MenuInicialASCII;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import com.exa863.anselmo_adna.model.GameState;
 
 /**
- * Menu principal do jogo (Novo Jogo, Continuar, Sair).
+ * Menu inicial ou menu da partida, conforme a existência de um protagonista.
  *
  * @author Anselmo e Adna
  */
@@ -31,18 +35,66 @@ public class MenuView implements View {
         console.printlnConsole("  Navegue com [ ▲ / ▼ ] e confirme a sua escolha com [ ENTER ]:\n");
 
         CMultiplaEscolha menu = new CMultiplaEscolha(console);
-        CEscolha[] opcoes = new CEscolha[]{
-                new CEscolha("Jogar (Iniciar Carreira)", 0),
-                new CEscolha("Tutorial (Guia do Boxeador)", 1),
-                new CEscolha("Créditos & Autoria", 2),
-                new CEscolha("Sair do Jogo", 3)
-        };
+        List<CEscolha> opcoes = new ArrayList<>();
+        if (gameController.getPlayer() != null) {
+            opcoes.add(new CEscolha("Retomar partida atual", 5));
+            opcoes.add(new CEscolha("Salvar partida", 6));
+            opcoes.add(new CEscolha("Carregar partida", 4));
+            opcoes.add(new CEscolha("Tutorial (Guia do Boxeador)", 1));
+            opcoes.add(new CEscolha("Ir para o menu inicial", 7));
+        } else {
+            SaveGameController.SaveRecente recente = new SaveGameController().carregarMaisRecente();
+            if (recente != null) {
+                String nome = recente.save().getGameState().getPlayer().getNome();
+                String capitulo = gameController.getNarrativaController()
+                        .getCapituloAtual(recente.save().getGameState().getPlayer());
+                opcoes.add(new CEscolha("Continuar (" + String.format("%.20s", nome)
+                        + " | " + capitulo + " | " + recente.getNomeSlot() + ")", 8));
+            }
+            opcoes.add(new CEscolha("Jogar (Iniciar Carreira)", 0));
+            opcoes.add(new CEscolha("Carregar partida", 4));
+            opcoes.add(new CEscolha("Tutorial (Guia do Boxeador)", 1));
+            opcoes.add(new CEscolha("Créditos & Autoria", 2));
+            opcoes.add(new CEscolha("Sair do Jogo", 3));
+        }
 
         try {
-            CEscolha escolha = menu.escolha(opcoes);
+            CEscolha escolha = menu.escolha(opcoes.toArray(CEscolha[]::new));
 
             switch (escolha.index) {
-                case 0 -> sceneController.trocarCena(new CriacaoPersonagemView(console, sceneController, gameController));
+                case 8 -> {
+                    SaveGameController.SaveRecente recente = new SaveGameController().carregarMaisRecente();
+                    if (recente == null) {
+                        console.esperarEnter("  Nenhum save válido disponível. [ ENTER ] Voltar");
+                        sceneController.trocarCena(this);
+                        return;
+                    }
+                    gameController.carregarGameState(recente.save().getGameState());
+                    sceneController.trocarCena(new MapaView(console, sceneController, gameController));
+                }
+                case 0 -> {
+                    gameController.carregarGameState(new GameState());
+                    sceneController.trocarCena(new CriacaoPersonagemView(console, sceneController, gameController));
+                }
+                case 4 -> sceneController.trocarCena(new SavesView(console, sceneController, gameController, false));
+                case 5 -> sceneController.trocarCena(new MapaView(console, sceneController, gameController));
+                case 6 -> sceneController.trocarCena(new SavesView(console, sceneController, gameController, true));
+                case 7 -> {
+                    console.clearConsole();
+                    console.printlnConsole("╔══════════════════════════════════════════════════════════════════════╗");
+                    console.printlnConsole("║                       VOLTAR AO MENU INICIAL                         ║");
+                    console.printlnConsole("╚══════════════════════════════════════════════════════════════════════╝");
+                    console.printlnConsole("\n  Deseja sair da partida sem salvar?");
+                    console.printlnConsole("  O progresso desde o último save será perdido.\n");
+                    CEscolha confirmacao = menu.escolha(new CEscolha[]{
+                            new CEscolha("Cancelar e voltar", 0),
+                            new CEscolha("Sair sem salvar", 1)
+                    });
+                    if (confirmacao.index == 1) {
+                        gameController.carregarGameState(new GameState());
+                    }
+                    sceneController.trocarCena(this);
+                }
                 case 1 -> {
                     console.clearConsole();
                     console.printlnConsole("╔══════════════════════════════════════════════════════════════════════╗");

@@ -1,11 +1,19 @@
 package com.exa863.anselmo_adna.model.character;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Classe base de todos os personagens do jogo.
  * Guarda id, nome, descrição, cor dos olhos e sexo.
  *
  * @author Anselmo e Adna
  */
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY,
+        getterVisibility = JsonAutoDetect.Visibility.NONE,
+        isGetterVisibility = JsonAutoDetect.Visibility.NONE,
+        setterVisibility = JsonAutoDetect.Visibility.NONE)
 public class Personagem {
 
     private int id;
@@ -14,7 +22,10 @@ public class Personagem {
     private Cores corOlhos;
     private Sexo sexo;
 
-    public Personagem(int id, String nome, String descricao, Cores corOlhos, Sexo sexo) {
+    @JsonCreator
+    public Personagem(@JsonProperty("id") int id, @JsonProperty("nome") String nome,
+                      @JsonProperty("descricao") String descricao,
+                      @JsonProperty("corOlhos") Cores corOlhos, @JsonProperty("sexo") Sexo sexo) {
         this.id = id;
         this.nome = nome;
         this.descricao = descricao;

@@ -3,8 +3,14 @@ package com.exa863.anselmo_adna.model.character;
 import com.exa863.anselmo_adna.model.stats.Atributo;
 import com.exa863.anselmo_adna.model.stats.Inventario;
 import com.exa863.anselmo_adna.model.stats.Relacionamentos;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -17,6 +23,7 @@ public class Player extends Personagem {
 
     private int dinheiro;
     private Atributo atributos;
+    @JsonIgnore
     private Relacionamentos[] relacionamentos;
     private Inventario inventario;
     private final Set<String> capitulosConcluidos;
@@ -34,7 +41,10 @@ public class Player extends Personagem {
     // Só dá para namorar um personagem por jogo
     private String personagemRomance;
 
-    public Player(int id, String nome, String descricao, Cores corOlhos, Sexo sexo) {
+    @JsonCreator
+    public Player(@JsonProperty("id") int id, @JsonProperty("nome") String nome,
+                  @JsonProperty("descricao") String descricao,
+                  @JsonProperty("corOlhos") Cores corOlhos, @JsonProperty("sexo") Sexo sexo) {
         super(id, nome, descricao, corOlhos, sexo);
         this.dinheiro = 100;
         this.atributos = new Atributo();
@@ -193,6 +203,27 @@ public class Player extends Personagem {
 
     public Relacionamentos[] getRelacionamentos() {
         return relacionamentos;
+    }
+
+    /** Slots vazios não são relações; o XML grava somente os vínculos existentes. */
+    @JsonProperty("vinculos")
+    public List<Relacionamentos> getVinculosSalvos() {
+        return Arrays.stream(relacionamentos).filter(Objects::nonNull).toList();
+    }
+
+    @JsonProperty("vinculos")
+    public void restaurarVinculos(List<Relacionamentos> vinculos) {
+        if (vinculos == null) {
+            vinculos = List.of();
+        }
+        if (vinculos.size() > 10 || vinculos.stream()
+                .anyMatch(vinculo -> vinculo == null || vinculo.getPersonagem() == null)) {
+            throw new IllegalArgumentException("Relacionamentos inválidos na partida salva.");
+        }
+        relacionamentos = new Relacionamentos[10];
+        for (int i = 0; i < vinculos.size(); i++) {
+            relacionamentos[i] = vinculos.get(i);
+        }
     }
 
     public void alterarAfinidade(Personagem personagem, int delta) {

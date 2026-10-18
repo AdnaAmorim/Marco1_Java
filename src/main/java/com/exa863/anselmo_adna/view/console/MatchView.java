@@ -7,6 +7,7 @@ import com.exa863.anselmo_adna.view.View;
 import com.exa863.anselmo_adna.view.console.art.LutasASCII;
 import com.exa863.anselmo_adna.controller.SceneController;
 import com.exa863.anselmo_adna.controller.GameController;
+import com.exa863.anselmo_adna.controller.SaveGameController;
 
 import com.exa863.anselmo_adna.model.combat.ResultadoLuta;
 import java.util.function.Consumer;
@@ -56,6 +57,7 @@ public class MatchView implements View {
             if (aoFinalizar != null) {
                 aoFinalizar.accept(match.getResultadoLuta());
             }
+            salvarAutomaticamente();
 
             console.esperarEnter("\n[Pressione ENTER para continuar]");
 
@@ -96,12 +98,19 @@ public class MatchView implements View {
         if (aoFinalizar != null) {
             aoFinalizar.accept(match.getResultadoLuta());
         }
+        salvarAutomaticamente();
 
         console.esperarEnter("\n[Pressione ENTER para continuar]");
 
         if (sceneController != null) {
             View destino = (viewRetorno != null) ? viewRetorno : new MapaView(console, sceneController, gameController);
             sceneController.trocarCena(destino);
+        }
+    }
+
+    private void salvarAutomaticamente() {
+        if (!new SaveGameController().autoSave(gameController.getGameState())) {
+            console.printlnConsole("  [!] Não foi possível salvar automaticamente. Salve pelo menu.");
         }
     }
 

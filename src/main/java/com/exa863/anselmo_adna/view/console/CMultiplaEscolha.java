@@ -6,6 +6,7 @@ import org.jline.terminal.Attributes;
 import org.jline.terminal.Terminal;
 
 import java.io.IOException;
+import java.util.function.Consumer;
 
 import static org.jline.utils.InfoCmp.Capability.key_down;
 import static org.jline.utils.InfoCmp.Capability.key_up;
@@ -40,6 +41,10 @@ public class CMultiplaEscolha {
     }
 
     public CEscolha escolha(CEscolha[] listaEscolha) throws IOException {
+        return escolha(listaEscolha, null);
+    }
+
+    public CEscolha escolha(CEscolha[] listaEscolha, Consumer<CEscolha> mostrarDetalhes) throws IOException {
         if (listaEscolha.length == 0) {
             throw new IllegalArgumentException(
                     "Lista de escolhas vazia"
@@ -55,11 +60,16 @@ public class CMultiplaEscolha {
 
         try {
             while (true) {
+                if (mostrarDetalhes != null) {
+                    mostrarDetalhes.accept(listaEscolha[selecionado]);
+                }
                 printEscolhas(listaEscolha, selecionado);
 
                 String key = reader.readBinding(keys);
 
-                limparLinhas(listaEscolha.length);
+                if (mostrarDetalhes == null) {
+                    limparLinhas(listaEscolha.length);
+                }
 
                 if (key == null) {
                     continue;

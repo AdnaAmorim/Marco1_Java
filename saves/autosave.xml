@@ -1,0 +1,64 @@
+<saveGame versao="3" dataSalvamento="2026-10-18 17:30:37" automatico="true">
+  <gameState>
+    <player>
+      <id>1</id>
+      <nome>TESTE</nome>
+      <descricao>Jovem determinado a seguir os passos do pai nos ringues de boxe.</descricao>
+      <corOlhos>CASTANHO</corOlhos>
+      <sexo>MASCULINO</sexo>
+      <dinheiro>20000</dinheiro>
+      <atributos>
+        <saude>100</saude>
+        <forca>10</forca>
+        <agilidade>10</agilidade>
+        <resistencia>10</resistencia>
+        <inteligencia>10</inteligencia>
+        <energia>100</energia>
+      </atributos>
+      <inventario>
+        <entradas>
+          <entradas>
+            <item>
+              <nome>Luva do Pai</nome>
+              <descricao>A luva de boxe que pertenceu ao seu pai.</descricao>
+              <tipo>ESPECIAL</tipo>
+              <preco>0</preco>
+              <cura>0</cura>
+              <energia>0</energia>
+            </item>
+            <quantidade>1</quantidade>
+          </entradas>
+        </entradas>
+      </inventario>
+      <capitulosConcluidos>
+        <capitulosConcluidos>CAPITULO_01</capitulosConcluidos>
+      </capitulosConcluidos>
+      <diaUltimoTreino>0</diaUltimoTreino>
+      <treinosRealizadosHoje>0</treinosRealizadosHoje>
+      <ultimoDiaLutaBoxe>-1</ultimoDiaLutaBoxe>
+      <lutasLocais>0</lutasLocais>
+      <lutasEstaduais>0</lutasEstaduais>
+      <lutasNacionais>0</lutasNacionais>
+      <vinculos/>
+    </player>
+    <dataDia>
+      <dias>1</dias>
+      <horas>6</horas>
+      <minutos>0</minutos>
+    </dataDia>
+    <localAtualId>casa</localAtualId>
+    <locaisDesbloqueados/>
+    <estadoGame>EXPLORANDO</estadoGame>
+    <interacoes>
+      <interacoes>
+        <capituloId>CAPITULO_01</capituloId>
+        <pergunta>O que você faz diante das luvas?</pergunta>
+        <opcao>0</opcao>
+        <resposta>Pegar as Luvas</resposta>
+        <dia>1</dia>
+        <hora>6</hora>
+        <minuto>0</minuto>
+      </interacoes>
+    </interacoes>
+  </gameState>
+</saveGame>

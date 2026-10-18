@@ -246,10 +246,9 @@ public class CampeonatoMundialView implements View {
             console.printlnConsole("       └────────────────────────────────────────────────────────┘");
             console.esperarEnter("");
 
-            sceneController.trocarCena(new MenuView(console, sceneController, new GameController()));
         };
 
-        View destinoRetorno = new CampeonatoMundialView(console, sceneController, gameController);
+        View destinoRetorno = new MenuView(console, sceneController, new GameController());
         sceneController.trocarCena(new MatchView(console, sceneController, gameController, match,
                 lutadorPlayer, lutadorOponente, destinoRetorno, callbackPosLuta));
     }

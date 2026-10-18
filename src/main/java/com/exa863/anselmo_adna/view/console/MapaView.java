@@ -129,11 +129,13 @@ public class MapaView implements View {
             }
         }
 
+        itens.add(new ItemMenuMapa(AcaoMenu.MENU_PRINCIPAL.getTitulo(), null, AcaoMenu.MENU_PRINCIPAL));
         return itens;
     }
 
     private void executarAcao(AcaoMenu acao) {
         switch (acao) {
+            case MENU_PRINCIPAL -> sceneController.trocarCena(new MenuView(console, sceneController, gameController));
             case ABRIR_MOCHILA -> sceneController.trocarCena(new InventarioView(console, sceneController, gameController));
             case ABRIR_ACADEMIA -> executarAcaoAbrirAcademia();
             case SAIR_LOCAL -> {
@@ -164,7 +166,7 @@ public class MapaView implements View {
         if (capituloDisponivel.isPresent()) {
             CutsceneController cc = new CutsceneController(
                     capituloDisponivel.get(),
-                    gameController.getPlayer()
+                    gameController.getGameState()
             );
             sceneController.trocarCena(new CutsceneView(console, sceneController, cc, viewDestino));
             return;

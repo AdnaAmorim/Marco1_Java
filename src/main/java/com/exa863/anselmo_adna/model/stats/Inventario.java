@@ -1,8 +1,12 @@
 package com.exa863.anselmo_adna.model.stats;
 
 import com.exa863.anselmo_adna.model.character.Player;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -17,6 +21,30 @@ public class Inventario {
 
     public Inventario() {
         this.itens = new LinkedHashMap<>();
+    }
+
+    @JsonCreator
+    public Inventario(@JsonProperty("entradas") List<Entrada> entradas) {
+        this();
+        if (entradas != null) {
+            for (Entrada entrada : entradas) {
+                if (entrada.item() == null || entrada.quantidade() <= 0) {
+                    throw new IllegalArgumentException("Item ou quantidade inválida no inventário salvo.");
+                }
+                adicionarItem(entrada.item(), entrada.quantidade());
+            }
+        }
+    }
+
+    // XML precisa preservar o objeto Item e sua quantidade, não uma chave de Map convertida em texto.
+    @JsonProperty("entradas")
+    public List<Entrada> getEntradasSalvas() {
+        return itens.entrySet().stream()
+                .map(entrada -> new Entrada(entrada.getKey(), entrada.getValue()))
+                .toList();
+    }
+
+    public record Entrada(Item item, int quantidade) {
     }
 
     public void adicionarItem(Item item) {
@@ -51,6 +79,7 @@ public class Inventario {
         return true;
     }
 
+    @JsonIgnore
     public Map<Item, Integer> getItens() {
         return itens;
     }

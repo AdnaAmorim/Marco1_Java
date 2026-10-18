@@ -1,5 +1,6 @@
 package com.exa863.anselmo_adna.model.save;
 
+import com.exa863.anselmo_adna.model.GameState;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
@@ -17,6 +18,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SaveGame {
 
+    public static final int VERSAO_ATUAL = 3;
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @JacksonXmlProperty(isAttribute = true)
@@ -28,7 +30,18 @@ public class SaveGame {
     @JacksonXmlProperty(isAttribute = true)
     private boolean automatico;
 
+    private GameState gameState;
+
     public SaveGame() {
+    }
+
+    public SaveGame(GameState gameState, boolean automatico) {
+        this(VERSAO_ATUAL, automatico);
+        this.gameState = Objects.requireNonNull(gameState, "O estado da partida é obrigatório.");
+    }
+
+    public SaveGame(GameState gameState) {
+        this(gameState, false);
     }
 
     public SaveGame(int versao) {
@@ -73,18 +86,27 @@ public class SaveGame {
         this.automatico = automatico;
     }
 
+    public GameState getGameState() {
+        return gameState;
+    }
+
+    public void setGameState(GameState gameState) {
+        this.gameState = gameState;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof SaveGame that)) return false;
         return versao == that.versao &&
                 automatico == that.automatico &&
-                Objects.equals(dataSalvamento, that.dataSalvamento);
+                Objects.equals(dataSalvamento, that.dataSalvamento) &&
+                Objects.equals(gameState, that.gameState);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(versao, dataSalvamento, automatico);
+        return Objects.hash(versao, dataSalvamento, automatico, gameState);
     }
 
     @Override

@@ -66,4 +66,15 @@ public class NarrativaController {
     public GrafoCapitulos getGrafo() {
         return grafo;
     }
+
+    public String getCapituloAtual(Player player) {
+        var capitulos = grafo.obterOrdemCronologica();
+        for (int i = 0; i < capitulos.size(); i++) {
+            Capitulo capitulo = capitulos.get(i);
+            if (!player.isCapituloConcluido(capitulo.getId())) {
+                return "Capítulo " + (i + 1) + " - " + capitulo.getTitulo();
+            }
+        }
+        return "Todos os capítulos concluídos";
+    }
 }

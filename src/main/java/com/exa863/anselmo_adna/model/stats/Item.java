@@ -1,10 +1,18 @@
 package com.exa863.anselmo_adna.model.stats;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Um item do jogo com nome, descrição, tipo, preço e quanto cura de vida/energia.
  *
  * @author Anselmo e Adna
  */
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY,
+        getterVisibility = JsonAutoDetect.Visibility.NONE,
+        isGetterVisibility = JsonAutoDetect.Visibility.NONE,
+        setterVisibility = JsonAutoDetect.Visibility.NONE)
 public class Item {
     private final String nome;
     private final String descricao;
@@ -13,7 +21,10 @@ public class Item {
     private final int cura;
     private final int energia;
 
-    public Item(String nome, String descricao, TipoItem tipo, int preco, int cura, int energia) {
+    @JsonCreator
+    public Item(@JsonProperty("nome") String nome, @JsonProperty("descricao") String descricao,
+                @JsonProperty("tipo") TipoItem tipo, @JsonProperty("preco") int preco,
+                @JsonProperty("cura") int cura, @JsonProperty("energia") int energia) {
         this.nome = nome;
         this.descricao = descricao;
         this.tipo = tipo;

@@ -8,6 +8,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.nio.file.Files;
+import java.nio.file.AtomicMoveNotSupportedException;
+import java.nio.file.StandardCopyOption;
 
 /**
  * Leitura e escrita de arquivos em XML usando Jackson.
@@ -46,8 +49,19 @@ public class XmlFileController extends FileController {
 
     @Override
     public <T> void salvar(String nomeArquivo, T dados) throws IOException {
-        File arquivo = obterCaminho(nomeArquivo).toFile();
-        xmlMapper.writeValue(arquivo, dados);
+        Path destino = obterCaminho(nomeArquivo).toAbsolutePath();
+        Path temporario = Files.createTempFile(destino.getParent(), ".save-", ".tmp");
+        try {
+            xmlMapper.writeValue(temporario.toFile(), dados);
+            try {
+                Files.move(temporario, destino, StandardCopyOption.REPLACE_EXISTING,
+                        StandardCopyOption.ATOMIC_MOVE);
+            } catch (AtomicMoveNotSupportedException e) {
+                Files.move(temporario, destino, StandardCopyOption.REPLACE_EXISTING);
+            }
+        } finally {
+            Files.deleteIfExists(temporario);
+        }
     }
 
     @Override

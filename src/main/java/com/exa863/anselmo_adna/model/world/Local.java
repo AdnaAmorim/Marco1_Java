@@ -1,5 +1,10 @@
 package com.exa863.anselmo_adna.model.world;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,17 +14,24 @@ import java.util.List;
  *
  * @author Anselmo e Adna
  */
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY,
+        getterVisibility = JsonAutoDetect.Visibility.NONE,
+        isGetterVisibility = JsonAutoDetect.Visibility.NONE,
+        setterVisibility = JsonAutoDetect.Visibility.NONE)
 public class Local {
 
+    private String id;
     private String nome;
     private String descricao;
+    @JsonIgnore
     private Local localPai;
     private List<Local> subLocais;
     private boolean localDeSaida;
     private int custoAcesso;
     private boolean acessoLiberado;
 
-    public Local(String nome, String descricao) {
+    @JsonCreator
+    public Local(@JsonProperty("nome") String nome, @JsonProperty("descricao") String descricao) {
         this.nome = nome;
         this.descricao = descricao;
         this.subLocais = new ArrayList<>();
@@ -30,6 +42,15 @@ public class Local {
 
     public String getNome() {
         return nome;
+    }
+
+    public Local(String id, String nome, String descricao) {
+        this(nome, descricao);
+        this.id = id;
+    }
+
+    public String getId() {
+        return id;
     }
 
     public String getDescricao() {
@@ -76,8 +97,17 @@ public class Local {
         );
 
         saida.localDeSaida = true;
+        saida.id = id + "_saida";
         saida.localPai = this;
 
         subLocais.add(saida);
+    }
+
+    /** Reconstitui as referências de retorno sem duplicar os locais no XML. */
+    public void restaurarVinculos() {
+        for (Local local : subLocais) {
+            local.localPai = this;
+            local.restaurarVinculos();
+        }
     }
 }

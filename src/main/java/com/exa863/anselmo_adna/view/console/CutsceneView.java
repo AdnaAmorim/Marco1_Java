@@ -1,6 +1,7 @@
 package com.exa863.anselmo_adna.view.console;
 
 import com.exa863.anselmo_adna.controller.SceneController;
+import com.exa863.anselmo_adna.controller.SaveGameController;
 import com.exa863.anselmo_adna.controller.cenas.CutsceneController;
 import com.exa863.anselmo_adna.model.character.Personagem;
 import com.exa863.anselmo_adna.model.character.Player;
@@ -50,6 +51,9 @@ public class CutsceneView implements View {
         }
 
         cutsceneController.finalizarCapitulo();
+        if (!new SaveGameController().autoSave(cutsceneController.getGameState())) {
+            console.printlnConsole("  [!] Não foi possível salvar automaticamente. Salve pelo menu.");
+        }
 
         console.printlnConsole("");
         console.printlnConsole("       ┌────────────────────────────────────────────────────────┐");
@@ -112,7 +116,7 @@ public class CutsceneView implements View {
             Player player = cutsceneController.getPlayer();
             Map<Integer, Integer> afinidadesAntes = capturarAfinidades(player);
 
-            cutsceneController.processarEscolha(opcaoEscolhida);
+            cutsceneController.processarEscolha(escolhaDialogo, selecionada.index);
 
             exibirVariacoesDeReputacao(player, afinidadesAntes);
 
