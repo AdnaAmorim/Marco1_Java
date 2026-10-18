@@ -12,6 +12,9 @@ import com.exa863.anselmo_adna.model.narrativa.Dialogo;
 import com.exa863.anselmo_adna.model.narrativa.TipoEmissor;
 import com.exa863.anselmo_adna.model.stats.Relacionamentos;
 import com.exa863.anselmo_adna.persistencia.Conquistas;
+import com.exa863.anselmo_adna.exception.DadosInvalidosException;
+import com.exa863.anselmo_adna.persistencia.Configuracao;
+import com.exa863.anselmo_adna.persistencia.ConfiguracaoXML;
 import com.exa863.anselmo_adna.view.View;
 
 import java.io.IOException;
@@ -31,6 +34,7 @@ public class CutsceneView implements View {
     private final SceneController sceneController;
     private final CutsceneController cutsceneController;
     private final View proximaCena;
+    private boolean pularCutscene;
 
     public CutsceneView(Console console, SceneController sceneController,
                         CutsceneController cutsceneController, View proximaCena) {
@@ -46,12 +50,21 @@ public class CutsceneView implements View {
 
     @Override
     public void render() {
+        pularCutscene = pularCutsceneHabilitada();
         console.clearConsole();
         imprimirCabecalho();
 
         List<Dialogo> dialogos = cutsceneController.getDialogos();
+
+        if (pularCutscene) {
+            console.printlnConsole("  [Cutscene pulada - apenas as escolhas importantes serao mostradas]\n");
+        }
+
         for (Dialogo dialogo : dialogos) {
-            processarDialogo(dialogo);
+
+            if (!pularCutscene || dialogo.isEscolha()) {
+                processarDialogo(dialogo);
+            }
         }
 
         cutsceneController.finalizarCapitulo();
@@ -130,8 +143,11 @@ public class CutsceneView implements View {
 
             exibirVariacoesDeReputacao(player, afinidadesAntes);
 
-            for (Dialogo falaDesfecho : opcaoEscolhida.getDesfecho()) {
-                exibirFala(falaDesfecho);
+            if (!pularCutscene) {
+
+                for (Dialogo falaDesfecho : opcaoEscolhida.getDesfecho()) {
+                    exibirFala(falaDesfecho);
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -202,25 +218,54 @@ public class CutsceneView implements View {
     }
 
     private void desbloquearConquista(String conquista) {
+
         ConquistaController conquistaController = new ConquistaController();
 
         try {
+
             conquistaController.desbloquear(conquista);
+
         } catch (FalhaCarregamentoException e) {
+
             console.printlnConsole("Erro ao carregar as conquistas.");
+
         } catch (FalhaSalvamentoException e) {
+
             console.printlnConsole("Erro ao salvar a conquista.");
         }
     }
 
 
+    private boolean pularCutsceneHabilitada() {
+
+        Configuracao config = new Configuracao();
+
+        try {
+
+            ConfiguracaoXML xml = new ConfiguracaoXML();
+            xml.carregar(config);
+
+        } catch (FalhaCarregamentoException | DadosInvalidosException e) {
+
+            return false;
+        }
+
+        return config.pularCutscene;
+    }
+
+
     private String centralizar(String texto, int largura) {
+
         if (texto.length() >= largura) {
             return texto.substring(0, largura);
         }
+
         int espacosTotais = largura - texto.length();
         int espacosEsquerda = espacosTotais / 2;
         int espacosDireita = espacosTotais - espacosEsquerda;
-        return " ".repeat(espacosEsquerda) + texto + " ".repeat(espacosDireita);
+
+        return " ".repeat(espacosEsquerda)
+                + texto
+                + " ".repeat(espacosDireita);
     }
 }
