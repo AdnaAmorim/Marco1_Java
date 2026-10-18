@@ -92,7 +92,7 @@ public class CutsceneView implements View {
     private void imprimirCabecalho() {
         String titulo = cutsceneController.getCapitulo().getTitulo().toUpperCase();
         console.printlnConsole("╔══════════════════════════════════════════════════════════════════════╗");
-        console.printlnConsole("║" + centralizar("HISTÓRIA : " + titulo, 70) + "║");
+        console.printlnConsole("║" + centralizar("HISTÓRIA : " + titulo, 70) +           "║");
         console.printlnConsole("╚══════════════════════════════════════════════════════════════════════╝\n");
     }
 
@@ -218,19 +218,21 @@ public class CutsceneView implements View {
     }
 
     private void desbloquearConquista(String conquista) {
-
         ConquistaController conquistaController = new ConquistaController();
 
         try {
+            boolean desbloqueou = conquistaController.desbloquear(conquista);
 
-            conquistaController.desbloquear(conquista);
+            if (desbloqueou) {
+                console.printlnConsole("");
+                console.printlnConsole("  ★ CONQUISTA DESBLOQUEADA! ★");
+                console.printlnConsole("  ► " + Conquistas.getNome(conquista));
+                console.printlnConsole("");
+            }
 
         } catch (FalhaCarregamentoException e) {
-
             console.printlnConsole("Erro ao carregar as conquistas.");
-
         } catch (FalhaSalvamentoException e) {
-
             console.printlnConsole("Erro ao salvar a conquista.");
         }
     }

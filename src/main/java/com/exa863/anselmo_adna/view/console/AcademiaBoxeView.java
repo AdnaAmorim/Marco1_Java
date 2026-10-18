@@ -299,7 +299,15 @@ public class AcademiaBoxeView implements View {
         ConquistaController conquistaController = new ConquistaController();
 
         try {
-            conquistaController.desbloquear(conquista);
+            boolean desbloqueou = conquistaController.desbloquear(conquista);
+
+            if (desbloqueou) {
+                console.printlnConsole("");
+                console.printlnConsole("  ★ CONQUISTA DESBLOQUEADA! ★");
+                console.printlnConsole("  ► " + Conquistas.getNome(conquista));
+                console.printlnConsole("");
+            }
+
         } catch (FalhaCarregamentoException e) {
             console.printlnConsole("Erro ao carregar as conquistas.");
         } catch (FalhaSalvamentoException e) {

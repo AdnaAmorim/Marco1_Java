@@ -7,7 +7,7 @@ import com.exa863.anselmo_adna.persistencia.ProgressoXML;
 
 public class ConquistaController {
 
-    public void desbloquear(String conquista)
+    public boolean desbloquear(String conquista)
             throws FalhaCarregamentoException, FalhaSalvamentoException {
 
         ProgressoGlobal progresso = new ProgressoGlobal();
@@ -18,6 +18,9 @@ public class ConquistaController {
         if (!progresso.conquistaJaDesbloqueada(conquista)) {
             progresso.registrarConquista(conquista);
             xml.salvar(progresso);
+            return true;
         }
+
+        return false;
     }
 }

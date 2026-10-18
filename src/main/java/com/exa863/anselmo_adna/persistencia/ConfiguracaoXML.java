@@ -43,7 +43,7 @@ public class ConfiguracaoXML {
             throw new FalhaCarregamentoException("Erro ao carregar as configurações.");
         }
 
-        String autoSave = dados.getProperty("autoSave", "false");
+        String autoSave = dados.getProperty("autoSave", "true");
         String pularAnimacao = dados.getProperty("pularAnimacaoCombate", "false");
         String pularCutscene = dados.getProperty("pularCutscene", "false");
 
@@ -63,6 +63,8 @@ public class ConfiguracaoXML {
             return false;
         }
 
-        throw new DadosInvalidosException("Valor inválido na configuração: " + nome);
+        throw new DadosInvalidosException(
+                "Valor inválido na configuração: " + nome
+        );
     }
 }

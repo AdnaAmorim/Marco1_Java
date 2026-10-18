@@ -333,7 +333,15 @@ public class MatchView implements View {
             ConquistaController conquistaController = new ConquistaController();
 
             try {
-                conquistaController.desbloquear(Conquistas.PRIMEIROS_PASSOS);
+                boolean desbloqueou = conquistaController.desbloquear(Conquistas.PRIMEIROS_PASSOS);
+
+                if (desbloqueou) {
+                    console.printlnConsole("");
+                    console.printlnConsole("  ★ CONQUISTA DESBLOQUEADA! ★");
+                    console.printlnConsole("  ► " + Conquistas.getNome(Conquistas.PRIMEIROS_PASSOS));
+                    console.printlnConsole("");
+                }
+
             } catch (FalhaCarregamentoException e) {
                 console.printlnConsole("Erro ao carregar as conquistas.");
             } catch (FalhaSalvamentoException e) {
