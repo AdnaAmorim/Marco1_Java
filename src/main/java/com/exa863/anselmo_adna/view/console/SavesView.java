@@ -3,6 +3,9 @@ package com.exa863.anselmo_adna.view.console;
 import com.exa863.anselmo_adna.controller.GameController;
 import com.exa863.anselmo_adna.controller.SaveGameController;
 import com.exa863.anselmo_adna.controller.SceneController;
+import com.exa863.anselmo_adna.exception.DadosInvalidosException;
+import com.exa863.anselmo_adna.exception.FalhaCarregamentoException;
+import com.exa863.anselmo_adna.exception.FalhaSalvamentoException;
 import com.exa863.anselmo_adna.model.GameState;
 import com.exa863.anselmo_adna.model.save.SaveGame;
 import com.exa863.anselmo_adna.view.View;
@@ -38,11 +41,11 @@ public class SavesView implements View {
                 SaveGame[] detalhes = new SaveGame[SaveGameController.MAX_SLOTS + 2];
                 CEscolha[] opcoes = new CEscolha[SaveGameController.MAX_SLOTS + (salvando ? 2 : 3)];
                 for (int i = 1; i <= SaveGameController.MAX_SLOTS; i++) {
-                    detalhes[i] = saves.carregar(i);
+                    detalhes[i] = lerSlot(i);
                     opcoes[i - 1] = new CEscolha(rotuloSlot("Slot " + i, detalhes[i], saves.existe(i)), i);
                 }
                 if (!salvando) {
-                    detalhes[SaveGameController.MAX_SLOTS + 1] = saves.carregarAutomatico();
+                    detalhes[SaveGameController.MAX_SLOTS + 1] = lerAutomatico();
                     opcoes[SaveGameController.MAX_SLOTS] = new CEscolha(rotuloSlot("Automático",
                             detalhes[SaveGameController.MAX_SLOTS + 1], saves.existeAutomatico()), SaveGameController.MAX_SLOTS + 1);
                 }
@@ -67,15 +70,17 @@ public class SavesView implements View {
                     if (saves.existe(slot) && !confirmar("Sobrescrever o save do slot " + slot + "?")) {
                         continue;
                     }
-                    if (saves.salvar(slot, gameController.getGameState())) {
+                    try {
+                        saves.salvar(slot, gameController.getGameState());
                         avisar("Partida salva no slot " + slot + ".");
                         voltarAoMenu();
                         return;
+                    } catch (FalhaSalvamentoException e) {
+                        avisar(e.getMessage());
                     }
-                    avisar("Não foi possível salvar. Verifique o acesso à pasta de saves.");
                 } else {
                     boolean automatico = slot == SaveGameController.MAX_SLOTS + 1;
-                    SaveGame save = automatico ? saves.carregarAutomatico() : saves.carregar(slot);
+                    SaveGame save = automatico ? lerAutomatico() : lerSlot(slot);
                     GameState estado = save == null ? null : save.getGameState();
                     if (estado == null) {
                         avisar((automatico ? saves.existeAutomatico() : saves.existe(slot))
@@ -95,6 +100,23 @@ public class SavesView implements View {
         } catch (IOException e) {
             avisar("Não foi possível ler a seleção dos slots.");
             voltarAoMenu();
+        }
+    }
+
+    /** Slot ilegível, vazio ou inválido vira null para a tela exibir como indisponível. */
+    private SaveGame lerSlot(int slot) {
+        try {
+            return saves.carregar(slot);
+        } catch (FalhaCarregamentoException | DadosInvalidosException e) {
+            return null;
+        }
+    }
+
+    private SaveGame lerAutomatico() {
+        try {
+            return saves.carregarAutomatico();
+        } catch (FalhaCarregamentoException | DadosInvalidosException e) {
+            return null;
         }
     }
 
@@ -136,12 +158,12 @@ public class SavesView implements View {
         List<CEscolha> opcoes = new ArrayList<>();
         for (int slot = 1; slot <= SaveGameController.MAX_SLOTS; slot++) {
             if (saves.existe(slot)) {
-                mostrarSave("Slot " + slot, saves.carregar(slot), true);
+                mostrarSave("Slot " + slot, lerSlot(slot), true);
                 opcoes.add(new CEscolha("Excluir Slot " + slot, slot));
             }
         }
         if (saves.existeAutomatico()) {
-            mostrarSave("Automático", saves.carregarAutomatico(), true);
+            mostrarSave("Automático", lerAutomatico(), true);
             opcoes.add(new CEscolha("Excluir salvamento automático", SaveGameController.MAX_SLOTS + 1));
         }
         console.printlnConsole("╚══════════════════════════════════════════════════════════════════════╝");

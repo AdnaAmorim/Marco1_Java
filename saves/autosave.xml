@@ -1,4 +1,4 @@
-<saveGame versao="3" dataSalvamento="2026-10-18 17:30:37" automatico="true">
+<saveGame versao="3" dataSalvamento="2026-10-18 18:07:42" automatico="true">
   <gameState>
     <player>
       <id>1</id>
@@ -32,6 +32,7 @@
       </inventario>
       <capitulosConcluidos>
         <capitulosConcluidos>CAPITULO_01</capitulosConcluidos>
+        <capitulosConcluidos>CAPITULO_02</capitulosConcluidos>
       </capitulosConcluidos>
       <diaUltimoTreino>0</diaUltimoTreino>
       <treinosRealizadosHoje>0</treinosRealizadosHoje>
@@ -39,14 +40,25 @@
       <lutasLocais>0</lutasLocais>
       <lutasEstaduais>0</lutasEstaduais>
       <lutasNacionais>0</lutasNacionais>
-      <vinculos/>
+      <vinculos>
+        <vinculos>
+          <personagem>
+            <id>2</id>
+            <nome>Olivia</nome>
+            <descricao>Estudante de fisioterapia</descricao>
+            <corOlhos>CASTANHO</corOlhos>
+            <sexo>FEMININO</sexo>
+          </personagem>
+          <nivelAmizade>1</nivelAmizade>
+        </vinculos>
+      </vinculos>
     </player>
     <dataDia>
       <dias>1</dias>
       <horas>6</horas>
       <minutos>0</minutos>
     </dataDia>
-    <localAtualId>casa</localAtualId>
+    <localAtualId>academia</localAtualId>
     <locaisDesbloqueados/>
     <estadoGame>EXPLORANDO</estadoGame>
     <interacoes>
@@ -55,6 +67,15 @@
         <pergunta>O que você faz diante das luvas?</pergunta>
         <opcao>0</opcao>
         <resposta>Pegar as Luvas</resposta>
+        <dia>1</dia>
+        <hora>6</hora>
+        <minuto>0</minuto>
+      </interacoes>
+      <interacoes>
+        <capituloId>CAPITULO_02</capituloId>
+        <pergunta>O que você faz?</pergunta>
+        <opcao>0</opcao>
+        <resposta>Pedir ajuda a Olivia</resposta>
         <dia>1</dia>
         <hora>6</hora>
         <minuto>0</minuto>

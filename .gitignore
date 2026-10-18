@@ -38,3 +38,7 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+### Dados gerados pelo jogo ###
+saves/
+configuracao.xml

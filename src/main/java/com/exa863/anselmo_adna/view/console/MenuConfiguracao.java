@@ -64,6 +64,7 @@ public class MenuConfiguracao {
                     new CEscolha("Save automatico: " + autoSave, 0),
                     new CEscolha("Pular animação de combate: " + animacao, 1),
                     new CEscolha("Pular cutscenes: " + cutscene, 2),
+                    CEscolha.separador(),
                     new CEscolha("Voltar e salvar", 3)
             };
 

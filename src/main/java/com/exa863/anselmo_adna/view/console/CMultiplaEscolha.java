@@ -56,7 +56,7 @@ public class CMultiplaEscolha {
         Attributes atributosOriginais = terminal.enterRawMode();
         console.setCursorInvisivel();
 
-        int selecionado = 0;
+        int selecionado = proximaOpcao(listaEscolha, -1, 1);
 
         try {
             while (true) {
@@ -77,14 +77,10 @@ public class CMultiplaEscolha {
 
                 switch (key) {
                     case KEY_UP ->
-                            selecionado =
-                                    (selecionado - 1 + listaEscolha.length)
-                                            % listaEscolha.length;
+                            selecionado = proximaOpcao(listaEscolha, selecionado, -1);
 
                     case KEY_DOWN ->
-                            selecionado =
-                                    (selecionado + 1)
-                                            % listaEscolha.length;
+                            selecionado = proximaOpcao(listaEscolha, selecionado, 1);
 
                     case KEY_ENTER -> {
                         return listaEscolha[selecionado];
@@ -98,11 +94,29 @@ public class CMultiplaEscolha {
         }
     }
 
+    /** Anda na lista de forma circular, ignorando os separadores. */
+    private int proximaOpcao(CEscolha[] listaEscolha, int atual, int passo) {
+        int tamanho = listaEscolha.length;
+        int proximo = atual;
+        for (int i = 0; i < tamanho; i++) {
+            proximo = (proximo + passo + tamanho) % tamanho;
+            if (!listaEscolha[proximo].isSeparador()) {
+                return proximo;
+            }
+        }
+        return Math.max(atual, 0);
+    }
+
     private void printEscolhas(
             CEscolha[] listaEscolha,
             int atual
     ) {
         for (int i = 0; i < listaEscolha.length; i++) {
+            if (listaEscolha[i].isSeparador()) {
+                console.printlnConsole("");
+                continue;
+            }
+
             String caracterSelecao = atual == i ? "❯ " : "  ";
 
             console.printlnConsole(

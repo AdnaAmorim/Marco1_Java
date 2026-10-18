@@ -36,7 +36,7 @@ public class SaveGameControllerTest {
     }
 
     @Test
-    public void testSalvarManual() {
+    public void testSalvarManual() throws Exception {
         boolean salvou = controller.salvar(1, gameState);
         assertTrue(salvou);
         assertTrue(controller.existe(1));
@@ -49,7 +49,7 @@ public class SaveGameControllerTest {
     }
 
     @Test
-    public void testAutoSaveNoSlot() {
+    public void testAutoSaveNoSlot() throws Exception {
         boolean salvou = controller.autoSave(2, gameState);
         assertTrue(salvou);
         assertTrue(controller.existe(2));
@@ -61,7 +61,7 @@ public class SaveGameControllerTest {
     }
 
     @Test
-    public void testListarSlotsOcupados() {
+    public void testListarSlotsOcupados() throws Exception {
         controller.salvar(1, gameState);
         controller.autoSave(3, gameState);
 
@@ -74,7 +74,7 @@ public class SaveGameControllerTest {
     }
 
     @Test
-    public void testListarSavesArquivos() {
+    public void testListarSavesArquivos() throws Exception {
         controller.salvar(1, gameState);
         controller.salvar(2, gameState);
 
@@ -85,7 +85,7 @@ public class SaveGameControllerTest {
     }
 
     @Test
-    public void testExcluirSlot() {
+    public void testExcluirSlot() throws Exception {
         controller.salvar(2, gameState);
         assertTrue(controller.existe(2));
 

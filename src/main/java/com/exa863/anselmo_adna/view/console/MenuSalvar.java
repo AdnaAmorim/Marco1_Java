@@ -2,6 +2,7 @@ package com.exa863.anselmo_adna.view.console;
 
 import com.exa863.anselmo_adna.controller.SaveGameController;
 import com.exa863.anselmo_adna.exception.FalhaSalvamentoException;
+import com.exa863.anselmo_adna.model.GameState;
 
 import java.io.IOException;
 
@@ -9,9 +10,11 @@ public class MenuSalvar {
 
     private final Console console;
     private final SaveGameController saveGameController;
+    private final GameState gameState;
 
-    public MenuSalvar(Console console) {
+    public MenuSalvar(Console console, GameState gameState) {
         this.console = console;
+        this.gameState = gameState;
         this.saveGameController = new SaveGameController();
     }
 
@@ -99,7 +102,7 @@ public class MenuSalvar {
 
         try {
 
-            saveGameController.salvar(slotId);
+            saveGameController.salvar(slotId, gameState);
 
             console.printlnConsole("");
             console.printlnConsole("╔══════════════════════════════════════════════════════════════════════╗");

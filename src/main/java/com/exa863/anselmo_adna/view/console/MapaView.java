@@ -50,10 +50,15 @@ public class MapaView implements View {
         renderHUD(localAtual, player);
 
         List<ItemMenuMapa> itensMenu = construirItensMenu(localAtual, player);
-        CEscolha[] opcoes = new CEscolha[itensMenu.size()];
+        List<CEscolha> listaOpcoes = new java.util.ArrayList<>();
         for (int i = 0; i < itensMenu.size(); i++) {
-            opcoes[i] = new CEscolha(itensMenu.get(i).rotulo(), i);
+            ItemMenuMapa item = itensMenu.get(i);
+            if (item.ehAcao() && item.acao() == AcaoMenu.MENU_PRINCIPAL) {
+                listaOpcoes.add(CEscolha.separador());
+            }
+            listaOpcoes.add(new CEscolha(item.rotulo(), i));
         }
+        CEscolha[] opcoes = listaOpcoes.toArray(CEscolha[]::new);
 
         try {
             CMultiplaEscolha menu = new CMultiplaEscolha(console);
@@ -118,7 +123,6 @@ public class MapaView implements View {
         }
 
         itens.add(new ItemMenuMapa(AcaoMenu.ABRIR_MOCHILA.getTitulo(), null, AcaoMenu.ABRIR_MOCHILA));
-        itens.add(new ItemMenuMapa(AcaoMenu.SALVAR_PARTIDA.getTitulo(), null, AcaoMenu.SALVAR_PARTIDA));
 
         if (localAtual.getNome().equalsIgnoreCase("Cidade B")) {
             itens.add(new ItemMenuMapa(AcaoMenu.ABRIR_ACADEMIA.getTitulo(), null, AcaoMenu.ABRIR_ACADEMIA));
@@ -138,11 +142,6 @@ public class MapaView implements View {
         switch (acao) {
             case MENU_PRINCIPAL -> sceneController.trocarCena(new MenuView(console, sceneController, gameController));
             case ABRIR_MOCHILA -> sceneController.trocarCena(new InventarioView(console, sceneController, gameController));
-            case SALVAR_PARTIDA -> {
-                MenuSalvar menuSalvar = new MenuSalvar(console);
-                menuSalvar.mostrar();
-                sceneController.trocarCena(new MapaView(console, sceneController, gameController));
-            }
             case ABRIR_ACADEMIA -> executarAcaoAbrirAcademia();
             case SAIR_LOCAL -> {
                 gameController.voltarLocal();

@@ -40,7 +40,7 @@ class GameStatePersistenceTest {
     }
 
     @Test
-    void restauraPartidaCompletaSemReiniciarDadosOuDuplicarLocais() throws IOException {
+    void restauraPartidaCompletaSemReiniciarDadosOuDuplicarLocais() throws Exception {
         SaveGameController saves = new SaveGameController(pasta.toString());
         GameState original = novaPartida();
         Player player = original.getPlayer();
@@ -166,7 +166,7 @@ class GameStatePersistenceTest {
     }
 
     @Test
-    void roundTripDePartidaNovaPreservaColecoesVaziasERaizDoMapa() {
+    void roundTripDePartidaNovaPreservaColecoesVaziasERaizDoMapa() throws Exception {
         SaveGameController saves = new SaveGameController(pasta.toString());
         GameState state = novaPartida();
         state.setLocalAtual(state.getMapaGlobal());
@@ -186,7 +186,7 @@ class GameStatePersistenceTest {
     }
 
     @Test
-    void escolhaRealSalvaHistoricoEConsequencias() {
+    void escolhaRealSalvaHistoricoEConsequencias() throws Exception {
         GameState state = novaPartida();
         CutsceneController cena = new CutsceneController(new Capitulo01(), state);
         Dialogo escolha = cena.getDialogos().stream().filter(Dialogo::isEscolha).findFirst().orElseThrow();
@@ -204,7 +204,7 @@ class GameStatePersistenceTest {
     }
 
     @Test
-    void rejeitaSlotsAntigosSemEstadoCorrompidosEVersaoDesconhecida() throws IOException {
+    void rejeitaSlotsAntigosSemEstadoCorrompidosEVersaoDesconhecida() throws Exception {
         XmlFileController xml = new XmlFileController(pasta);
         SaveGameController saves = new SaveGameController(xml);
         xml.salvar("save_game_1", new SaveGame(1));
@@ -214,7 +214,8 @@ class GameStatePersistenceTest {
         futuro.setVersao(999);
         xml.salvar("save_game_4", futuro);
         for (int slot = 1; slot <= 4; slot++) {
-            assertNull(saves.carregarGameState(slot));
+            final int slotInvalido = slot;
+            assertThrows(Exception.class, () -> saves.carregarGameState(slotInvalido));
         }
         assertThrows(IllegalArgumentException.class, () -> saves.salvar(1, null));
         assertThrows(IllegalArgumentException.class, () -> saves.salvar(1, new GameState()));
