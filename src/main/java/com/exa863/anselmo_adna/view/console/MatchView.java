@@ -1,8 +1,12 @@
 package com.exa863.anselmo_adna.view.console;
 
+import com.exa863.anselmo_adna.controller.ConquistaController;
+import com.exa863.anselmo_adna.exception.FalhaCarregamentoException;
+import com.exa863.anselmo_adna.exception.FalhaSalvamentoException;
 import com.exa863.anselmo_adna.model.combat.Lutador;
 import com.exa863.anselmo_adna.model.combat.Match;
 import com.exa863.anselmo_adna.model.combat.Round;
+import com.exa863.anselmo_adna.persistencia.Conquistas;
 import com.exa863.anselmo_adna.view.View;
 import com.exa863.anselmo_adna.view.console.art.LutasASCII;
 import com.exa863.anselmo_adna.controller.SceneController;
@@ -54,6 +58,8 @@ public class MatchView implements View {
             console.printlnConsole("\n--- RESULTADO OFICIAL [MODO DEV ATIVO - ANIMAÇÕES PULADAS] ---");
             console.printlnConsole(match.getResultadoLuta().getDescricao() + "\n");
 
+            verificarPrimeirosPassos(match.getResultadoLuta());
+
             if (aoFinalizar != null) {
                 aoFinalizar.accept(match.getResultadoLuta());
             }
@@ -95,6 +101,8 @@ public class MatchView implements View {
         console.printlnConsole("\n--- RESULTADO OFICIAL ---");
         console.printlnConsole(match.getResultadoLuta().getDescricao() + "\n");
 
+        verificarPrimeirosPassos(match.getResultadoLuta());
+
         if (aoFinalizar != null) {
             aoFinalizar.accept(match.getResultadoLuta());
         }
@@ -109,8 +117,13 @@ public class MatchView implements View {
     }
 
     private void salvarAutomaticamente() {
-        if (!new SaveGameController().autoSave(gameController.getGameState())) {
-            console.printlnConsole("  [!] Não foi possível salvar automaticamente. Salve pelo menu.");
+        try {
+            SaveGameController saves = new SaveGameController();
+            if (saves.autoSaveHabilitado()) {
+                saves.autoSave(gameController.getGameState());
+            }
+        } catch (FalhaSalvamentoException e) {
+            console.printlnConsole("  [!] " + e.getMessage() + " Salve pelo menu.");
         }
     }
 
@@ -313,4 +326,19 @@ public class MatchView implements View {
         console.animarTextoSequencial(contagem, 50, 600);
         console.printlnConsole("");
     }
+
+    private void verificarPrimeirosPassos(ResultadoLuta resultado) {
+        if (resultado.isVencedor(lutador1)) {
+            ConquistaController conquistaController = new ConquistaController();
+
+            try {
+                conquistaController.desbloquear(Conquistas.PRIMEIROS_PASSOS);
+            } catch (FalhaCarregamentoException e) {
+                console.printlnConsole("Erro ao carregar as conquistas.");
+            } catch (FalhaSalvamentoException e) {
+                console.printlnConsole("Erro ao salvar a conquista.");
+            }
+        }
+    }
+
 }

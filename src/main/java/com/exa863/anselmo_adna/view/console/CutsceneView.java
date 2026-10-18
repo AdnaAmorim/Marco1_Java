@@ -1,13 +1,17 @@
 package com.exa863.anselmo_adna.view.console;
 
+import com.exa863.anselmo_adna.controller.ConquistaController;
 import com.exa863.anselmo_adna.controller.SceneController;
 import com.exa863.anselmo_adna.controller.SaveGameController;
 import com.exa863.anselmo_adna.controller.cenas.CutsceneController;
+import com.exa863.anselmo_adna.exception.FalhaCarregamentoException;
+import com.exa863.anselmo_adna.exception.FalhaSalvamentoException;
 import com.exa863.anselmo_adna.model.character.Personagem;
 import com.exa863.anselmo_adna.model.character.Player;
 import com.exa863.anselmo_adna.model.narrativa.Dialogo;
 import com.exa863.anselmo_adna.model.narrativa.TipoEmissor;
 import com.exa863.anselmo_adna.model.stats.Relacionamentos;
+import com.exa863.anselmo_adna.persistencia.Conquistas;
 import com.exa863.anselmo_adna.view.View;
 
 import java.io.IOException;
@@ -51,9 +55,15 @@ public class CutsceneView implements View {
         }
 
         cutsceneController.finalizarCapitulo();
-        if (!new SaveGameController().autoSave(cutsceneController.getGameState())) {
-            console.printlnConsole("  [!] Não foi possível salvar automaticamente. Salve pelo menu.");
+        try {
+            SaveGameController saves = new SaveGameController();
+            if (saves.autoSaveHabilitado()) {
+                saves.autoSave(cutsceneController.getGameState());
+            }
+        } catch (FalhaSalvamentoException e) {
+            console.printlnConsole("  [!] " + e.getMessage() + " Salve pelo menu.");
         }
+        verificarConquistas();
 
         console.printlnConsole("");
         console.printlnConsole("       ┌────────────────────────────────────────────────────────┐");
@@ -174,6 +184,35 @@ public class CutsceneView implements View {
         }
         console.printlnConsole("");
     }
+
+    private void verificarConquistas() {
+        Player player = cutsceneController.getPlayer();
+
+        if (player == null) {
+            return;
+        }
+
+        if (player.possuiRomance()) {
+            desbloquearConquista(Conquistas.CORACAO_DE_LUTADOR);
+        }
+
+        if (player.isCapituloConcluido("INVESTIGACAO_COMPLETA")) {
+            desbloquearConquista(Conquistas.INVESTIGADOR);
+        }
+    }
+
+    private void desbloquearConquista(String conquista) {
+        ConquistaController conquistaController = new ConquistaController();
+
+        try {
+            conquistaController.desbloquear(conquista);
+        } catch (FalhaCarregamentoException e) {
+            console.printlnConsole("Erro ao carregar as conquistas.");
+        } catch (FalhaSalvamentoException e) {
+            console.printlnConsole("Erro ao salvar a conquista.");
+        }
+    }
+
 
     private String centralizar(String texto, int largura) {
         if (texto.length() >= largura) {

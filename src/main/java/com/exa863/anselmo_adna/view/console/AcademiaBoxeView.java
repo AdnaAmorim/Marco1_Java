@@ -1,8 +1,11 @@
 package com.exa863.anselmo_adna.view.console;
 
+import com.exa863.anselmo_adna.controller.ConquistaController;
 import com.exa863.anselmo_adna.controller.GameController;
 import com.exa863.anselmo_adna.controller.MatchController;
 import com.exa863.anselmo_adna.controller.SceneController;
+import com.exa863.anselmo_adna.exception.FalhaCarregamentoException;
+import com.exa863.anselmo_adna.exception.FalhaSalvamentoException;
 import com.exa863.anselmo_adna.model.character.Player;
 import com.exa863.anselmo_adna.model.combat.EstiloLuta;
 import com.exa863.anselmo_adna.model.combat.Lutador;
@@ -14,6 +17,7 @@ import com.exa863.anselmo_adna.model.combat.estilos.Contragolpeador;
 import com.exa863.anselmo_adna.model.combat.estilos.Nocauteador;
 import com.exa863.anselmo_adna.model.combat.estilos.Velocista;
 import com.exa863.anselmo_adna.model.stats.Atributo;
+import com.exa863.anselmo_adna.persistencia.Conquistas;
 import com.exa863.anselmo_adna.view.View;
 
 import java.io.IOException;
@@ -246,8 +250,18 @@ public class AcademiaBoxeView implements View {
         Consumer<ResultadoLuta> callbackPosLuta = resultado -> {
             if (tipoCampeonato == 1) {
                 player.registrarLutaEstadual();
+
+                if (player.getLutasEstaduais() >= LIMITE_LUTAS_ESTADUAIS) {
+                    desbloquearConquista(Conquistas.DESTAQUE_ESTADUAL);
+                }
+
             } else if (tipoCampeonato == 2) {
                 player.registrarLutaNacional();
+
+                if (player.getLutasNacionais() >= LIMITE_LUTAS_NACIONAIS) {
+                    desbloquearConquista(Conquistas.NOME_NACIONAL);
+                }
+
             } else if (tipoCampeonato == 0) {
                 player.registrarLutaLocal();
             }
@@ -280,4 +294,17 @@ public class AcademiaBoxeView implements View {
         sceneController.trocarCena(new MatchView(console, sceneController, gameController, match,
                 lutadorPlayer, lutadorOponente, destinoRetorno, callbackPosLuta));
     }
+
+    private void desbloquearConquista(String conquista) {
+        ConquistaController conquistaController = new ConquistaController();
+
+        try {
+            conquistaController.desbloquear(conquista);
+        } catch (FalhaCarregamentoException e) {
+            console.printlnConsole("Erro ao carregar as conquistas.");
+        } catch (FalhaSalvamentoException e) {
+            console.printlnConsole("Erro ao salvar a conquista.");
+        }
+    }
+
 }

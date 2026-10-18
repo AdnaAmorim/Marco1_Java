@@ -3,6 +3,10 @@ package com.exa863.anselmo_adna.view.console;
 import com.exa863.anselmo_adna.controller.GameController;
 import com.exa863.anselmo_adna.controller.SceneController;
 import com.exa863.anselmo_adna.controller.SaveGameController;
+import com.exa863.anselmo_adna.exception.DadosInvalidosException;
+import com.exa863.anselmo_adna.exception.FalhaCarregamentoException;
+import com.exa863.anselmo_adna.persistencia.Configuracao;
+import com.exa863.anselmo_adna.persistencia.ConfiguracaoXML;
 import com.exa863.anselmo_adna.view.View;
 import com.exa863.anselmo_adna.view.console.art.MenuInicialASCII;
 import java.io.IOException;
@@ -20,11 +24,19 @@ public class MenuView implements View {
     private final Console console;
     private final SceneController sceneController;
     private final GameController gameController;
+    private final Configuracao config = new Configuracao();
 
     public MenuView(Console console, SceneController sceneController, GameController gameController) {
         this.console = console;
         this.sceneController = sceneController;
         this.gameController = gameController;
+
+        ConfiguracaoXML xml = new ConfiguracaoXML();
+        try {
+            xml.carregar(config);
+        } catch (FalhaCarregamentoException | DadosInvalidosException e) {
+            console.printlnConsole(e.getMessage());
+        }
     }
 
     @Override
@@ -54,6 +66,7 @@ public class MenuView implements View {
             opcoes.add(new CEscolha("Jogar (Iniciar Carreira)", 0));
             opcoes.add(new CEscolha("Carregar partida", 4));
             opcoes.add(new CEscolha("Tutorial (Guia do Boxeador)", 1));
+            opcoes.add(new CEscolha("Configurações", 9));
             opcoes.add(new CEscolha("Créditos & Autoria", 2));
             opcoes.add(new CEscolha("Sair do Jogo", 3));
         }
@@ -155,6 +168,11 @@ public class MenuView implements View {
                     console.printlnConsole("       │          [ ENTER ]  Voltar ao Menu Principal           │");
                     console.printlnConsole("       └────────────────────────────────────────────────────────┘");
                     console.esperarEnter("");
+                    sceneController.trocarCena(this);
+                }
+                case 9 -> {
+                    MenuConfiguracao menuConfig = new MenuConfiguracao(console, config);
+                    menuConfig.mostrar();
                     sceneController.trocarCena(this);
                 }
                 case 3 -> {
