@@ -2,6 +2,10 @@ package com.exa863.anselmo_adna.view.console;
 
 import com.exa863.anselmo_adna.controller.GameController;
 import com.exa863.anselmo_adna.controller.SceneController;
+import com.exa863.anselmo_adna.exception.DadosInvalidosException;
+import com.exa863.anselmo_adna.exception.FalhaCarregamentoException;
+import com.exa863.anselmo_adna.persistencia.Configuracao;
+import com.exa863.anselmo_adna.persistencia.ConfiguracaoXML;
 import com.exa863.anselmo_adna.view.View;
 import com.exa863.anselmo_adna.view.console.art.MenuInicialASCII;
 import java.io.IOException;
@@ -16,11 +20,19 @@ public class MenuView implements View {
     private final Console console;
     private final SceneController sceneController;
     private final GameController gameController;
+    private final Configuracao config = new Configuracao();
 
     public MenuView(Console console, SceneController sceneController, GameController gameController) {
         this.console = console;
         this.sceneController = sceneController;
         this.gameController = gameController;
+
+        ConfiguracaoXML xml = new ConfiguracaoXML();
+        try {
+            xml.carregar(config);
+        } catch (FalhaCarregamentoException | DadosInvalidosException e) {
+            console.printlnConsole(e.getMessage());
+        }
     }
 
     @Override
@@ -35,7 +47,8 @@ public class MenuView implements View {
                 new CEscolha("Jogar (Iniciar Carreira)", 0),
                 new CEscolha("Tutorial (Guia do Boxeador)", 1),
                 new CEscolha("Créditos & Autoria", 2),
-                new CEscolha("Sair do Jogo", 3)
+                new CEscolha("Configurações", 3),
+                new CEscolha("Sair do Jogo", 4)
         };
 
         try {
@@ -106,6 +119,11 @@ public class MenuView implements View {
                     sceneController.trocarCena(this);
                 }
                 case 3 -> {
+                    MenuConfiguracao menuConfig = new MenuConfiguracao(console, config);
+                    menuConfig.mostrar();
+                    sceneController.trocarCena(this);
+                }
+                case 4 -> {
                     console.clearConsole();
                     console.printlnConsole("╔══════════════════════════════════════════════════════════════════════╗");
                     console.printlnConsole("║         Obrigado por jogar Boxing Game! Até a próxima luta!          ║");

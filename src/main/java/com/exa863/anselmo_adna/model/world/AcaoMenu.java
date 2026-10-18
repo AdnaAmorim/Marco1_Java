@@ -7,6 +7,7 @@ package com.exa863.anselmo_adna.model.world;
  */
 public enum AcaoMenu {
     ABRIR_MOCHILA("Abrir Mochila (Inventário)", "Acessa os itens, equipamentos e consumíveis."),
+    SALVAR_PARTIDA("Salvar partida", "Abre os slots de salvamento."),
     ABRIR_ACADEMIA("Abrir uma Academia", "Construa sua própria academia de boxe profissional."),
     SAIR_LOCAL("Sair daqui", "Retorna para o mapa da região anterior.");
 

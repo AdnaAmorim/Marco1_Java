@@ -1,0 +1,239 @@
+package com.exa863.anselmo_adna.view.console;
+
+import com.exa863.anselmo_adna.controller.SaveGameController;
+import com.exa863.anselmo_adna.exception.FalhaSalvamentoException;
+
+import java.io.IOException;
+
+public class MenuSalvar {
+
+    private final Console console;
+    private final SaveGameController saveGameController;
+
+    public MenuSalvar(Console console) {
+        this.console = console;
+        this.saveGameController = new SaveGameController();
+    }
+
+    public void mostrar() {
+
+        boolean aberto = true;
+
+        while (aberto) {
+
+            console.clearConsole();
+
+            console.printlnConsole("╔══════════════════════════════════════════════════════════════════════╗");
+            console.printlnConsole("║                         SALVAR PARTIDA                               ║");
+            console.printlnConsole("╠══════════════════════════════════════════════════════════════════════╣");
+            console.printlnConsole("║                                                                      ║");
+            console.printlnConsole("║  ► Escolha um slot para salvar sua partida.                          ║");
+            console.printlnConsole("║                                                                      ║");
+            console.printlnConsole("╚══════════════════════════════════════════════════════════════════════╝");
+
+            console.printlnConsole("");
+            console.printlnConsole("  Navegue com [ ▲ / ▼ ] e confirme com [ ENTER ]:");
+            console.printlnConsole("");
+
+            String slot1 = statusSlot(1);
+            String slot2 = statusSlot(2);
+            String slot3 = statusSlot(3);
+            String slot4 = statusSlot(4);
+
+            CEscolha[] opcoes = {
+                    new CEscolha("Slot 1 - " + slot1, 1),
+                    new CEscolha("Slot 2 - " + slot2, 2),
+                    new CEscolha("Slot 3 - " + slot3, 3),
+                    new CEscolha("Slot 4 - " + slot4, 4),
+                    new CEscolha("Excluir um save", 5),
+                    new CEscolha("Voltar", 0)
+            };
+
+            CMultiplaEscolha menu = new CMultiplaEscolha(console);
+
+            try {
+
+                int opcao = menu.escolha(opcoes).index;
+
+                if (opcao == 0) {
+                    aberto = false;
+                    continue;
+                }
+
+                if (opcao == 5) {
+                    excluirSave();
+                    continue;
+                }
+
+                salvarNoSlot(opcao);
+
+            } catch (IOException e) {
+
+                console.printlnConsole("Erro ao ler a escolha.");
+                console.esperarEnter("");
+            }
+        }
+    }
+
+
+    private String statusSlot(int slotId) {
+
+        if (saveGameController.existe(slotId)) {
+            return "OCUPADO";
+        }
+
+        return "VAZIO";
+    }
+
+
+    private void salvarNoSlot(int slotId) throws IOException {
+
+        if (saveGameController.existe(slotId)) {
+
+            boolean confirmou = confirmarSobrescrita(slotId);
+
+            if (!confirmou) {
+                return;
+            }
+        }
+
+        try {
+
+            saveGameController.salvar(slotId);
+
+            console.printlnConsole("");
+            console.printlnConsole("╔══════════════════════════════════════════════════════════════════════╗");
+            console.printlnConsole("║                       PARTIDA SALVA!                                 ║");
+            console.printlnConsole("╚══════════════════════════════════════════════════════════════════════╝");
+
+        } catch (FalhaSalvamentoException e) {
+
+            console.printlnConsole("");
+            console.printlnConsole(e.getMessage());
+        }
+
+        console.esperarEnter("");
+    }
+
+
+    private boolean confirmarSobrescrita(int slotId) throws IOException {
+
+        console.clearConsole();
+
+        console.printlnConsole("╔══════════════════════════════════════════════════════════════════════╗");
+        console.printlnConsole("║                       SOBRESCREVER SAVE                              ║");
+        console.printlnConsole("╠══════════════════════════════════════════════════════════════════════╣");
+        console.printlnConsole("║                                                                      ║");
+        console.printlnConsole("║  Já existe uma partida salva neste slot.                             ║");
+        console.printlnConsole("║  Deseja substituir o save existente?                                 ║");
+        console.printlnConsole("║                                                                      ║");
+        console.printlnConsole("╚══════════════════════════════════════════════════════════════════════╝");
+
+        console.printlnConsole("");
+
+        CEscolha[] opcoes = {
+                new CEscolha("Sim, sobrescrever Slot " + slotId, 1),
+                new CEscolha("Não, cancelar", 0)
+        };
+
+        CMultiplaEscolha menu = new CMultiplaEscolha(console);
+
+        int escolha = menu.escolha(opcoes).index;
+
+        return escolha == 1;
+    }
+
+
+    private void excluirSave() throws IOException {
+
+        console.clearConsole();
+
+        console.printlnConsole("╔══════════════════════════════════════════════════════════════════════╗");
+        console.printlnConsole("║                          EXCLUIR SAVE                                ║");
+        console.printlnConsole("╠══════════════════════════════════════════════════════════════════════╣");
+        console.printlnConsole("║                                                                      ║");
+        console.printlnConsole("║  ► Escolha qual slot deseja excluir.                                 ║");
+        console.printlnConsole("║                                                                      ║");
+        console.printlnConsole("╚══════════════════════════════════════════════════════════════════════╝");
+
+        console.printlnConsole("");
+        console.printlnConsole("  Navegue com [ ▲ / ▼ ] e confirme com [ ENTER ]:");
+        console.printlnConsole("");
+
+        CEscolha[] opcoes = {
+                new CEscolha("Slot 1 - " + statusSlot(1), 1),
+                new CEscolha("Slot 2 - " + statusSlot(2), 2),
+                new CEscolha("Slot 3 - " + statusSlot(3), 3),
+                new CEscolha("Slot 4 - " + statusSlot(4), 4),
+                new CEscolha("Voltar", 0)
+        };
+
+        CMultiplaEscolha menu = new CMultiplaEscolha(console);
+
+        int slotId = menu.escolha(opcoes).index;
+
+        if (slotId == 0) {
+            return;
+        }
+
+        if (!saveGameController.existe(slotId)) {
+
+            console.printlnConsole("");
+            console.printlnConsole("Este slot está vazio.");
+            console.esperarEnter("");
+
+            return;
+        }
+
+        boolean confirmou = confirmarExclusao(slotId);
+
+        if (!confirmou) {
+            return;
+        }
+
+        boolean excluiu = saveGameController.excluir(slotId);
+
+        if (excluiu) {
+
+            console.printlnConsole("");
+            console.printlnConsole("╔══════════════════════════════════════════════════════════════════════╗");
+            console.printlnConsole("║                    SAVE EXCLUÍDO COM SUCESSO!                        ║");
+            console.printlnConsole("╚══════════════════════════════════════════════════════════════════════╝");
+
+        } else {
+
+            console.printlnConsole("");
+            console.printlnConsole("Erro ao excluir o save.");
+        }
+
+        console.esperarEnter("");
+    }
+
+
+    private boolean confirmarExclusao(int slotId) throws IOException {
+
+        console.clearConsole();
+
+        console.printlnConsole("╔══════════════════════════════════════════════════════════════════════╗");
+        console.printlnConsole("║                         EXCLUIR SAVE                                 ║");
+        console.printlnConsole("╠══════════════════════════════════════════════════════════════════════╣");
+        console.printlnConsole("║                                                                      ║");
+        console.printlnConsole("║  Tem certeza que deseja excluir o Slot " + slotId + "?               ║");
+        console.printlnConsole("║  Essa ação não poderá ser desfeita.                                  ║");
+        console.printlnConsole("║                                                                      ║");
+        console.printlnConsole("╚══════════════════════════════════════════════════════════════════════╝");
+
+        console.printlnConsole("");
+
+        CEscolha[] opcoes = {
+                new CEscolha("Sim, excluir", 1),
+                new CEscolha("Não, cancelar", 0)
+        };
+
+        CMultiplaEscolha menu = new CMultiplaEscolha(console);
+
+        int escolha = menu.escolha(opcoes).index;
+
+        return escolha == 1;
+    }
+}

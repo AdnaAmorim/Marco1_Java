@@ -118,6 +118,7 @@ public class MapaView implements View {
         }
 
         itens.add(new ItemMenuMapa(AcaoMenu.ABRIR_MOCHILA.getTitulo(), null, AcaoMenu.ABRIR_MOCHILA));
+        itens.add(new ItemMenuMapa(AcaoMenu.SALVAR_PARTIDA.getTitulo(), null, AcaoMenu.SALVAR_PARTIDA));
 
         if (localAtual.getNome().equalsIgnoreCase("Cidade B")) {
             itens.add(new ItemMenuMapa(AcaoMenu.ABRIR_ACADEMIA.getTitulo(), null, AcaoMenu.ABRIR_ACADEMIA));
@@ -135,6 +136,11 @@ public class MapaView implements View {
     private void executarAcao(AcaoMenu acao) {
         switch (acao) {
             case ABRIR_MOCHILA -> sceneController.trocarCena(new InventarioView(console, sceneController, gameController));
+            case SALVAR_PARTIDA -> {
+                MenuSalvar menuSalvar = new MenuSalvar(console);
+                menuSalvar.mostrar();
+                sceneController.trocarCena(new MapaView(console, sceneController, gameController));
+            }
             case ABRIR_ACADEMIA -> executarAcaoAbrirAcademia();
             case SAIR_LOCAL -> {
                 gameController.voltarLocal();

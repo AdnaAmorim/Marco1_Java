@@ -1,8 +1,11 @@
 package com.exa863.anselmo_adna.view.console;
 
+import com.exa863.anselmo_adna.controller.ConquistaController;
 import com.exa863.anselmo_adna.controller.GameController;
 import com.exa863.anselmo_adna.controller.MatchController;
 import com.exa863.anselmo_adna.controller.SceneController;
+import com.exa863.anselmo_adna.exception.FalhaCarregamentoException;
+import com.exa863.anselmo_adna.exception.FalhaSalvamentoException;
 import com.exa863.anselmo_adna.model.character.Cores;
 import com.exa863.anselmo_adna.model.character.Personagem;
 import com.exa863.anselmo_adna.model.character.Player;
@@ -16,6 +19,9 @@ import com.exa863.anselmo_adna.model.combat.estilos.Nocauteador;
 import com.exa863.anselmo_adna.model.combat.estilos.Velocista;
 import com.exa863.anselmo_adna.model.stats.Atributo;
 import com.exa863.anselmo_adna.model.stats.Relacionamentos;
+import com.exa863.anselmo_adna.persistencia.Conquistas;
+import com.exa863.anselmo_adna.persistencia.ProgressoGlobal;
+import com.exa863.anselmo_adna.persistencia.ProgressoXML;
 import com.exa863.anselmo_adna.view.View;
 
 import java.io.IOException;
@@ -54,6 +60,8 @@ public class CampeonatoMundialView implements View {
             renderAcessoNegado(player);
             return;
         }
+
+        desbloquearConquista(Conquistas.CHEGUEI_AO_MUNDIAL);
 
         console.printlnConsole("╔══════════════════════════════════════════════════════════════════════╗");
         console.printlnConsole("║                  CAMPEONATO MUNDIAL - O GRANDE PALCO                 ║");
@@ -203,6 +211,7 @@ public class CampeonatoMundialView implements View {
             Personagem victorNoor = new Personagem(5, "Victor Noor", "", Cores.PRETO, Sexo.MASCULINO);
             boolean aceitouContrato = player.isCapituloConcluido("FLAG_CONTRATO_ACEITO") || player.getAfinidade(victorNoor) >= 50;
             boolean investigacaoCompleta = player.isCapituloConcluido("INVESTIGACAO_COMPLETA");
+            String finalAlcancado;
 
             console.clearConsole();
             console.printlnConsole("╔══════════════════════════════════════════════════════════════════════╗");
@@ -215,11 +224,13 @@ public class CampeonatoMundialView implements View {
                     console.printlnConsole("  ◈ [Narrador] Mas as perigosas organizações que apostaram milhões em você não perdoaram a sua covardia.");
                     console.printlnConsole("  ◈ [Narrador] O dinheiro maldito nunca chegou a ser gasto na sua curta vida.");
                     console.printlnConsole("\n  ✦ FIM 1: A ALMA VENDIDA (Derrota Opcional)");
+                    finalAlcancado = "FINAL_1_ALMA_VENDIDA_DERROTA";
                 } else {
                     console.printlnConsole("  ◈ [Narrador] O orgulho falou mais alto e você se recusou a cair na lona. Você aniquilou Anthony brilhantemente.");
                     console.printlnConsole("  ◈ [Narrador] Porém, você quebrou o letal contrato de Noor. A sua glória perante a multidão foi eterna,");
                     console.printlnConsole("  ◈ [Narrador] mas sua vida terminou tragicamente naquela mesma noite chuvosa, em um beco atrás da arena.");
                     console.printlnConsole("\n  ✦ FIM 2: A ALMA VENDIDA (Vitória Trágica)");
+                    finalAlcancado = "FINAL_2_ALMA_VENDIDA_VITORIA";
                 }
             } else {
                 if (venceuLuta) {
@@ -227,10 +238,12 @@ public class CampeonatoMundialView implements View {
                     console.printlnConsole("  ◈ [Narrador] O ringue sangrento silencia antes da explosão de gritos. O juiz levanta o seu braço com convicção.");
                     console.printlnConsole("  ► " + player.getNome() + ": 'Pai, onde quer que você esteja... nós finalmente conseguimos! O nosso legado de sangue está salvo!'");
                     console.printlnConsole("\n  ✦ FIM 3: O CAMPEÃO DO MUNDO");
+                    finalAlcancado = "FINAL_3_CAMPEAO_DO_MUNDO";
                 } else {
                     console.printlnConsole("  ◈ [Narrador] Anthony simplesmente foi superior técnico. Seus músculos falharam e a lona gelada beija o seu rosto.");
                     console.printlnConsole("  ► " + player.getNome() + ": (Anos depois, treinando pacientemente na sua modesta academia) 'Eu não venci o mundial naquele dia, mas o legado vive aqui.'");
                     console.printlnConsole("\n  ✦ FIM 4: O VERDADEIRO LEGADO");
+                    finalAlcancado = "FINAL_4_VERDADEIRO_LEGADO";
                 }
 
                 if (investigacaoCompleta) {
@@ -239,6 +252,7 @@ public class CampeonatoMundialView implements View {
                 }
             }
 
+            registrarFinal(finalAlcancado);
             exibirResumoRelacionamentos(player);
 
             console.printlnConsole("\n       ┌────────────────────────────────────────────────────────┐");
@@ -253,4 +267,50 @@ public class CampeonatoMundialView implements View {
         sceneController.trocarCena(new MatchView(console, sceneController, gameController, match,
                 lutadorPlayer, lutadorOponente, destinoRetorno, callbackPosLuta));
     }
+
+    private void registrarFinal(String finalAlcancado) {
+        ProgressoGlobal progresso = new ProgressoGlobal();
+        ProgressoXML xml = new ProgressoXML();
+
+        try {
+            xml.carregar(progresso);
+            progresso.registrarFinal(finalAlcancado);
+
+            if (finalAlcancado.equals("FINAL_3_CAMPEAO_DO_MUNDO")) {
+                progresso.registrarConquista(Conquistas.CAMPEAO_DO_MUNDO);
+            }
+
+            if (finalAlcancado.equals("FINAL_4_VERDADEIRO_LEGADO")) {
+                progresso.registrarConquista(Conquistas.VERDADEIRO_LEGADO);
+            }
+
+            if (progresso.finaisAlcancados.size() >= 2) {
+                progresso.registrarConquista(Conquistas.MULTIPLOS_DESTINOS);
+            }
+
+            if (progresso.finaisAlcancados.size() >= 4) {
+                progresso.registrarConquista(Conquistas.TODOS_OS_CAMINHOS);
+            }
+
+            xml.salvar(progresso);
+
+        } catch (FalhaCarregamentoException e) {
+            console.printlnConsole("Erro ao carregar os finais: " + e.getMessage());
+        } catch (FalhaSalvamentoException e) {
+            console.printlnConsole("Erro ao salvar o final: " + e.getMessage());
+        }
+    }
+
+    private void desbloquearConquista(String conquista) {
+        ConquistaController conquistaController = new ConquistaController();
+
+        try {
+            conquistaController.desbloquear(conquista);
+        } catch (FalhaCarregamentoException e) {
+            console.printlnConsole("Erro ao carregar as conquistas.");
+        } catch (FalhaSalvamentoException e) {
+            console.printlnConsole("Erro ao salvar a conquista.");
+        }
+    }
+
 }
