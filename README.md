@@ -46,8 +46,11 @@ O desfecho combina o resultado da luta mundial com as decisões sobre Noor. Exis
 - **Descanso:** dormir avança oito horas e restaura saúde e energia. Há chance de perder um ponto de habilidade ao descansar.
 - **Economia:** dinheiro para treinos, viagens, compras e inscrições em campeonatos; prêmios obtidos nas lutas.
 - **Inventário:** alimentos, suplementos e itens especiais da narrativa.
-- **Combate:** escolha entre Velocista, Nocauteador e Contragolpeador. O resultado é calculado a partir dos atributos e estilos; os rounds narram esse resultado, sem comandos de ataque durante a luta.
+- **Combate:** escolha entre Velocista, Nocauteador e Contragolpeador. O resultado é calculado a partir dos atributos e estilos; os rounds narram esse resultado com animações no terminal (com opção de pular direto para o resultado final nas configurações).
 - **Progressão:** capítulos dependem de acontecimentos anteriores, locais visitados e quantidade de lutas disputadas. Algumas escolhas também dependem de afinidade e decisões anteriores.
+- **Sistema de Saves e Persistência:** múltiplos slots de salvamento manuais (`saves/slot_*.xml`), salvamento automático inteligente (`saves/autosave.xml`) com detecção automática do save mais recente no Menu Inicial ("Continuar"), além de exportação/importação e tratamento de exceções de persistência (`FalhaSalvamentoException`, `FalhaCarregamentoException`, `DadosInvalidosException`).
+- **Configurações e Acessibilidade:** menu de configurações com persistência em `configuracao.xml`, permitindo alternar auto-save, exibição da logo inicial e velocidade de exibição/pulo de animações de combate.
+- **Progresso Global e Conquistas:** rastreamento contínuo em `progresso.xml`, registrando finais desbloqueados e conquistas da carreira (como *Primeiros Passos*).
 
 ## Organização do código
 
@@ -56,19 +59,23 @@ O projeto é organizado segundo o padrão MVC, com classes e responsabilidades d
 ```text
 src/main/java/com/exa863/anselmo_adna/
 ├── Main.java             # Ponto de entrada
-├── controller/           # Controle do jogo, cenas, narrativa e combate
-│   └── cenas/            # Controle de abertura e cutscenes
+├── controller/           # Controle do jogo, cenas, narrativa, combate e saves
+│   ├── cenas/            # Controle de abertura e cutscenes
+│   ├── SaveGameController.java   # Gerenciamento de slots e autosave
+│   └── XmlFileController.java    # Serialização e desserialização XML (Jackson)
+├── exception/            # Exceções customizadas de persistência e validação
+├── persistencia/         # Modelos e manipuladores de configurações, progresso e conquistas
 ├── model/
 │   ├── character/        # Jogador e personagens
 │   ├── combat/           # Lutadores, estilos, rounds e resultados
 │   ├── narrativa/        # Diálogos, capítulos e dependências da história
 │   ├── stats/            # Atributos, itens, inventário e relacionamentos
-│   └── world/            # Locais, tempo e estados do jogo
-├── view/console/         # Telas, menus e interação com o terminal
+│   └── world/            # Locais, tempo e estados do jogo (GameState)
+├── view/console/         # Telas, menus navegáveis, saves e interação com o terminal
 └── utils/                # Formatação de textos e caixas
 ```
 
-São utilizados herança e polimorfismo nos estilos de luta e capítulos, encapsulamento dos atributos e composição entre os componentes da partida. O grafo de capítulos organiza os pré-requisitos da narrativa. Algumas regras de treino, compras e recompensas ainda estão nas telas e podem ser separadas melhor dos componentes de apresentação.
+São utilizados herança e polimorfismo nos estilos de luta e capítulos, encapsulamento dos atributos e composição entre os componentes da partida. O grafo de capítulos organiza os pré-requisitos da narrativa.
 
 ### Tecnologias
 
@@ -76,9 +83,10 @@ São utilizados herança e polimorfismo nos estilos de luta e capítulos, encaps
 | --- | --- | --- |
 | Java | 21 | Linguagem e execução |
 | Maven | Instalação externa | Compilação e gerenciamento de dependências |
-| JLine | 3.29.0 | Terminal, leitura de teclas e menus |
+| JLine | 3.29.0 | Terminal, leitura de teclas e menus interativos |
 | JGraphT | 1.5.2 | Grafo de dependências entre capítulos |
-| JUnit Jupiter | 5.10.2 | Dependência de testes; testes ainda não implementados |
+| Jackson Dataformat XML | 2.17.2 | Serialização e persistência de dados em XML |
+| JUnit Jupiter | 5.10.2 | Testes automatizados de unidade e integração |
 
 Não é utilizada uma engine de jogos.
 
@@ -159,32 +167,40 @@ cd "C:\caminho\Marco1_Java"
 mvn compile exec:java
 ```
 
-Esse é o jeito mais simples de jogar pelo código-fonte: o Maven baixa as dependências necessárias, compila e inicia o jogo. A primeira execução pode demorar por causa dos downloads. Use um terminal externo.
+Esse é o jeito mais simples de jogar pelo código-fonte: o Maven baixa as dependências necessárias (incluindo JLine, JGraphT e Jackson Dataformat XML), compila e inicia o jogo. A primeira execução pode demorar por causa dos downloads. Use um terminal externo.
 
-### 4. Gere um JAR para compartilhar
+### 4. Executar os testes automatizados
 
-Para reunir o jogo e todas as dependências de execução em um único arquivo:
+Para rodar toda a suíte de testes unitários e de integração:
+
+```powershell
+mvn test
+```
+
+### 5. Gere um JAR para compartilhar
+
+Para reunir o jogo e todas as dependências de execução em um único arquivo executável (fat JAR):
 
 ```powershell
 mvn clean package
 ```
 
-O arquivo final é `target/PBLGame-1.0-SNAPSHOT.jar`. O Maven Shade inclui as bibliotecas e configura a classe principal. Compartilhe esse arquivo; o arquivo com prefixo `original-`, também gerado no processo, não contém as dependências.
+O arquivo final é `target/PBLGame-1.5.jar`. O Maven Shade inclui as bibliotecas e configura a classe principal. Compartilhe esse arquivo; o arquivo com prefixo `original-`, também gerado no processo, não contém as dependências.
 
 ## Como executar uma versão já compilada
 
 Baixe a versão publicada diretamente na página de **[Releases do GitHub](https://github.com/AdnaAmorim/Marco1_Java/releases)**.
 
-Você só precisa baixar o arquivo **`PBLGame-1.0-SNAPSHOT.jar`** (disponível na seção de *Assets* da release) e ter o **Java 21 instalado**. Não precisa de Maven, código-fonte nem pasta de dependências.
+Você só precisa baixar o arquivo **`PBLGame-1.5.jar`** (disponível na seção de *Assets* da release) e ter o **Java 21 instalado**. Não precisa de Maven, código-fonte nem pasta de dependências.
 
 Abra um terminal externo na pasta onde salvou o JAR e execute:
 
 ```powershell
 cd "C:\caminho\BoxingGame"
-java -jar PBLGame-1.0-SNAPSHOT.jar
+java -jar PBLGame-1.5.jar
 ```
 
-Se ainda estiver na pasta do projeto, use `java -jar target/PBLGame-1.0-SNAPSHOT.jar`.
+Se ainda estiver na pasta do projeto, use `java -jar target/PBLGame-1.5.jar`.
 
 **Abra pelo terminal, não por duplo clique:** no Windows, o duplo clique pode usar o Java sem uma janela de console, impedindo a interação. O JAR inclui as bibliotecas do jogo, mas não inclui o próprio Java. Confira `java -version` antes de abrir. O comando é o mesmo no Linux/macOS, mas a interação nesses ambientes ainda precisa de validação.
 
@@ -192,16 +208,18 @@ O jogo compilado não precisa de conexão com a internet para funcionar.
 
 ## Guia rápido de jogo
 
-1. No menu inicial, selecione **Jogar (Iniciar Carreira)**. Também estão disponíveis tutorial, créditos e saída.
-2. Informe o nome do protagonista e escolha sexo e cor dos olhos.
+1. No menu inicial, selecione **Jogar (Iniciar Carreira)** ou **Continuar** (caso já exista um save ou autosave recente). Também estão disponíveis gerenciamento de saves (**Carregar partida**), **Configurações**, **Tutorial (Guia do Boxeador)**, **Créditos** e **Sair**.
+2. Ao iniciar nova carreira, informe o nome do protagonista e escolha sexo e cor dos olhos.
 3. Leia a introdução e avance com **Enter**.
 4. No mapa, visite primeiro a **Casa** para iniciar o capítulo Origens. Novos locais aparecem conforme a história avança.
 5. Use **↑ / ↓** para selecionar opções e **Enter** para confirmar. Nas conversas, leia as alternativas: elas podem alterar afinidades, atributos e caminhos futuros.
 6. Treine em casa ou na academia, acompanhe saúde e energia e descanse quando necessário. Dormir avança oito horas, portanto nem sempre muda o dia imediatamente.
 7. Na Academia de Boxe, escolha uma competição e uma postura. O circuito local permite obter dinheiro; os circuitos Estadual e Nacional contribuem para o acesso ao Mundial. Há um limite de uma luta de boxe por dia do jogo.
-8. Volte aos locais após avançar na carreira: os capítulos são acionados ao entrar neles. A Loja vende consumíveis, e a opção **Abrir Mochila (Inventário)** permite usá-los.
-9. Para disputar o Mundial, são exigidas pelo menos duas lutas estaduais, uma nacional, R$ 3.000 de inscrição e 70 pontos de saúde e energia, além da liberação do acesso pela narrativa.
-10. Ao concluir a luta final, acompanhe o desfecho e o resumo dos relacionamentos. O jogo oferece retorno ao menu principal.
+8. Durante o combate, as animações e narrativas de rounds são exibidas na íntegra (ou puladas diretamente para o resultado caso ativado no menu de configurações).
+9. Volte aos locais após avançar na carreira: os capítulos são acionados ao entrar neles. A Loja vende consumíveis, e a opção **Abrir Mochila (Inventário)** permite usá-los.
+10. O jogo salva seu progresso automaticamente ao passar por cutscenes importantes e ao término de combates (`autosave.xml`), além de permitir salvar manualmente pelo menu do jogo a qualquer momento em slots dedicados.
+11. Para disputar o Mundial, são exigidas pelo menos duas lutas estaduais, uma nacional, R$ 3.000 de inscrição e 70 pontos de saúde e energia, além da liberação do acesso pela narrativa.
+12. Ao concluir a luta final, acompanhe o desfecho, o resumo dos relacionamentos, o registro de finais conquistados e conquistas desbloqueadas. O jogo oferece retorno seguro ao menu principal.
 
 ## Problemas ao abrir
 
@@ -210,6 +228,7 @@ O jogo compilado não precisa de conexão com a internet para funcionar.
 | `java` ou `mvn` não reconhecido | Instalação e `PATH`; abra um novo terminal após configurar |
 | Erro de versão do Java | Compare `java -version`, `javac -version` e o Java mostrado por `mvn -version` |
 | JAR não encontrado | Pasta atual e caminho informado depois de `java -jar` |
+| `NoClassDefFoundError: XmlMapper` | O Maven não baixou as dependências ou executou sem compilar. Execute `mvn compile exec:java` ou rode via JAR empacotado |
 | `NoClassDefFoundError` para JLine ou JGraphT | Use o JAR completo gerado por `mvn clean package`, sem o prefixo `original-` |
 | Mensagem sobre ausência de manifesto principal | Confira se está usando o JAR completo atualizado, e não um artefato antigo ou com prefixo `original-` |
 | Setas, molduras ou limpeza de tela não funcionam | Execute em terminal externo, amplie a janela e confira a fonte |
@@ -218,7 +237,7 @@ O jogo compilado não precisa de conexão com a internet para funcionar.
 
 | Requisito | Situação no código atual |
 | --- | --- |
-| Menu com nova partida, instruções, créditos e saída | Implementado |
+| Menu com nova partida, carregar save, configurações, instruções, créditos e saída | Implementado (com suporte a atalho "Continuar" para o save mais recente) |
 | Configuração do protagonista e introdução | Implementadas |
 | Ao menos dez unidades narrativas | Dez classes de capítulos, além da introdução |
 | Diálogos, escolhas e consequências | Implementados com alterações de estado e opções condicionais |
@@ -227,9 +246,10 @@ O jogo compilado não precisa de conexão com a internet para funcionar.
 | Pelo menos três atributos variáveis | Seis atributos |
 | Recursos gerenciáveis | Dinheiro, energia, inventário e limites diários |
 | Condições de acesso | Dependências de capítulos, participações em lutas e escolhas anteriores |
-| Ao menos três finais e retorno ao menu | Quatro finais principais implementados; fluxo completo ainda requer validação em execução |
-| POO e MVC | Organização presente, com regras ainda concentradas em algumas views |
-| Testes de unidade | Implementados com JUnit 5 (cobrindo regras críticas de atributos, inventário, combate, estilos de boxe, passagem de tempo e grafo da história) |
+| Ao menos três finais e retorno ao menu | Quatro finais principais implementados; rastreamento global de finais concluídos |
+| Persistência e Recuperação de Estado | Implementada em XML com múltiplos slots, autosave, tratamento de exceções robusto e configurações |
+| POO e MVC | Organização arquitetural clara entre model, view, controller, persistencia e exception |
+| Testes de unidade | Implementados com JUnit 5 (cobrindo regras críticas de atributos, inventário, combate, estilos de boxe, passagem de tempo, grafo da história e persistência XML/saves) |
 
 A Fase 1 também exige **diagrama de classes em dupla**, separado e anexado ao relatório, e **relatório individual no padrão SBC, de seis a dez páginas**. Este README documenta o projeto e seu uso; não substitui esses entregáveis.
 
