@@ -1,8 +1,11 @@
 package com.exa863.anselmo_adna.view.console;
 
 import com.exa863.anselmo_adna.controller.ConquistaController;
+import com.exa863.anselmo_adna.exception.DadosInvalidosException;
 import com.exa863.anselmo_adna.exception.FalhaCarregamentoException;
 import com.exa863.anselmo_adna.exception.FalhaSalvamentoException;
+import com.exa863.anselmo_adna.persistencia.Configuracao;
+import com.exa863.anselmo_adna.persistencia.ConfiguracaoXML;
 import com.exa863.anselmo_adna.model.combat.Lutador;
 import com.exa863.anselmo_adna.model.combat.Match;
 import com.exa863.anselmo_adna.model.combat.Round;
@@ -52,53 +55,41 @@ public class MatchView implements View {
 
     @Override
     public void render() {
-        if (Console.MODO_DEV) {
-            console.clearConsole();
-            imprimirHUD(null);
-            console.printlnConsole("\n--- RESULTADO OFICIAL [MODO DEV ATIVO - ANIMAÇÕES PULADAS] ---");
-            console.printlnConsole(match.getResultadoLuta().getDescricao() + "\n");
+        boolean pularAnimacao = Console.MODO_DEV || pularAnimacaoHabilitado();
 
-            verificarPrimeirosPassos(match.getResultadoLuta());
+        if (!pularAnimacao) {
+            for (Round round : match) {
+                console.clearConsole();
 
-            if (aoFinalizar != null) {
-                aoFinalizar.accept(match.getResultadoLuta());
-            }
-            salvarAutomaticamente();
+                anunciarRound(round);
 
-            console.esperarEnter("\n[Pressione ENTER para continuar]");
+                java.util.List<String> eventos = round.getEventos();
+                for (String evento : eventos) {
+                    animarEspera();
+                    console.printDigitado(evento);
+                }
 
-            if (sceneController != null) {
-                View destino = (viewRetorno != null) ? viewRetorno : new MapaView(console, sceneController, gameController);
-                sceneController.trocarCena(destino);
-            }
-            return;
-        }
-
-        for (Round round : match) {
-            console.clearConsole();
-
-            anunciarRound(round);
-
-            java.util.List<String> eventos = round.getEventos();
-            for (String evento : eventos) {
-                animarEspera();
-                console.printDigitado(evento);
-            }
-
-            if (!round.isUltimo()) {
-                animarFimDeRound();
-                console.printlnConsole(LutasASCII.fimDeRound);
-                console.printlnConsole("- Fim do Round " + round.getNumero()
-                        + "! Os lutadores vão para seus córners e respiram fundo.");
-                animarDing();
-            } else {
-                console.esperarEnter("\n[Pressione ENTER para continuar]");
+                if (!round.isUltimo()) {
+                    animarFimDeRound();
+                    console.printlnConsole(LutasASCII.fimDeRound);
+                    console.printlnConsole("- Fim do Round " + round.getNumero()
+                            + "! Os lutadores vão para seus córners e respiram fundo.");
+                    animarDing();
+                } else {
+                    console.esperarEnter("\n[Pressione ENTER para continuar]");
+                }
             }
         }
 
         console.clearConsole();
         imprimirHUD(null);
-        console.printlnConsole("\n--- RESULTADO OFICIAL ---");
+        if (Console.MODO_DEV) {
+            console.printlnConsole("\n--- RESULTADO OFICIAL [MODO DEV ATIVO - ANIMAÇÕES PULADAS] ---");
+        } else if (!pularAnimacao) {
+            console.printlnConsole("\n--- RESULTADO OFICIAL ---");
+        } else {
+            console.printlnConsole("");
+        }
         console.printlnConsole(match.getResultadoLuta().getDescricao() + "\n");
 
         verificarPrimeirosPassos(match.getResultadoLuta());
@@ -114,6 +105,16 @@ public class MatchView implements View {
             View destino = (viewRetorno != null) ? viewRetorno : new MapaView(console, sceneController, gameController);
             sceneController.trocarCena(destino);
         }
+    }
+
+    private boolean pularAnimacaoHabilitado() {
+        Configuracao config = new Configuracao();
+        try {
+            new ConfiguracaoXML().carregar(config);
+        } catch (FalhaCarregamentoException | DadosInvalidosException e) {
+            return false;
+        }
+        return config.pularAnimacaoCombate;
     }
 
     private void salvarAutomaticamente() {
