@@ -255,7 +255,7 @@ public class CampeonatoMundialView implements View {
             registrarFinal(finalAlcancado);
             exibirResumoRelacionamentos(player);
 
-            console.printlnConsole("\n       ┌────────────────────────────────────────────────────────┐");
+            console.printlnConsole("\n     ┌────────────────────────────────────────────────────────┐");
             console.printlnConsole("       │           [ ENTER ]  Voltar ao Menu Principal          │");
             console.printlnConsole("       └────────────────────────────────────────────────────────┘");
             console.esperarEnter("");
@@ -266,7 +266,12 @@ public class CampeonatoMundialView implements View {
         sceneController.trocarCena(new MatchView(console, sceneController, gameController, match,
                 lutadorPlayer, lutadorOponente, destinoRetorno, callbackPosLuta));
     }
-
+    /**
+     * Registra o final alcançado pelo jogador e verifica
+     * quais conquistas relacionadas aos finais foram desbloqueadas.
+     *
+     * @param finalAlcancado Identificador do final alcançado.
+     */
     private void registrarFinal(String finalAlcancado) {
         ProgressoGlobal progresso = new ProgressoGlobal();
         ProgressoXML xml = new ProgressoXML();
@@ -274,24 +279,23 @@ public class CampeonatoMundialView implements View {
         try {
             xml.carregar(progresso);
             progresso.registrarFinal(finalAlcancado);
+            xml.salvar(progresso);
 
             if (finalAlcancado.equals("FINAL_3_CAMPEAO_DO_MUNDO")) {
-                progresso.registrarConquista(Conquistas.CAMPEAO_DO_MUNDO);
+                desbloquearConquista(Conquistas.CAMPEAO_DO_MUNDO);
             }
 
             if (finalAlcancado.equals("FINAL_4_VERDADEIRO_LEGADO")) {
-                progresso.registrarConquista(Conquistas.VERDADEIRO_LEGADO);
+                desbloquearConquista(Conquistas.VERDADEIRO_LEGADO);
             }
 
             if (progresso.finaisAlcancados.size() >= 2) {
-                progresso.registrarConquista(Conquistas.MULTIPLOS_DESTINOS);
+                desbloquearConquista(Conquistas.MULTIPLOS_DESTINOS);
             }
 
             if (progresso.finaisAlcancados.size() >= 4) {
-                progresso.registrarConquista(Conquistas.TODOS_OS_CAMINHOS);
+                desbloquearConquista(Conquistas.TODOS_OS_CAMINHOS);
             }
-
-            xml.salvar(progresso);
 
         } catch (FalhaCarregamentoException e) {
             console.printlnConsole("Erro ao carregar os finais: " + e.getMessage());
@@ -299,12 +303,25 @@ public class CampeonatoMundialView implements View {
             console.printlnConsole("Erro ao salvar o final: " + e.getMessage());
         }
     }
-
+    /**
+     * Tenta desbloquear uma conquista e exibe uma mensagem
+     * caso ela seja obtida pela primeira vez.
+     *
+     * @param conquista Identificador da conquista.
+     */
     private void desbloquearConquista(String conquista) {
         ConquistaController conquistaController = new ConquistaController();
 
         try {
-            conquistaController.desbloquear(conquista);
+            boolean desbloqueou = conquistaController.desbloquear(conquista);
+
+            if (desbloqueou) {
+                console.printlnConsole("");
+                console.printlnConsole("  ★ CONQUISTA DESBLOQUEADA! ★");
+                console.printlnConsole("  ► " + Conquistas.getNome(conquista));
+                console.printlnConsole("");
+            }
+
         } catch (FalhaCarregamentoException e) {
             console.printlnConsole("Erro ao carregar as conquistas.");
         } catch (FalhaSalvamentoException e) {

@@ -294,12 +294,25 @@ public class AcademiaBoxeView implements View {
         sceneController.trocarCena(new MatchView(console, sceneController, gameController, match,
                 lutadorPlayer, lutadorOponente, destinoRetorno, callbackPosLuta));
     }
-
+    /**
+     * Tenta desbloquear uma conquista e exibe uma mensagem
+     * caso ela seja obtida pela primeira vez.
+     *
+     * @param conquista Identificador da conquista.
+     */
     private void desbloquearConquista(String conquista) {
         ConquistaController conquistaController = new ConquistaController();
 
         try {
-            conquistaController.desbloquear(conquista);
+            boolean desbloqueou = conquistaController.desbloquear(conquista);
+
+            if (desbloqueou) {
+                console.printlnConsole("");
+                console.printlnConsole("  ★ CONQUISTA DESBLOQUEADA! ★");
+                console.printlnConsole("  ► " + Conquistas.getNome(conquista));
+                console.printlnConsole("");
+            }
+
         } catch (FalhaCarregamentoException e) {
             console.printlnConsole("Erro ao carregar as conquistas.");
         } catch (FalhaSalvamentoException e) {

@@ -89,10 +89,11 @@ public class CutsceneView implements View {
         }
     }
 
+
     private void imprimirCabecalho() {
         String titulo = cutsceneController.getCapitulo().getTitulo().toUpperCase();
         console.printlnConsole("╔══════════════════════════════════════════════════════════════════════╗");
-        console.printlnConsole("║" + centralizar("HISTÓRIA : " + titulo, 70) + "║");
+        console.printlnConsole("║" + centralizar("HISTÓRIA : " + titulo, 70) +           "║");
         console.printlnConsole("╚══════════════════════════════════════════════════════════════════════╝\n");
     }
 
@@ -201,6 +202,9 @@ public class CutsceneView implements View {
         console.printlnConsole("");
     }
 
+    /**
+     * Verifica as conquistas que podem ser obtidas durante as cutscenes.
+     */
     private void verificarConquistas() {
         Player player = cutsceneController.getPlayer();
 
@@ -216,26 +220,36 @@ public class CutsceneView implements View {
             desbloquearConquista(Conquistas.INVESTIGADOR);
         }
     }
-
+    /**
+     * Tenta desbloquear uma conquista e exibe uma mensagem caso ela seja obtida pela primeira vez.
+     *
+     * @param conquista Identificador da conquista.
+     */
     private void desbloquearConquista(String conquista) {
-
         ConquistaController conquistaController = new ConquistaController();
 
         try {
+            boolean desbloqueou = conquistaController.desbloquear(conquista);
 
-            conquistaController.desbloquear(conquista);
+            if (desbloqueou) {
+                console.printlnConsole("");
+                console.printlnConsole("  ★ CONQUISTA DESBLOQUEADA! ★");
+                console.printlnConsole("  ► " + Conquistas.getNome(conquista));
+                console.printlnConsole("");
+            }
 
         } catch (FalhaCarregamentoException e) {
-
             console.printlnConsole("Erro ao carregar as conquistas.");
-
         } catch (FalhaSalvamentoException e) {
-
             console.printlnConsole("Erro ao salvar a conquista.");
         }
     }
 
-
+    /**
+     * Verifica se a opção de pular cutscenes está ativada.
+     *
+     * @return true se as cutscenes devem ser puladas ou false caso contrário.
+     */
     private boolean pularCutsceneHabilitada() {
 
         Configuracao config = new Configuracao();
