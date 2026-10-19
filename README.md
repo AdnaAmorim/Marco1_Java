@@ -114,10 +114,10 @@ Se aparecerem letras trocadas ou símbolos estranhos no Windows, configure a ses
 
 ```powershell
 chcp 65001
-java -Dfile.encoding=UTF-8 -jar PBLGame-1.0-SNAPSHOT.jar
+java -Dfile.encoding=UTF-8 -jar PBLGame-1.5.jar
 ```
 
-Se estiver na pasta do projeto, use `target/PBLGame-1.0-SNAPSHOT.jar` no comando. No Linux/macOS, configure o terminal e a localidade do sistema para UTF-8; `chcp` é exclusivo do Windows.
+Se estiver na pasta do projeto, use `target/PBLGame-1.5.jar` no comando. No Linux/macOS, configure o terminal e a localidade do sistema para UTF-8; `chcp` é exclusivo do Windows.
 
 Se os caracteres aparecerem como quadradinhos mesmo com UTF-8, confira a fonte do terminal: mudar a codificação não adiciona símbolos que a fonte não possui. Se as molduras estiverem cortadas, aumente também o tamanho da janela.
 
