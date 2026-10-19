@@ -266,7 +266,12 @@ public class CampeonatoMundialView implements View {
         sceneController.trocarCena(new MatchView(console, sceneController, gameController, match,
                 lutadorPlayer, lutadorOponente, destinoRetorno, callbackPosLuta));
     }
-
+    /**
+     * Registra o final alcançado pelo jogador e verifica
+     * quais conquistas relacionadas aos finais foram desbloqueadas.
+     *
+     * @param finalAlcancado Identificador do final alcançado.
+     */
     private void registrarFinal(String finalAlcancado) {
         ProgressoGlobal progresso = new ProgressoGlobal();
         ProgressoXML xml = new ProgressoXML();
@@ -298,7 +303,12 @@ public class CampeonatoMundialView implements View {
             console.printlnConsole("Erro ao salvar o final: " + e.getMessage());
         }
     }
-
+    /**
+     * Tenta desbloquear uma conquista e exibe uma mensagem
+     * caso ela seja obtida pela primeira vez.
+     *
+     * @param conquista Identificador da conquista.
+     */
     private void desbloquearConquista(String conquista) {
         ConquistaController conquistaController = new ConquistaController();
 

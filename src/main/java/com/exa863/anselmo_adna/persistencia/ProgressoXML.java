@@ -8,11 +8,22 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
-
+/**
+ * Responsável por salvar e carregar o progresso global do jogo em XML.
+ * Armazena os finais alcançados e as conquistas desbloqueadas pelo jogador.
+ *
+ * @author Anselmo e Adna
+ */
 public class ProgressoXML {
 
     private final String caminho = "progresso.xml";
-
+    /**
+     * Salva os finais alcançados e as conquistas desbloqueadas
+     * no arquivo de progresso global.
+     *
+     * @param progresso Progresso global atual do jogo.
+     * @throws FalhaSalvamentoException Caso ocorra erro ao salvar o arquivo.
+     */
     public void salvar(ProgressoGlobal progresso) throws FalhaSalvamentoException {
         Properties dados = new Properties();
 
@@ -28,7 +39,13 @@ public class ProgressoXML {
             throw new FalhaSalvamentoException("Erro ao salvar o progresso global.");
         }
     }
-
+    /**
+     * Carrega os finais e as conquistas salvas no arquivo de progresso.
+     * Caso o arquivo ainda não exista, mantém o progresso vazio.
+     *
+     * @param progresso Objeto que receberá os dados carregados.
+     * @throws FalhaCarregamentoException Caso ocorra erro ao carregar o arquivo.
+     */
     public void carregar(ProgressoGlobal progresso) throws FalhaCarregamentoException {
         File arquivo = new File(caminho);
 

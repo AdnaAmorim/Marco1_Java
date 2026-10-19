@@ -9,9 +9,19 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
-
+/**
+ * Responsável por salvar e carregar as configurações do jogo em XML.
+ * Mantém as preferências do jogador entre as execuções do programa.
+ *
+ * @author Anselmo e Adna
+ */
 public class ConfiguracaoXML {
-
+    /**
+     * Salva as configurações atuais do jogo no arquivo configuracao.xml.
+     *
+     * @param config Configurações atuais do jogo.
+     * @throws FalhaSalvamentoException Caso ocorra erro ao salvar o arquivo.
+     */
     public void salvar(Configuracao config) throws FalhaSalvamentoException {
         Properties dados = new Properties();
 
@@ -25,7 +35,14 @@ public class ConfiguracaoXML {
             throw new FalhaSalvamentoException("Erro ao salvar as configurações.");
         }
     }
-
+    /**
+     * Carrega as configurações salvas no arquivo configuracao.xml.
+     * Caso o arquivo ainda não exista, mantém os valores padrão.
+     *
+     * @param config Objeto que receberá as configurações carregadas.
+     * @throws FalhaCarregamentoException Caso ocorra erro ao carregar o arquivo.
+     * @throws DadosInvalidosException Caso algum valor salvo seja inválido.
+     */
     public void carregar(Configuracao config)
             throws FalhaCarregamentoException, DadosInvalidosException {
 

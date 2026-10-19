@@ -4,12 +4,24 @@ import com.exa863.anselmo_adna.exception.FalhaSalvamentoException;
 import com.exa863.anselmo_adna.persistencia.Configuracao;
 import com.exa863.anselmo_adna.persistencia.ConfiguracaoXML;
 import java.io.IOException;
-
+/**
+ * Menu responsável pelas configurações do jogo.
+ * Permite ativar ou desativar o salvamento automático, as animações de combate
+ * e as cutscenes, mantendo as preferências salvas entre as execuções.
+ *
+ * @author Anselmo e Adna
+ */
 public class MenuConfiguracao {
 
     private final Console console;
     private final Configuracao config;
-
+    /**
+     * Cria o menu de configurações utilizando o console
+     * e as configurações atuais do jogo.
+     *
+     * @param console Console utilizado para exibir e receber as escolhas.
+     * @param config Configurações atuais do jogo.
+     */
     public MenuConfiguracao(Console console, Configuracao config) {
         this.console = console;
         this.config = config;

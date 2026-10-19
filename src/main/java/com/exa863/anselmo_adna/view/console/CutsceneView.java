@@ -89,6 +89,7 @@ public class CutsceneView implements View {
         }
     }
 
+
     private void imprimirCabecalho() {
         String titulo = cutsceneController.getCapitulo().getTitulo().toUpperCase();
         console.printlnConsole("╔══════════════════════════════════════════════════════════════════════╗");
@@ -201,6 +202,9 @@ public class CutsceneView implements View {
         console.printlnConsole("");
     }
 
+    /**
+     * Verifica as conquistas que podem ser obtidas durante as cutscenes.
+     */
     private void verificarConquistas() {
         Player player = cutsceneController.getPlayer();
 
@@ -216,7 +220,11 @@ public class CutsceneView implements View {
             desbloquearConquista(Conquistas.INVESTIGADOR);
         }
     }
-
+    /**
+     * Tenta desbloquear uma conquista e exibe uma mensagem caso ela seja obtida pela primeira vez.
+     *
+     * @param conquista Identificador da conquista.
+     */
     private void desbloquearConquista(String conquista) {
         ConquistaController conquistaController = new ConquistaController();
 
@@ -237,7 +245,11 @@ public class CutsceneView implements View {
         }
     }
 
-
+    /**
+     * Verifica se a opção de pular cutscenes está ativada.
+     *
+     * @return true se as cutscenes devem ser puladas ou false caso contrário.
+     */
     private boolean pularCutsceneHabilitada() {
 
         Configuracao config = new Configuracao();

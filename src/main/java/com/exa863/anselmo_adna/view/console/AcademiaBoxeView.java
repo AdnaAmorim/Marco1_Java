@@ -294,7 +294,12 @@ public class AcademiaBoxeView implements View {
         sceneController.trocarCena(new MatchView(console, sceneController, gameController, match,
                 lutadorPlayer, lutadorOponente, destinoRetorno, callbackPosLuta));
     }
-
+    /**
+     * Tenta desbloquear uma conquista e exibe uma mensagem
+     * caso ela seja obtida pela primeira vez.
+     *
+     * @param conquista Identificador da conquista.
+     */
     private void desbloquearConquista(String conquista) {
         ConquistaController conquistaController = new ConquistaController();
 

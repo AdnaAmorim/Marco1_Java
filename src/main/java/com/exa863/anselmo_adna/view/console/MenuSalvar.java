@@ -5,9 +5,17 @@ import com.exa863.anselmo_adna.exception.FalhaSalvamentoException;
 import com.exa863.anselmo_adna.model.GameState;
 
 import java.io.IOException;
-
+/**
+ * Menu responsável pelo salvamento manual da partida.
+ * Permite escolher um slot, sobrescrever saves existentes e excluir saves salvos.
+ *
+ * @author Anselmo e Adna
+ */
 public class MenuSalvar {
-
+    /**
+     * Exibe o menu de salvamento e permite ao jogador
+     * escolher entre salvar, excluir um save ou voltar.
+     */
     private final Console console;
     private final SaveGameController saveGameController;
     private final GameState gameState;
@@ -78,7 +86,12 @@ public class MenuSalvar {
         }
     }
 
-
+    /**
+     * Verifica se um slot está ocupado ou vazio.
+     *
+     * @param slotId Número do slot que será verificado.
+     * @return OCUPADO se existir um save ou VAZIO caso contrário.
+     */
     private String statusSlot(int slotId) {
 
         if (saveGameController.existe(slotId)) {
@@ -88,7 +101,13 @@ public class MenuSalvar {
         return "VAZIO";
     }
 
-
+    /**
+     * Salva o estado atual do jogo no slot escolhido.
+     * Caso o slot esteja ocupado, solicita confirmação antes de sobrescrever.
+     *
+     * @param slotId Número do slot escolhido.
+     * @throws IOException Caso ocorra erro durante a leitura da confirmação.
+     */
     private void salvarNoSlot(int slotId) throws IOException {
 
         if (saveGameController.existe(slotId)) {
@@ -118,7 +137,13 @@ public class MenuSalvar {
         console.esperarEnter("");
     }
 
-
+    /**
+     * Solicita confirmação antes de substituir um save existente.
+     *
+     * @param slotId Número do slot que será sobrescrito.
+     * @return true se o jogador confirmar ou false caso cancele.
+     * @throws IOException Caso ocorra erro durante a leitura da escolha.
+     */
     private boolean confirmarSobrescrita(int slotId) throws IOException {
 
         console.clearConsole();
@@ -212,7 +237,13 @@ public class MenuSalvar {
         console.esperarEnter("");
     }
 
-
+    /**
+     * Solicita confirmação antes de excluir permanentemente um save.
+     *
+     * @param slotId Número do slot que será excluído.
+     * @return true se o jogador confirmar ou false caso cancele.
+     * @throws IOException Caso ocorra erro durante a leitura da escolha.
+     */
     private boolean confirmarExclusao(int slotId) throws IOException {
 
         console.clearConsole();
