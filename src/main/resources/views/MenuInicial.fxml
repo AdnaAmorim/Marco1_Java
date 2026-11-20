@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.media.MediaView?>
+
+<StackPane fx:id="rootPane" minHeight="0.0" minWidth="0.0" prefHeight="540.0" prefWidth="960.0" styleClass="menu-fundo" stylesheets="@../styles/MenuInicial.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.exa863.anselmo_adna.controller.fx.MenuInicialController">
+   <children>
+      <MediaView fx:id="bgMediaView" managed="false" preserveRatio="true" smooth="true" />
+      <Region mouseTransparent="true" styleClass="menu-vinheta" />
+      <GridPane>
+         <columnConstraints>
+            <ColumnConstraints halignment="CENTER" percentWidth="100.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints percentHeight="45.0" valignment="CENTER" />
+            <RowConstraints percentHeight="55.0" valignment="CENTER" />
+         </rowConstraints>
+         <children>
+            <StackPane fx:id="logoContainer" maxHeight="-Infinity" maxWidth="-Infinity" scaleX="${rootPane.height / 540.0}" scaleY="${rootPane.height / 540.0}" GridPane.rowIndex="0">
+               <children>
+                  <StackPane fx:id="logoPulse" maxHeight="-Infinity" maxWidth="-Infinity">
+                     <children>
+                        <Region mouseTransparent="true" styleClass="logo-aura" />
+                        <ImageView fx:id="imgLogo" fitHeight="225.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="true" smooth="false" styleClass="menu-logo">
+                           <image>
+                              <Image url="@../images/logo.png" />
+                           </image>
+                        </ImageView>
+                        <StackPane fx:id="shineLayer" mouseTransparent="true" />
+                     </children>
+                  </StackPane>
+               </children>
+            </StackPane>
+            <VBox fx:id="menuContainer" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" scaleX="${rootPane.height / 540.0}" scaleY="${rootPane.height / 540.0}" styleClass="menu-container" GridPane.rowIndex="1">
+               <children>
+                  <Button fx:id="btnContinuar" focusTraversable="false" mnemonicParsing="false" styleClass="botao-jogo, botao-menu" text="CONTINUAR" />
+                  <Button fx:id="btnNovoJogo" focusTraversable="false" mnemonicParsing="false" styleClass="botao-jogo, botao-menu" text="JOGAR (INICIAR CARREIRA)" />
+                  <Button fx:id="btnCarregar" focusTraversable="false" mnemonicParsing="false" onAction="#abrirSaves" styleClass="botao-jogo, botao-menu" text="CARREGAR PARTIDA" />
+                  <Button fx:id="btnTutorial" focusTraversable="false" mnemonicParsing="false" onAction="#abrirTutorial" styleClass="botao-jogo, botao-menu" text="TUTORIAL" />
+                  <Button fx:id="btnOpcoes" focusTraversable="false" mnemonicParsing="false" onAction="#abrirConfiguracoes" styleClass="botao-jogo, botao-menu" text="CONFIGURAÇÕES" />
+                  <Button fx:id="btnCreditos" focusTraversable="false" mnemonicParsing="false" onAction="#abrirCreditos" styleClass="botao-jogo, botao-menu" text="CRÉDITOS" />
+                  <Button fx:id="btnSair" focusTraversable="false" mnemonicParsing="false" onAction="#sairJogo" styleClass="botao-jogo, botao-menu" text="SAIR" />
+               </children>
+            </VBox>
+         </children>
+      </GridPane>
+   </children>
+</StackPane>

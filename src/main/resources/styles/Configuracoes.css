@@ -1,0 +1,106 @@
+.config-card {
+    -fx-padding: 22 30 18 30;
+    -fx-spacing: 12;
+    -fx-pref-width: 600px;
+}
+
+.config-subtitulo {
+    -fx-font-size: 16px;
+    -fx-text-fill: -cor-texto-suave;
+}
+
+.config-lista {
+    -fx-spacing: 10;
+    -fx-pref-width: 530px;
+    -fx-padding: 6 0 4 0;
+}
+
+.config-linha {
+    -fx-background-color: -cor-painel;
+    -fx-border-color: rgba(250, 240, 220, 0.25);
+    -fx-border-width: 2px;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-padding: 8 14 8 14;
+}
+
+.config-label {
+    -fx-font-size: 18px;
+    -fx-text-fill: -cor-texto;
+}
+
+.toggle-botao {
+    -fx-background-color: rgba(230, 57, 70, 0.18);
+    -fx-border-color: -cor-perigo;
+    -fx-border-width: 2px;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-font-size: 16px;
+    -fx-text-fill: -cor-perigo;
+    -fx-min-width: 82px;
+    -fx-padding: 4 12 4 12;
+    -fx-cursor: hand;
+}
+
+.toggle-botao:hover {
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+
+.toggle-ativo {
+    -fx-background-color: rgba(255, 209, 102, 0.2);
+    -fx-border-color: -cor-destaque;
+    -fx-text-fill: -cor-destaque;
+}
+
+.config-slider {
+    -fx-pref-width: 170px;
+    -fx-cursor: hand;
+}
+
+.config-slider .track {
+    -fx-background-color: rgba(250, 240, 220, 0.22);
+    -fx-border-color: rgba(255, 209, 102, 0.5);
+    -fx-border-width: 1px;
+    -fx-border-radius: 3px;
+    -fx-background-radius: 3px;
+    -fx-pref-height: 8px;
+}
+
+.config-slider .thumb {
+    -fx-background-color: -cor-destaque;
+    -fx-border-color: #000000;
+    -fx-border-width: 1.5px;
+    -fx-background-radius: 4px;
+    -fx-border-radius: 4px;
+    -fx-pref-width: 14px;
+    -fx-pref-height: 20px;
+}
+
+.config-slider .thumb:hover {
+    -fx-background-color: -cor-texto;
+}
+
+.config-valor {
+    -fx-font-size: 16px;
+    -fx-text-fill: -cor-destaque;
+    -fx-min-width: 56px;
+    -fx-alignment: center-right;
+    -fx-padding: 0 0 0 8;
+}
+
+.config-mensagem {
+    -fx-font-size: 14px;
+    -fx-text-fill: -cor-destaque;
+    -fx-min-height: 18px;
+}
+
+.config-acoes {
+    -fx-spacing: 28;
+    -fx-padding: 4 0 0 0;
+}
+
+.botao-config {
+    -fx-font-size: 22px;
+    -fx-padding: 2 10 2 10;
+}

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane fx:id="overlayPane" alignment="CENTER" styleClass="modal-overlay" stylesheets="@../styles/Creditos.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.exa863.anselmo_adna.controller.fx.CreditosController">
+   <children>
+      <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" scaleX="${overlayPane.height / 540.0}" scaleY="${overlayPane.height / 540.0}" spacing="4.0" styleClass="modal-card, creditos-card">
+         <children>
+            <Label styleClass="modal-titulo, titulo-creditos" text="CRÉDITOS" />
+            <Label styleClass="secao-creditos" text="DESENVOLVIMENTO &amp; AUTORIA" />
+            <Label styleClass="item-creditos" text="ANSELMO ANJOS" />
+            <Label styleClass="item-creditos" text="ADNA AMORIM" />
+            <Label styleClass="secao-creditos" text="DISCIPLINA &amp; PROJETO ACADÊMICO" />
+            <Label styleClass="item-creditos" text="2026.2 - EXA 863 - TP04 - MI - PROGRAMAÇÃO" />
+            <Label styleClass="secao-creditos" text="COMPONENTES &amp; BIBLIOTECAS" />
+            <Label styleClass="item-creditos" text="JAVAFX 21 - INTERFACE GRÁFICA" />
+            <Label styleClass="item-creditos" text="ASCIIBOX - MOLDURAS EM ASCII" />
+            <Label styleClass="item-creditos" text="JGRAPHT - GRAFO DE NARRATIVA" />
+            <Label styleClass="item-creditos" text="JACKSON XML &amp; JUNIT 5" />
+            <Button fx:id="btnVoltar" focusTraversable="false" mnemonicParsing="false" onAction="#voltarMenuInicial" styleClass="botao-jogo, botao-voltar" text="VOLTAR AO MENU" />
+         </children>
+      </VBox>
+   </children>
+</StackPane>
+
