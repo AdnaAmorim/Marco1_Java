@@ -74,9 +74,17 @@ public class MatchNarratorController {
             int eventosNoRound = 2 + random.nextInt(3);
 
             for (int j = 0; j < eventosNoRound; j++) {
-                boolean vencedorAje = random.nextDouble() < CHANCE_VENCEDOR_SER_ATOR;
-                Lutador ator = vencedorAje ? vencedor : perdedor;
-                Lutador alvo = vencedorAje ? perdedor : vencedor;
+                Lutador ator;
+                Lutador alvo;
+                if (resultado.isEmpate()) {
+                    boolean lutador1Ataca = random.nextBoolean();
+                    ator = lutador1Ataca ? resultado.getLutador1() : resultado.getLutador2();
+                    alvo = lutador1Ataca ? resultado.getLutador2() : resultado.getLutador1();
+                } else {
+                    boolean vencedorAje = random.nextDouble() < CHANCE_VENCEDOR_SER_ATOR;
+                    ator = vencedorAje ? vencedor : perdedor;
+                    alvo = vencedorAje ? perdedor : vencedor;
+                }
 
                 AtributosEfetivos eff = ator.getAtributosEfetivos();
 

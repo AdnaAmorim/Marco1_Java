@@ -1,0 +1,26 @@
+.creditos-card {
+    -fx-padding: 22 36 22 36;
+    -fx-max-width: 680px;
+}
+
+.titulo-creditos {
+    -fx-font-size: 36px;
+}
+
+.secao-creditos {
+    -fx-font-size: 20px;
+    -fx-text-fill: -cor-perigo;
+    -fx-padding: 8 0 0 0;
+    -fx-effect: dropshadow(one-pass-box, rgba(0, 0, 0, 0.85), 2, 0.7, 1, 1);
+}
+
+.item-creditos {
+    -fx-font-size: 17px;
+    -fx-text-fill: -cor-texto;
+    -fx-effect: dropshadow(one-pass-box, rgba(0, 0, 0, 0.75), 2, 0.5, 1, 1);
+}
+
+.botao-voltar {
+    -fx-font-size: 26px;
+    -fx-padding: 8 16 2 16;
+}

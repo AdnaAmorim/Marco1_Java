@@ -11,13 +11,15 @@ import java.io.IOException;
 
 /**
  * Abstração do terminal do jogo.
- * Centraliza todas as operações de leitura, escrita, limpeza de tela, controle de cursor e delays de animação.
+ * Centraliza todas as operações de leitura, escrita, limpeza de tela, controle
+ * de cursor e delays de animação.
  *
  * @author Anselmo e Adna
  */
 public class Console {
 
-    // MODO DEV: quando true, anula todos os delays de animação e digitação, imprimindo instantaneamente
+    // MODO DEV: quando true, anula todos os delays de animação e digitação,
+    // imprimindo instantaneamente
     public static boolean MODO_DEV = false;
 
     private final Terminal terminal;
@@ -41,8 +43,7 @@ public class Console {
         } catch (IOException e) {
             throw new IllegalStateException(
                     "Não foi possível inicializar o terminal.",
-                    e
-            );
+                    e);
         }
     }
 
@@ -157,7 +158,10 @@ public class Console {
         limparBufferTeclado();
         printConsole(mensagem);
         while (!enterPressionado()) {
-            try { Thread.sleep(50); } catch (Exception e) {}
+            try {
+                Thread.sleep(50);
+            } catch (Exception e) {
+            }
         }
         printConsole("\r" + " ".repeat(mensagem.length() + 10) + "\r");
     }
@@ -189,7 +193,10 @@ public class Console {
             int pad = maxLen - (frame != null ? frame.length() : 0);
             printConsole("\r" + frame + (pad > 0 ? " ".repeat(pad) : ""));
             frameIndex = (frameIndex + 1) % frames.length;
-            try { Thread.sleep(intervaloMs); } catch (InterruptedException ignored) {}
+            try {
+                Thread.sleep(intervaloMs);
+            } catch (InterruptedException ignored) {
+            }
         }
         setCursorVisivel();
     }
@@ -211,7 +218,10 @@ public class Console {
             int pad = maxLen - (frame != null ? frame.length() : 0);
             printConsole("\r" + frame + (pad > 0 ? " ".repeat(pad) : "") + sufixo);
             frameIndex = (frameIndex + 1) % frames.length;
-            try { Thread.sleep(intervaloMs); } catch (InterruptedException ignored) {}
+            try {
+                Thread.sleep(intervaloMs);
+            } catch (InterruptedException ignored) {
+            }
         }
         setCursorVisivel();
     }
@@ -226,9 +236,15 @@ public class Console {
         for (String bloco : blocos) {
             for (char ch : bloco.toCharArray()) {
                 printConsole(String.valueOf(ch));
-                try { Thread.sleep(intervaloLetraMs); } catch (Exception e) {}
+                try {
+                    Thread.sleep(intervaloLetraMs);
+                } catch (Exception e) {
+                }
             }
-            try { Thread.sleep(intervaloBlocoMs); } catch (Exception e) {}
+            try {
+                Thread.sleep(intervaloBlocoMs);
+            } catch (Exception e) {
+            }
         }
     }
 
@@ -248,7 +264,8 @@ public class Console {
                 } else {
                     Thread.sleep(delayMs);
                 }
-            } catch (InterruptedException ignored) {}
+            } catch (InterruptedException ignored) {
+            }
         }
         printlnConsole("");
     }

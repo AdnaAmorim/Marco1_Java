@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane fx:id="overlayPane" alignment="CENTER" styleClass="modal-overlay" stylesheets="@../styles/Configuracoes.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.exa863.anselmo_adna.controller.fx.ConfiguracoesController">
+   <children>
+      <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" scaleX="${overlayPane.height / 540.0}" scaleY="${overlayPane.height / 540.0}" styleClass="modal-card, config-card">
+         <children>
+            <Label styleClass="modal-titulo" text="CONFIGURAÇÕES" />
+            <Label styleClass="config-subtitulo" text="PERSONALIZE SUA EXPERIÊNCIA DE JOGO" />
+
+            <VBox styleClass="config-lista">
+               <children>
+                  <HBox alignment="CENTER_LEFT" styleClass="config-linha">
+                     <children>
+                        <Label fx:id="lblAutoSave" styleClass="config-label" text="SAVE AUTOMÁTICO" />
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Button fx:id="btnAutoSave" focusTraversable="false" mnemonicParsing="false" onAction="#alternarAutoSave" styleClass="toggle-botao" text="SIM" />
+                     </children>
+                  </HBox>
+
+                  <HBox alignment="CENTER_LEFT" styleClass="config-linha">
+                     <children>
+                        <Label fx:id="lblPularCombate" styleClass="config-label" text="PULAR ANIMAÇÃO DE COMBATE" />
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Button fx:id="btnPularCombate" focusTraversable="false" mnemonicParsing="false" onAction="#alternarPularCombate" styleClass="toggle-botao" text="NÃO" />
+                     </children>
+                  </HBox>
+
+                  <HBox alignment="CENTER_LEFT" styleClass="config-linha">
+                     <children>
+                        <Label fx:id="lblPularCutscene" styleClass="config-label" text="PULAR CUTSCENES" />
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Button fx:id="btnPularCutscene" focusTraversable="false" mnemonicParsing="false" onAction="#alternarPularCutscene" styleClass="toggle-botao" text="NÃO" />
+                     </children>
+                  </HBox>
+
+                  <HBox alignment="CENTER_LEFT" styleClass="config-linha">
+                     <children>
+                        <Label fx:id="lblMusica" styleClass="config-label" text="VOLUME DA MÚSICA" />
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Slider fx:id="sliderVolumeMusica" blockIncrement="10.0" focusTraversable="false" majorTickUnit="10.0" max="100.0" min="0.0" minorTickCount="0" snapToTicks="true" styleClass="config-slider" value="80.0" />
+                        <Label fx:id="lblVolumeMusica" styleClass="config-valor" text="80%" />
+                     </children>
+                  </HBox>
+
+                  <HBox alignment="CENTER_LEFT" styleClass="config-linha">
+                     <children>
+                        <Label fx:id="lblEfeitos" styleClass="config-label" text="VOLUME DOS EFEITOS" />
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Slider fx:id="sliderVolumeEfeitos" blockIncrement="10.0" focusTraversable="false" majorTickUnit="10.0" max="100.0" min="0.0" minorTickCount="0" snapToTicks="true" styleClass="config-slider" value="60.0" />
+                        <Label fx:id="lblVolumeEfeitos" styleClass="config-valor" text="60%" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+
+            <Label fx:id="lblMensagem" styleClass="config-mensagem" text="" />
+
+            <HBox alignment="CENTER" styleClass="config-acoes">
+               <children>
+                  <Button fx:id="btnSalvar" focusTraversable="false" mnemonicParsing="false" onAction="#salvarEVoltar" styleClass="botao-jogo, botao-config" text="SALVAR E VOLTAR" />
+                  <Button fx:id="btnCancelar" focusTraversable="false" mnemonicParsing="false" onAction="#cancelar" styleClass="botao-perigo, botao-config" text="CANCELAR" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</StackPane>

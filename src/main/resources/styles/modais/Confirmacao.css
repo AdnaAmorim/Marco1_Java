@@ -1,0 +1,27 @@
+.confirmacao-card {
+    -fx-padding: 24 34 20 34;
+    -fx-spacing: 10;
+    -fx-pref-width: 520px;
+}
+
+.confirmacao-texto {
+    -fx-font-size: 18px;
+    -fx-text-fill: -cor-texto;
+    -fx-text-alignment: center;
+}
+
+.confirmacao-aviso {
+    -fx-font-size: 14px;
+    -fx-text-fill: -cor-texto-suave;
+    -fx-text-alignment: center;
+}
+
+.confirmacao-acoes {
+    -fx-spacing: 36;
+    -fx-padding: 10 0 0 0;
+}
+
+.botao-confirmacao {
+    -fx-font-size: 24px;
+    -fx-padding: 2 14 2 14;
+}

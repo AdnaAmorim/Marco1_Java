@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane fx:id="overlayPane" alignment="CENTER" styleClass="modal-overlay" stylesheets="@../../styles/modais/Confirmacao.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.exa863.anselmo_adna.controller.fx.modais.ConfirmacaoController">
+   <children>
+      <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" scaleX="${overlayPane.height / 540.0}" scaleY="${overlayPane.height / 540.0}" styleClass="modal-card, confirmacao-card">
+         <children>
+            <Label fx:id="lblTitulo" styleClass="modal-titulo" text="CONFIRMAÇÃO" wrapText="true" />
+            <Label fx:id="lblMensagem" styleClass="confirmacao-texto" text="" wrapText="true" />
+            <Label fx:id="lblAviso" styleClass="confirmacao-aviso" text="" wrapText="true" />
+
+            <HBox alignment="CENTER" styleClass="confirmacao-acoes">
+               <children>
+                  <Button fx:id="btnConfirmar" focusTraversable="false" mnemonicParsing="false" onAction="#confirmar" styleClass="botao-perigo, botao-confirmacao" text="CONFIRMAR" />
+                  <Button fx:id="btnCancelar" focusTraversable="false" mnemonicParsing="false" onAction="#cancelar" styleClass="botao-jogo, botao-confirmacao" text="CANCELAR" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</StackPane>

@@ -12,4 +12,8 @@ public class Configuracao {
     public boolean pularAnimacaoCombate = false;
 
     public boolean pularCutscene = false;
+
+    public int volumeMusica = 80;
+
+    public int volumeEfeitos = 60;
 }

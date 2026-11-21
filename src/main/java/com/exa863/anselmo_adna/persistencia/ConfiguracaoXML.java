@@ -28,6 +28,8 @@ public class ConfiguracaoXML {
         dados.setProperty("autoSave", String.valueOf(config.autoSave));
         dados.setProperty("pularAnimacaoCombate", String.valueOf(config.pularAnimacaoCombate));
         dados.setProperty("pularCutscene", String.valueOf(config.pularCutscene));
+        dados.setProperty("volumeMusica", String.valueOf(config.volumeMusica));
+        dados.setProperty("volumeEfeitos", String.valueOf(config.volumeEfeitos));
 
         try (FileOutputStream arquivo = new FileOutputStream("configuracao.xml")) {
             dados.storeToXML(arquivo, "Configuracoes do jogo");
@@ -63,10 +65,26 @@ public class ConfiguracaoXML {
         String autoSave = dados.getProperty("autoSave", "true");
         String pularAnimacao = dados.getProperty("pularAnimacaoCombate", "false");
         String pularCutscene = dados.getProperty("pularCutscene", "false");
+        String volumeMusica = dados.getProperty("volumeMusica", "80");
+        String volumeEfeitos = dados.getProperty("volumeEfeitos", "60");
 
         config.autoSave = lerBoolean(autoSave, "autoSave");
         config.pularAnimacaoCombate = lerBoolean(pularAnimacao, "pularAnimacaoCombate");
         config.pularCutscene = lerBoolean(pularCutscene, "pularCutscene");
+        config.volumeMusica = lerVolume(volumeMusica, "volumeMusica");
+        config.volumeEfeitos = lerVolume(volumeEfeitos, "volumeEfeitos");
+    }
+
+    private int lerVolume(String valor, String nome) throws DadosInvalidosException {
+        try {
+            int numero = Integer.parseInt(valor);
+            if (numero < 0 || numero > 100) {
+                throw new DadosInvalidosException("Valor inválido na configuração: " + nome);
+            }
+            return numero;
+        } catch (NumberFormatException e) {
+            throw new DadosInvalidosException("Valor inválido na configuração: " + nome);
+        }
     }
 
     private boolean lerBoolean(String valor, String nome)
