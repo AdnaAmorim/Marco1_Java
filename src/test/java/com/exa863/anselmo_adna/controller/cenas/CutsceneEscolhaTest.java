@@ -21,10 +21,23 @@ class CutsceneEscolhaTest {
         Dialogo escolha = controller.getDialogos().stream()
                 .filter(Dialogo::isEscolha).findFirst().orElseThrow();
         assertFalse(p.getInventario().temItem(Itens.LUVA_DO_PAI));
-        controller.processarEscolha(escolha, 0);
+        var avisos = controller.processarEscolha(escolha, 0);
+        assertEquals(1, avisos.size());
+        assertTrue(avisos.getFirst().getTexto().contains(Itens.LUVA_DO_PAI.getNome()));
         assertTrue(p.getInventario().temItem(Itens.LUVA_DO_PAI));
         assertEquals(1, gameState.getInteracoes().size());
         controller.finalizarCapitulo();
         assertTrue(p.isCapituloConcluido(Capitulo01.ID));
+    }
+
+    @Test
+    void recusarLuvasNaoExibeAvisoDeItem() {
+        var estado = new GameState();
+        estado.setPlayer(new Player(1, "Maria", "Teste", Cores.VERDE, Sexo.FEMININO));
+        var controller = new CutsceneController(new Capitulo01(), estado);
+        Dialogo escolha = controller.getDialogos().stream()
+                .filter(Dialogo::isEscolha).findFirst().orElseThrow();
+        assertTrue(controller.processarEscolha(escolha, 1).isEmpty());
+        assertFalse(estado.getPlayer().getInventario().temItem(Itens.LUVA_DO_PAI));
     }
 }

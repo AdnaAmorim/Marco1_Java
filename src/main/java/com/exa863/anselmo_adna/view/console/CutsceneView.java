@@ -140,7 +140,9 @@ public class CutsceneView implements View {
             Player player = cutsceneController.getPlayer();
             Map<Integer, Integer> afinidadesAntes = capturarAfinidades(player);
 
-            cutsceneController.processarEscolha(escolhaDialogo, selecionada.index);
+            for (Dialogo aviso : cutsceneController.processarEscolha(escolhaDialogo, selecionada.index)) {
+                console.printlnConsole(aviso.getTexto());
+            }
 
             exibirVariacoesDeReputacao(player, afinidadesAntes);
 

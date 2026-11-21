@@ -4,8 +4,13 @@ import com.exa863.anselmo_adna.model.character.Player;
 import com.exa863.anselmo_adna.model.GameState;
 import com.exa863.anselmo_adna.model.narrativa.Capitulo;
 import com.exa863.anselmo_adna.model.narrativa.Dialogo;
+import com.exa863.anselmo_adna.model.narrativa.DialogoNarrativo;
+import com.exa863.anselmo_adna.model.stats.Item;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Controla a exibição dos diálogos e escolhas de um capítulo.
@@ -39,10 +44,21 @@ public class CutsceneController {
         return capitulo.getDialogos(getPlayer());
     }
 
-    public void processarEscolha(Dialogo dialogo, int indiceOpcao) {
+    public List<Dialogo> processarEscolha(Dialogo dialogo, int indiceOpcao) {
         Dialogo.Opcao opcao = dialogo.getOpcoes().get(indiceOpcao);
+        Map<Item, Integer> itens = getPlayer().getInventario().getItens();
+        Map<Item, Integer> antes = new HashMap<>(itens);
         opcao.executarAcao(getPlayer());
         gameState.registrarInteracao(capitulo.getId(), dialogo.getTexto(), indiceOpcao, opcao.getTexto());
+        List<Dialogo> avisos = new ArrayList<>();
+        itens.forEach((item, quantidade) -> {
+            int ganho = quantidade - antes.getOrDefault(item, 0);
+            if (ganho > 0) {
+                avisos.add(DialogoNarrativo.sistema("Você recebeu: " + item.getNome()
+                        + (ganho > 1 ? " ×" + ganho : "") + ". Confira no inventário."));
+            }
+        });
+        return avisos;
     }
 
     public void finalizarCapitulo() {

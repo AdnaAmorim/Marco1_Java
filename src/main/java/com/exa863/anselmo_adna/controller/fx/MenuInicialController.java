@@ -154,8 +154,17 @@ public class MenuInicialController {
             return;
         }
 
-        Media media = new Media(recurso.toExternalForm());
-        mediaPlayer = new MediaPlayer(media);
+        Media media;
+        try {
+            media = new Media(recurso.toExternalForm());
+            mediaPlayer = new MediaPlayer(media);
+        } catch (javafx.scene.media.MediaException e) {
+            return;
+        }
+        bgMediaView.setVisible(false);
+        mediaPlayer.setOnPlaying(() -> bgMediaView.setVisible(true));
+        mediaPlayer.setOnError(() -> bgMediaView.setVisible(false));
+        media.setOnError(() -> bgMediaView.setVisible(false));
         mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
         mediaPlayer.setMute(true);
         mediaPlayer.setVolume(0.0);

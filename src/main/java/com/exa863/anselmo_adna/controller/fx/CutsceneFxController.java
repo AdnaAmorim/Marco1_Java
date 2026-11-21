@@ -244,9 +244,10 @@ public class CutsceneFxController {
         if (etapa != Etapa.CAPITULO || indiceDialogo >= dialogos.size()
                 || dialogos.get(indiceDialogo) != dialogo) return;
         Dialogo.Opcao opcao = dialogo.getOpcoes().get(indiceOpcao);
-        capituloController.processarEscolha(dialogo, indiceOpcao);
+        List<Dialogo> avisos = capituloController.processarEscolha(dialogo, indiceOpcao);
         // As falas de consequência aparecem antes da próxima fala normal.
         dialogos.addAll(indiceDialogo + 1, opcao.getDesfecho());
+        dialogos.addAll(indiceDialogo + 1, avisos);
         AudioManager.tocar(Som.CONFIRMAR);
         indiceDialogo++;
         mostrarDialogo();
