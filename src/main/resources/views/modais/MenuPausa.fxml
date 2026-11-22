@@ -9,8 +9,8 @@
            fx:controller="com.exa863.anselmo_adna.controller.fx.modais.MenuPausaController">
     <children>
         <ScrollPane fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED"
-                    prefWidth="510" prefHeight="455" minHeight="0" maxWidth="540"
-                    maxHeight="455" styleClass="pausa-scroll">
+                    prefWidth="510" prefHeight="520" minHeight="0" maxWidth="540"
+                    maxHeight="520" styleClass="pausa-scroll">
             <content>
         <VBox alignment="CENTER" spacing="17" maxWidth="500" prefWidth="470"
               styleClass="pausa-card">
@@ -23,6 +23,8 @@
                     <children>
                         <Button fx:id="btnContinuar" text="CONTINUAR" maxWidth="1.7976931348623157E308"
                                 onAction="#continuar" styleClass="pausa-botao, pausa-primario" />
+                        <Button fx:id="btnSalvar" text="SALVAR / SAVES" maxWidth="1.7976931348623157E308"
+                                onAction="#abrirSaves" styleClass="pausa-botao" />
                         <Button fx:id="btnConfiguracoes" text="CONFIGURAÇÕES" maxWidth="1.7976931348623157E308"
                                 onAction="#abrirConfiguracoes" styleClass="pausa-botao" />
                         <Button fx:id="btnVoltarMenu" text="VOLTAR AO MENU" maxWidth="1.7976931348623157E308"

@@ -67,9 +67,10 @@ public class Capitulo08 extends Capitulo {
         }
 
         if (player.isCapituloConcluido("FLAG_ALEXANDRA")) {
+            Personagem alexandra = new Personagem(8, "Alexandra Cruz", "Repórter investigativa implacável.", Cores.VERDE, Sexo.FEMININO);
             opcoes.add(Dialogo.opcao("Procurar provas com Alexandra", p -> p.concluirCapitulo("INVESTIGACAO_COMPLETA"), List.of(
                     new Dialogo(player, "(Ligando apressadamente) 'Alexandra! Noor acabou de mandar uma mensagem ameaçadora me extorquindo. Podemos usar esse rastreio contra ele?'"),
-                    DialogoNarrativo.sistema("[Alexandra]: 'Isso é ouro puro! Faça o backup disso agora! Suba lá e lute para valer, eu cuido de acionar a polícia e prender o lixo lá fora.'")
+                    new Dialogo(alexandra, "'Isso é ouro puro! Faça o backup disso agora! Suba lá e lute para valer, eu cuido de acionar a polícia e prender o lixo lá fora.'")
             )));
         }
 

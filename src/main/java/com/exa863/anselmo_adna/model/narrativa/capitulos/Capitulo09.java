@@ -79,7 +79,7 @@ public class Capitulo09 extends Capitulo {
             )));
         }
 
-        opcoes.add(Dialogo.opcao("Manter o foco apenas na carreira", p -> {}, List.of(
+        opcoes.add(Dialogo.opcao("Manter o foco apenas na carreira", p -> p.concluirCapitulo("FOCO_NA_CARREIRA"), List.of(
                 new Dialogo(player, "(Isolando-se na poltrona do fundo) 'Amanhã é o dia do julgamento. Não posso me distrair com sentimentos soltos agora. O cinturão é a única coisa que importa.'"),
                 DialogoNarrativo.narrador("Você fecha os olhos firmemente, visualizando obcecadamente a luta mortal contra Anthony repetidas vezes até adormecer exausto.")
         )));

@@ -1,7 +1,10 @@
 package com.exa863.anselmo_adna.controller.fx;
 
 import com.exa863.anselmo_adna.controller.GameController;
+import com.exa863.anselmo_adna.model.narrativa.Capitulo;
+import com.exa863.anselmo_adna.model.world.Local;
 import com.exa863.anselmo_adna.controller.fx.modais.ConfirmacaoController;
+import com.exa863.anselmo_adna.view.fx.LutaContexto;
 import com.exa863.anselmo_adna.view.fx.Som;
 import com.exa863.anselmo_adna.view.fx.Tela;
 import javafx.fxml.FXMLLoader;
@@ -32,6 +35,33 @@ public final class SceneManager {
     private static Node telaDesfocada;
     private static Effect efeitoAnterior;
     private static Runnable aoRetomarPausa;
+    // Contexto temporário: capítulos disparados pelo mapa usam o mesmo FXML do prólogo.
+    private static InicioCapitulo inicioCapituloPendente;
+
+    public record InicioCapitulo(Capitulo capitulo, Tela telaRetorno) { }
+
+    /** Entra no capítulo disponível para o local, respeitando dependências e requisitos. */
+    public static boolean iniciarCapituloSeDisponivel(Local local, Tela telaRetorno) {
+        if (local == null || gameController == null || gameController.getPlayer() == null) return false;
+        var disponivel = CapitulosNoMapa.localizar(gameController, local);
+        if (disponivel.isEmpty()) return false;
+        inicioCapituloPendente = new InicioCapitulo(disponivel.get(),
+                telaRetorno != null ? telaRetorno : Tela.MAPA);
+        try {
+            irPara(Tela.CUTSCENE);
+            return true;
+        } catch (RuntimeException e) {
+            inicioCapituloPendente = null;
+            throw e;
+        }
+    }
+
+    /** Consumido uma única vez durante o initialize da Cutscene.fxml. */
+    public static InicioCapitulo consumirInicioCapitulo() {
+        InicioCapitulo inicio = inicioCapituloPendente;
+        inicioCapituloPendente = null;
+        return inicio;
+    }
 
     private SceneManager() {
     }
@@ -75,6 +105,22 @@ public final class SceneManager {
         limparEstadoPausa();
         containerRaiz.getChildren().setAll(carregar(tela));
         AudioManager.tocarMusica(tela.getMusica());
+    }
+
+    public static void iniciarLuta(LutaContexto contexto) {
+        verificarInicializacao();
+        limparEstadoPausa();
+        FXMLLoader loader = criarLoader(Tela.LUTA);
+        try {
+            Parent raiz = loader.load();
+            AudioManager.aplicarHoverNosBotoes(raiz);
+            LutaController controller = loader.getController();
+            controller.iniciar(contexto);
+            containerRaiz.getChildren().setAll(raiz);
+            AudioManager.tocarMusica(Tela.LUTA.getMusica());
+        } catch (IOException e) {
+            throw new RuntimeException("Falha ao carregar a tela de luta.", e);
+        }
     }
 
     public static void abrirModal(Tela tela) {

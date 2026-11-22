@@ -6,30 +6,40 @@ import com.exa863.anselmo_adna.model.character.Player;
 import com.exa863.anselmo_adna.model.character.Sexo;
 import com.exa863.anselmo_adna.view.fx.Som;
 import com.exa863.anselmo_adna.view.fx.Tela;
+import javafx.animation.Interpolator;
+import javafx.animation.ParallelTransition;
+import javafx.animation.ScaleTransition;
+import javafx.animation.TranslateTransition;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.DoubleBinding;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.geometry.Rectangle2D;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 
 import java.net.URL;
 import java.util.EnumMap;
 import java.util.Map;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 
 /** Versão JavaFX da criação de personagem existente na interface de terminal. */
 public class CriacaoPersonagemController {
 
+    private static final double LARGURA_BASE = 1280.0;
+    private static final double ALTURA_BASE = 760.0;
+    private static final double ZOOM_HOVER = 3.1;
+    private static final double DESLOCAMENTO_ROSTO_Y = 345.0;
+
     @FXML private StackPane rootPane;
-    @FXML private StackPane centroConteudo;
-    @FXML private ScrollPane scrollConteudo;
-    @FXML private ImageView imgFundo;
+    @FXML private VBox conteudoContainer;
+    @FXML private StackPane palcoPreview;
     @FXML private TextField txtNome;
     @FXML private ComboBox<Cores> cmbOlhos;
     @FXML private VBox cardMasculino;
@@ -46,14 +56,12 @@ public class CriacaoPersonagemController {
     private final Map<Sexo, Map<Cores, Image>> imagens = new EnumMap<>(Sexo.class);
 
     private Sexo sexoSelecionado = Sexo.MASCULINO;
+    private ParallelTransition animacaoZoom;
 
     @FXML
     public void initialize() {
-        // Ocupa toda a área visível do ScrollPane e centraliza os dois painéis.
-        // Se a altura da janela for pequena, o conteúdo continua rolável.
-        scrollConteudo.viewportBoundsProperty().addListener((obs, antigo, atual) ->
-                centroConteudo.setMinHeight(atual.getHeight()));
-        configurarCenarioDeFundo();
+        configurarEscalaResponsiva();
+        configurarZoomPreview();
         cmbOlhos.setItems(FXCollections.observableArrayList(Cores.values()));
         cmbOlhos.getSelectionModel().select(Cores.CASTANHO);
         cmbOlhos.valueProperty().addListener((obs, antes, depois) -> atualizarPreview());
@@ -63,33 +71,49 @@ public class CriacaoPersonagemController {
         btnConfirmar.setDefaultButton(true);
     }
 
-    /** Imagem da academia já existente, cobrindo toda a janela sem distorcer. */
-    private void configurarCenarioDeFundo() {
-        URL recurso = getClass().getResource("/images/cutscenes/02_sonho_do_pai.png");
-        if (recurso == null) {
-            throw new IllegalStateException("Fundo da seleção de personagem não encontrado.");
+    private void configurarZoomPreview() {
+        if (palcoPreview == null || imgPersonagemPrincipal == null) {
+            return;
         }
-        imgFundo.setImage(new Image(recurso.toExternalForm(), false));
-        imgFundo.fitWidthProperty().bind(rootPane.widthProperty());
-        imgFundo.fitHeightProperty().bind(rootPane.heightProperty());
-        rootPane.widthProperty().addListener((obs, anterior, atual) -> ajustarFundo());
-        rootPane.heightProperty().addListener((obs, anterior, atual) -> ajustarFundo());
-        ajustarFundo();
+        Rectangle clip = new Rectangle();
+        clip.widthProperty().bind(palcoPreview.widthProperty());
+        clip.heightProperty().bind(palcoPreview.heightProperty());
+        palcoPreview.setClip(clip);
+
+        palcoPreview.hoverProperty().addListener((obs, antigo, hover) -> animarZoomPreview(hover));
     }
 
-    private void ajustarFundo() {
-        Image imagem = imgFundo.getImage();
-        if (imagem == null || rootPane.getWidth() <= 0 || rootPane.getHeight() <= 0) return;
-        double largura = imagem.getWidth();
-        double altura = imagem.getHeight();
-        double proporcaoTela = rootPane.getWidth() / rootPane.getHeight();
-        if (largura / altura > proporcaoTela) {
-            double larguraVisivel = altura * proporcaoTela;
-            imgFundo.setViewport(new Rectangle2D((largura - larguraVisivel) / 2, 0, larguraVisivel, altura));
-        } else {
-            double alturaVisivel = largura / proporcaoTela;
-            imgFundo.setViewport(new Rectangle2D(0, (altura - alturaVisivel) / 2, largura, alturaVisivel));
+    private void animarZoomPreview(boolean aproximar) {
+        if (animacaoZoom != null) {
+            animacaoZoom.stop();
         }
+        Duration duracao = Duration.millis(220);
+
+        ScaleTransition escala = new ScaleTransition(duracao, imgPersonagemPrincipal);
+        escala.setToX(aproximar ? ZOOM_HOVER : 1.0);
+        escala.setToY(aproximar ? ZOOM_HOVER : 1.0);
+        escala.setInterpolator(Interpolator.EASE_OUT);
+
+        TranslateTransition mover = new TranslateTransition(duracao, imgPersonagemPrincipal);
+        mover.setToY(aproximar ? DESLOCAMENTO_ROSTO_Y : 0.0);
+        mover.setInterpolator(Interpolator.EASE_OUT);
+
+        animacaoZoom = new ParallelTransition(escala, mover);
+        animacaoZoom.play();
+    }
+
+    private void configurarEscalaResponsiva() {
+        DoubleBinding escala = Bindings.createDoubleBinding(() -> {
+            double largura = rootPane.getWidth();
+            double altura = rootPane.getHeight();
+            if (largura <= 0 || altura <= 0) {
+                return 1.0;
+            }
+            return Math.min(largura / LARGURA_BASE, altura / ALTURA_BASE);
+        }, rootPane.widthProperty(), rootPane.heightProperty());
+
+        conteudoContainer.scaleXProperty().bind(escala);
+        conteudoContainer.scaleYProperty().bind(escala);
     }
 
     @FXML public void selecionarMasculino() { selecionarSexo(Sexo.MASCULINO); }

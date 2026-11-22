@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane fx:id="rootPane" minHeight="360" minWidth="640" prefHeight="540" prefWidth="960" styleClass="cutscene-fundo" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.exa863.anselmo_adna.controller.fx.LutaController">
+   <stylesheets>
+      <URL value="@../styles/Cutscene.css" />
+      <URL value="@../styles/Luta.css" />
+   </stylesheets>
+   <children>
+      <ImageView fx:id="imgCenario" mouseTransparent="true" preserveRatio="false" smooth="true" />
+      <Region mouseTransparent="true" styleClass="cutscene-filtro" />
+
+      <BorderPane pickOnBounds="false" styleClass="cutscene-layout">
+         <top>
+            <VBox spacing="10" styleClass="cutscene-cabecalho">
+               <children>
+                  <HBox alignment="CENTER_LEFT" spacing="13">
+                     <children>
+                        <Button fx:id="btnMenuPausa" focusTraversable="false" onAction="#abrirMenuPausa" styleClass="cutscene-menu, luta-menu-btn" text="PAUSA" />
+                        <Label fx:id="lblEvento" styleClass="cutscene-parte, luta-evento-titulo" text="GRANDE COMBATE" />
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Label fx:id="lblRound" styleClass="luta-round-badge" text="APRESENTAÇÃO" />
+                     </children>
+                  </HBox>
+
+                  <HBox alignment="CENTER" spacing="16" styleClass="luta-hud-versus">
+                     <children>
+                        <VBox alignment="CENTER_LEFT" spacing="4" styleClass="luta-hud-lado" HBox.hgrow="ALWAYS">
+                           <children>
+                              <HBox alignment="BASELINE_LEFT" spacing="10">
+                                 <children>
+                                    <Label fx:id="lblNome1" styleClass="luta-nome" text="ATLETA" />
+                                    <Label fx:id="lblEstilo1" styleClass="luta-estilo" text="[VELOCISTA]" />
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" spacing="8">
+                                 <children>
+                                    <Label fx:id="lblHp1" styleClass="luta-valor-hp" text="100 HP" />
+                                    <ProgressBar fx:id="barHp1" maxWidth="Infinity" progress="1.0" styleClass="luta-barra-hp" HBox.hgrow="ALWAYS" />
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" spacing="8">
+                                 <children>
+                                    <Label fx:id="lblSt1" styleClass="luta-valor-st" text="100 ST" />
+                                    <ProgressBar fx:id="barSt1" maxWidth="Infinity" progress="1.0" styleClass="luta-barra-st" HBox.hgrow="ALWAYS" />
+                                 </children>
+                              </HBox>
+                              <Label fx:id="lblAttr1" styleClass="luta-attr" text="FOR 0 | AGI 0 | RES 0" />
+                           </children>
+                        </VBox>
+
+                        <Label styleClass="luta-vs" text="VS" />
+
+                        <VBox alignment="CENTER_RIGHT" spacing="4" styleClass="luta-hud-lado" HBox.hgrow="ALWAYS">
+                           <children>
+                              <HBox alignment="BASELINE_RIGHT" spacing="10">
+                                 <children>
+                                    <Label fx:id="lblEstilo2" styleClass="luta-estilo" text="[NOCAUTEADOR]" />
+                                    <Label fx:id="lblNome2" styleClass="luta-nome" text="OPONENTE" />
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER_RIGHT" spacing="8">
+                                 <children>
+                                    <ProgressBar fx:id="barHp2" maxWidth="Infinity" progress="1.0" styleClass="luta-barra-hp" HBox.hgrow="ALWAYS" />
+                                    <Label fx:id="lblHp2" styleClass="luta-valor-hp" text="100 HP" />
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER_RIGHT" spacing="8">
+                                 <children>
+                                    <ProgressBar fx:id="barSt2" maxWidth="Infinity" progress="1.0" styleClass="luta-barra-st" HBox.hgrow="ALWAYS" />
+                                    <Label fx:id="lblSt2" styleClass="luta-valor-st" text="100 ST" />
+                                 </children>
+                              </HBox>
+                              <Label fx:id="lblAttr2" styleClass="luta-attr" text="FOR 0 | AGI 0 | RES 0" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </top>
+
+         <center>
+            <StackPane fx:id="palcoLuta" pickOnBounds="false" styleClass="luta-palco">
+               <children>
+                  <HBox alignment="BOTTOM_CENTER" pickOnBounds="false" styleClass="luta-lutadores" StackPane.alignment="BOTTOM_CENTER">
+                     <children>
+                        <ImageView fx:id="imgLutador1" fitHeight="260" mouseTransparent="true" preserveRatio="true" smooth="true" styleClass="luta-sprite-jogador" />
+                        <Region HBox.hgrow="ALWAYS" />
+                        <ImageView fx:id="imgLutador2" fitHeight="260" mouseTransparent="true" preserveRatio="true" smooth="true" styleClass="luta-sprite-oponente" />
+                     </children>
+                  </HBox>
+
+                  <ImageView fx:id="imgNarrador" fitHeight="260" mouseTransparent="true" preserveRatio="true" smooth="true" styleClass="luta-sprite-narrador" StackPane.alignment="BOTTOM_CENTER" />
+
+                  <Label fx:id="lblBannerCentral" managed="false" mouseTransparent="true" styleClass="luta-banner-central" text="FIGHT!" visible="false" StackPane.alignment="CENTER" />
+               </children>
+            </StackPane>
+         </center>
+
+         <bottom>
+            <VBox spacing="8" styleClass="cutscene-base">
+               <children>
+                  <VBox spacing="10" styleClass="cutscene-dialogo, luta-dialogo">
+                     <children>
+                        <Label fx:id="lblEmissor" styleClass="cutscene-emissor, luta-emissor" text="LOCUTOR" />
+                        <Label fx:id="lblTexto" maxWidth="1120" minHeight="70" styleClass="cutscene-texto, luta-texto" text="" wrapText="true" />
+                        <VBox fx:id="boxResumoResultado" managed="false" spacing="5" styleClass="luta-resumo" visible="false" />
+                     </children>
+                  </VBox>
+                  <HBox alignment="CENTER_LEFT" spacing="9">
+                     <children>
+                        <Label fx:id="lblAviso" styleClass="cutscene-ajuda, luta-aviso" text="ENTER OU CLIQUE PARA CONTINUAR" />
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Button fx:id="btnPular" focusTraversable="false" managed="false" onAction="#pular" styleClass="cutscene-pular, luta-pular" text="PULAR LUTA  »" visible="false" />
+                        <Button fx:id="btnAvancar" focusTraversable="false" onAction="#avancar" styleClass="cutscene-avancar, luta-avancar" text="CONTINUAR  →" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </bottom>
+      </BorderPane>
+   </children>
+</StackPane>

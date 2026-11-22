@@ -1,9 +1,5 @@
 .menu-fundo {
     -fx-background-color: -cor-fundo;
-    -fx-background-image: url("../images/cutscenes/02_sonho_do_pai.png");
-    -fx-background-size: cover;
-    -fx-background-position: center;
-    -fx-background-repeat: no-repeat;
 }
 
 .menu-vinheta {

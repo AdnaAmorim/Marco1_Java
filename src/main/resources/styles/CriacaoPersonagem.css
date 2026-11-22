@@ -1,11 +1,15 @@
-/* Seleção de personagem: cenário cinematográfico do próprio jogo + painéis maiores. */
-.criacao-fundo { -fx-background-color: #2c1b1b; }
+/* Seleção de personagem: cenário cinematográfico do próprio jogo + painéis responsivos. */
+.criacao-fundo {
+    -fx-background-color: #2c1b1b;
+    -fx-background-image: url("../images/cutscenes/02_sonho_do_pai.png");
+    -fx-background-size: cover;
+    -fx-background-position: center center;
+    -fx-background-repeat: no-repeat;
+}
 .criacao-vinheta {
     -fx-background-color: linear-gradient(to right, rgba(21,15,24,0.62), rgba(29,20,26,0.34) 48%, rgba(23,16,25,0.63));
 }
-.criacao-scroll, .criacao-scroll > .viewport { -fx-background-color: transparent; }
-.criacao-scroll { -fx-background: transparent; -fx-padding: 0; -fx-border-width: 0; }
-.criacao-conteudo { -fx-padding: 25 22 26 22; }
+.criacao-conteudo { -fx-padding: 18 22 18 22; }
 .criacao-titulo { -fx-font-size: 46px; -fx-text-fill: #ffe0a1; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, #08040a, 10, 0.85, 0, 3); }
 .criacao-subtitulo { -fx-font-size: 17px; -fx-text-fill: #fff2d4; -fx-effect: dropshadow(gaussian, #08040a, 6, 0.7, 0, 2); }
 .criacao-corpo { -fx-padding: 3 0; }
@@ -22,7 +26,7 @@
 .personagem-botao:hover { -fx-background-color: #c23e34; -fx-text-fill: white; }
 .criacao-ficha { -fx-padding: 12 18; -fx-background-color: rgba(18,25,40,0.92); -fx-border-color: #e8b96a; -fx-border-width: 2; -fx-border-radius: 10; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.60), 20, 0.2, 0, 8); }
 .criacao-ficha-titulo { -fx-font-size: 27px; -fx-font-weight: bold; -fx-text-fill: #ffdc91; }
-.criacao-palco { -fx-background-color: radial-gradient(center 50% 65%, radius 75%, rgba(169,80,42,0.32), rgba(32,25,36,0.04) 80%); }
+.criacao-palco { -fx-background-color: radial-gradient(center 50% 65%, radius 75%, rgba(169,80,42,0.32), rgba(32,25,36,0.04) 80%); -fx-cursor: hand; }
 .criacao-halo { -fx-background-color: radial-gradient(center 50% 60%, radius 60%, rgba(253,184,105,0.20), transparent 80%); }
 .criacao-nome { -fx-font-size: 27px; -fx-font-weight: bold; -fx-text-fill: #fff4d8; -fx-alignment: center; }
 .criacao-ficha-campo { -fx-text-fill: #aeb7c8; -fx-font-size: 16px; }

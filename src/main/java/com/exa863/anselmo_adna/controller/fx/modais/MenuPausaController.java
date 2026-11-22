@@ -15,12 +15,14 @@ public class MenuPausaController {
 
     @FXML private StackPane rootPane;
     @FXML private Button btnContinuar;
+    @FXML private Button btnSalvar;
     @FXML private Button btnConfiguracoes;
     @FXML private Button btnVoltarMenu;
 
     @FXML
     public void initialize() {
         IconManager.aplicarBotao(btnContinuar, Icone.PLAY, 20);
+        IconManager.aplicarBotao(btnSalvar, Icone.FLOPPY_DRIVE, 20);
         IconManager.aplicarBotao(btnConfiguracoes, Icone.GEAR, 20);
         IconManager.aplicarBotaoPerigo(btnVoltarMenu, Icone.HOME, 20);
         rootPane.setOnKeyPressed(event -> {
@@ -35,6 +37,11 @@ public class MenuPausaController {
     @FXML
     public void continuar() {
         SceneManager.fecharMenuPausa();
+    }
+
+    @FXML
+    public void abrirSaves() {
+        SceneManager.abrirModal(Tela.SAVES);
     }
 
     @FXML

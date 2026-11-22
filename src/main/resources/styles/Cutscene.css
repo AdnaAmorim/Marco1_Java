@@ -18,3 +18,9 @@
 .cutscene-avancar:disabled, .cutscene-pular:disabled { -fx-opacity: 0.38; }
 .cutscene-opcao { -fx-font-size: 16px; -fx-text-fill: #ffe7ca; -fx-padding: 8 13; -fx-background-color: rgba(27,40,60,0.97); -fx-border-color: rgba(255,209,102,0.45); -fx-cursor: hand; -fx-background-radius: 4; -fx-alignment: CENTER_LEFT; }
 .cutscene-opcao:hover { -fx-border-color: #ffd166; -fx-background-color: #6c3835; }
+
+/* Retratos originais enviados: fundo transparente, layout responsivo e destaque para quem fala. */
+.cutscene-personagens { -fx-padding: 0 34 105 34; -fx-spacing: 170; }
+.cutscene-personagens .image-view {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.75), 18, 0.55, 0, 6);
+}
