@@ -14,7 +14,7 @@ import java.util.Map;
  */
 public final class ItemImagem {
 
-    private static final String PASTA = "/images/Inventario_O_Legado_do_Ringue/";
+    private static final String PASTA = "/images/itens/";
     private static final Map<String, Image> CACHE = new HashMap<>();
 
     private ItemImagem() {
@@ -28,13 +28,13 @@ public final class ItemImagem {
             case "salada" -> "Salada.png";
             case "bife" -> "Bife.png";
             case "refrigerante" -> "Refrigerante.png";
-            case "barra de cereal" -> "Barra_de_Cereal.png";
+            case "barra de cereal" -> "Barra_De_Cereal.png";
             case "café expresso", "cafe expresso" -> "Cafe_Expresso.png";
             case "energético", "energetico" -> "Energetico.png";
             case "remédio", "remedio" -> "Remedio.png";
             case "vitaminas" -> "Vitaminas.png";
             case "contrato" -> "Contrato.png";
-            case "luva do pai" -> "Luva_de_Boxe.png";
+            case "luva do pai" -> "Luva_De_Boxe.png";
             default -> null;
         };
         if (arquivo == null) {
