@@ -35,6 +35,7 @@ import java.net.URL;
 public class MenuInicialController {
 
     private static final String VIDEO_FUNDO = "/videos/background.mp4";
+    private static final int MAX_TENTATIVAS_VIDEO = 3;
 
     @FXML private StackPane rootPane;
     @FXML private MediaView bgMediaView;
@@ -52,6 +53,7 @@ public class MenuInicialController {
     private MediaPlayer mediaPlayer;
     private SequentialTransition animacaoBrilho;
     private ScaleTransition animacaoPulso;
+    private boolean cenaAtiva = true;
 
     @FXML
     public void initialize() {
@@ -154,33 +156,12 @@ public class MenuInicialController {
             return;
         }
 
-        Media media;
-        try {
-            media = new Media(recurso.toExternalForm());
-            mediaPlayer = new MediaPlayer(media);
-        } catch (javafx.scene.media.MediaException e) {
-            return;
-        }
-        bgMediaView.setVisible(false);
-        mediaPlayer.setOnPlaying(() -> bgMediaView.setVisible(true));
-        mediaPlayer.setOnError(() -> bgMediaView.setVisible(false));
-        media.setOnError(() -> bgMediaView.setVisible(false));
-        mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-        mediaPlayer.setMute(true);
-        mediaPlayer.setVolume(0.0);
-        mediaPlayer.setAutoPlay(true);
-        bgMediaView.setMediaPlayer(mediaPlayer);
-
-        media.widthProperty().addListener((obs, oldVal, newVal) -> ajustarVideo());
-        media.heightProperty().addListener((obs, oldVal, newVal) -> ajustarVideo());
         rootPane.widthProperty().addListener((obs, oldVal, newVal) -> ajustarVideo());
         rootPane.heightProperty().addListener((obs, oldVal, newVal) -> ajustarVideo());
         rootPane.sceneProperty().addListener((obs, oldScene, newScene) -> {
             if (newScene == null) {
-                if (mediaPlayer != null) {
-                    mediaPlayer.stop();
-                    mediaPlayer.dispose();
-                }
+                cenaAtiva = false;
+                liberarMediaPlayer();
                 if (animacaoBrilho != null) {
                     animacaoBrilho.stop();
                 }
@@ -190,8 +171,70 @@ public class MenuInicialController {
             }
         });
 
-        mediaPlayer.setOnReady(() -> Platform.runLater(this::ajustarVideo));
-        mediaPlayer.play();
+        carregarVideo(recurso.toExternalForm(), 1);
+    }
+
+    private void carregarVideo(String urlVideo, int tentativa) {
+        if (!cenaAtiva) {
+            return;
+        }
+        liberarMediaPlayer();
+
+        Media media;
+        MediaPlayer player;
+        try {
+            media = new Media(urlVideo);
+            player = new MediaPlayer(media);
+        } catch (javafx.scene.media.MediaException e) {
+            reagendarVideo(urlVideo, tentativa, e);
+            return;
+        }
+
+        mediaPlayer = player;
+        player.setCycleCount(MediaPlayer.INDEFINITE);
+        player.setMute(true);
+        player.setVolume(0.0);
+        bgMediaView.setMediaPlayer(player);
+
+        media.widthProperty().addListener((obs, oldVal, newVal) -> ajustarVideo());
+        media.heightProperty().addListener((obs, oldVal, newVal) -> ajustarVideo());
+        media.setOnError(() -> reagendarVideo(urlVideo, tentativa, media.getError()));
+        player.setOnError(() -> reagendarVideo(urlVideo, tentativa, player.getError()));
+        player.setOnPlaying(() -> Platform.runLater(() -> {
+            bgMediaView.setVisible(true);
+            ajustarVideo();
+        }));
+        player.setOnReady(() -> Platform.runLater(() -> {
+            if (cenaAtiva && mediaPlayer == player) {
+                ajustarVideo();
+                player.play();
+            }
+        }));
+    }
+
+    private void reagendarVideo(String urlVideo, int tentativa, Throwable erro) {
+        if (!cenaAtiva) {
+            return;
+        }
+        if (tentativa < MAX_TENTATIVAS_VIDEO) {
+            PauseTransition retry = new PauseTransition(Duration.millis(250));
+            retry.setOnFinished(e -> carregarVideo(urlVideo, tentativa + 1));
+            retry.play();
+            return;
+        }
+        System.err.println("[VideoFundo] Falha após " + tentativa + " tentativas: " + erro);
+        bgMediaView.setVisible(false);
+    }
+
+    private void liberarMediaPlayer() {
+        if (mediaPlayer != null) {
+            mediaPlayer.setOnError(null);
+            mediaPlayer.setOnReady(null);
+            mediaPlayer.setOnPlaying(null);
+            mediaPlayer.stop();
+            mediaPlayer.dispose();
+            mediaPlayer = null;
+        }
     }
 
     private void ajustarVideo() {
