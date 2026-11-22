@@ -43,11 +43,11 @@ public class Capitulo01 extends Capitulo {
     @Override
     public List<Dialogo> getDialogos(Player player) {
         return List.of(
-                DialogoNarrativo.narrador("O cheiro de poeira e suor antigo ainda paira no ar do velho quarto."),
-                new Dialogo(player, "(Olhando para a velha caixa de papelão) 'Essas coisas estão aqui há anos...'"),
-                DialogoNarrativo.narrador("A luz do fim de tarde entra pela janela, iluminando recortes de jornais desbotados na parede."),
+                DialogoNarrativo.narrador("O cheiro de poeira e suor antigo ainda paira no ar do velho porão."),
+                new Dialogo(player, "(Olhando para o velho baú de madeira) 'Essas coisas estão aqui há anos...'"),
+                DialogoNarrativo.narrador("A luz do fim de tarde entra pela pequena janela do porão, revelando objetos cobertos de poeira."),
                 new Dialogo(player, "'Meu pai era o melhor... até que o ringue cobrou o preço final.'"),
-                DialogoNarrativo.narrador("Você afasta algumas roupas velhas e encontra algo de couro no fundo da caixa."),
+                DialogoNarrativo.narrador("Você afasta algumas roupas velhas e encontra algo de couro no fundo do baú."),
                 DialogoNarrativo.sistema("Você encontrou as Luvas do Pai. Elas estão gastas, mas carregam um peso enorme."),
                 new Dialogo(player, "(Passando o polegar sobre o couro rachado) 'Ele sempre dizia que o verdadeiro combate acontece na mente.'"),
 
@@ -68,7 +68,7 @@ public class Capitulo01 extends Capitulo {
                                         this::acaoNaoPegarLuvas,
                                         List.of(
                                                 new Dialogo(player, "'Ainda não estou pronto para carregar esse peso. Preciso do meu próprio caminho.'"),
-                                                DialogoNarrativo.narrador("Você fecha a caixa, deixando as luvas no escuro mais uma vez."),
+                                                DialogoNarrativo.narrador("Você fecha o baú, deixando as luvas no escuro mais uma vez."),
                                                 new Dialogo(player, "'Se eu for lutar, será por mim. Com as minhas próprias mãos.'")
                                         )
                                 )

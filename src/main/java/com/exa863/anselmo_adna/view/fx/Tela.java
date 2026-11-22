@@ -9,11 +9,14 @@ public enum Tela {
 
     SPLASH_SCREEN("SplashScreen"),
     MENU_INICIAL("MenuInicial", Musica.MENU),
+    CRIACAO_PERSONAGEM("CriacaoPersonagem", Musica.MENU),
+    CUTSCENE("Cutscene", Musica.CUTSCENE),
     SAVES("Saves"),
     TUTORIAL("Tutorial"),
     CONFIGURACOES("Configuracoes"),
     CREDITOS("Creditos"),
-    CONFIRMACAO("modais/Confirmacao");
+    CONFIRMACAO("modais/Confirmacao"),
+    MENU_PAUSA("modais/MenuPausa");
 
     private static final String PASTA_VIEWS = "/views/";
     private static final String EXTENSAO = ".fxml";

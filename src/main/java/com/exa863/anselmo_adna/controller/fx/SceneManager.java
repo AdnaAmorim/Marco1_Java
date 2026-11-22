@@ -6,6 +6,9 @@ import com.exa863.anselmo_adna.view.fx.Som;
 import com.exa863.anselmo_adna.view.fx.Tela;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Node;
+import javafx.scene.effect.Effect;
+import javafx.scene.effect.GaussianBlur;
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
@@ -25,6 +28,10 @@ public final class SceneManager {
     private static StackPane containerRaiz;
     private static GameController gameController;
     private static boolean confirmacaoSaidaAberta;
+    private static Parent menuPausa;
+    private static Node telaDesfocada;
+    private static Effect efeitoAnterior;
+    private static Runnable aoRetomarPausa;
 
     private SceneManager() {
     }
@@ -65,6 +72,7 @@ public final class SceneManager {
 
     public static void irPara(Tela tela) {
         verificarInicializacao();
+        limparEstadoPausa();
         containerRaiz.getChildren().setAll(carregar(tela));
         AudioManager.tocarMusica(tela.getMusica());
     }
@@ -73,6 +81,37 @@ public final class SceneManager {
         verificarInicializacao();
         AudioManager.tocar(Som.ABRIR_MODAL);
         containerRaiz.getChildren().add(carregar(tela));
+    }
+
+    /** Abre um menu de pausa sem trocar a cena, aplicando Blur apenas ao jogo atrás. */
+    public static boolean abrirMenuPausa(Runnable aoRetomar) {
+        verificarInicializacao();
+        if (menuPausa != null || containerRaiz.getChildren().size() != 1) return false;
+        Parent modal = carregar(Tela.MENU_PAUSA);
+        telaDesfocada = containerRaiz.getChildren().get(0);
+        efeitoAnterior = telaDesfocada.getEffect();
+        telaDesfocada.setEffect(new GaussianBlur(13));
+        aoRetomarPausa = aoRetomar;
+        menuPausa = modal;
+        AudioManager.tocar(Som.ABRIR_MODAL);
+        containerRaiz.getChildren().add(modal);
+        return true;
+    }
+
+    public static boolean pausaAtiva() {
+        return menuPausa != null;
+    }
+
+    /** Só fecha a pausa quando ela for o modal do topo (sem configurações abertas). */
+    public static void fecharMenuPausa() {
+        verificarInicializacao();
+        int total = containerRaiz.getChildren().size();
+        if (menuPausa == null || total <= 1 || containerRaiz.getChildren().get(total - 1) != menuPausa) return;
+        containerRaiz.getChildren().remove(menuPausa);
+        Runnable aoRetomar = aoRetomarPausa;
+        limparEstadoPausa();
+        AudioManager.tocar(Som.FECHAR_MODAL);
+        if (aoRetomar != null) aoRetomar.run();
     }
 
     public static void abrirConfirmacao(String titulo, String mensagem, Runnable aoConfirmar) {
@@ -117,12 +156,25 @@ public final class SceneManager {
         verificarInicializacao();
         int total = containerRaiz.getChildren().size();
         if (total > 1) {
+            Node modal = containerRaiz.getChildren().get(total - 1);
+            if (modal == menuPausa) {
+                fecharMenuPausa();
+                return;
+            }
             containerRaiz.getChildren().remove(total - 1);
             confirmacaoSaidaAberta = false;
             if (tocarSom) {
                 AudioManager.tocar(Som.FECHAR_MODAL);
             }
         }
+    }
+
+    private static void limparEstadoPausa() {
+        if (telaDesfocada != null) telaDesfocada.setEffect(efeitoAnterior);
+        telaDesfocada = null;
+        efeitoAnterior = null;
+        menuPausa = null;
+        aoRetomarPausa = null;
     }
 
     private static void verificarInicializacao() {

@@ -42,7 +42,7 @@
             <VBox fx:id="menuContainer" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" scaleX="${rootPane.height / 540.0}" scaleY="${rootPane.height / 540.0}" styleClass="menu-container" GridPane.rowIndex="1">
                <children>
                   <Button fx:id="btnContinuar" focusTraversable="false" mnemonicParsing="false" styleClass="botao-jogo, botao-menu" text="CONTINUAR" />
-                  <Button fx:id="btnNovoJogo" focusTraversable="false" mnemonicParsing="false" styleClass="botao-jogo, botao-menu" text="JOGAR (INICIAR CARREIRA)" />
+                  <Button fx:id="btnNovoJogo" focusTraversable="false" mnemonicParsing="false" onAction="#iniciarCarreira" styleClass="botao-jogo, botao-menu" text="JOGAR (INICIAR CARREIRA)" />
                   <Button fx:id="btnCarregar" focusTraversable="false" mnemonicParsing="false" onAction="#abrirSaves" styleClass="botao-jogo, botao-menu" text="CARREGAR PARTIDA" />
                   <Button fx:id="btnTutorial" focusTraversable="false" mnemonicParsing="false" onAction="#abrirTutorial" styleClass="botao-jogo, botao-menu" text="TUTORIAL" />
                   <Button fx:id="btnOpcoes" focusTraversable="false" mnemonicParsing="false" onAction="#abrirConfiguracoes" styleClass="botao-jogo, botao-menu" text="CONFIGURAÇÕES" />

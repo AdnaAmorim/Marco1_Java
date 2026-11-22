@@ -8,7 +8,8 @@ package com.exa863.anselmo_adna.view.fx;
 public enum Musica {
 
     INTRO("intro"),
-    MENU("background");
+    MENU("background"),
+    CUTSCENE("cutscene");
 
     private static final String PASTA_AUDIOS = "/audios/";
     private static final String EXTENSAO = ".mp3";
