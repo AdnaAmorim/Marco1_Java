@@ -121,7 +121,7 @@ public class MapaController {
             case 3 -> "CAPÍTULO 3 • VISITE A ACADEMIA DE BOXE.";
             case 4 -> player.getLutasLocais() >= 2
                     ? "CAPÍTULO 4 • RETORNE À ACADEMIA DE BOXE."
-                    : "CAPÍTULO 4 • FAÇA 2 LUTAS LOCAIS NA ACADEMIA DE BOXE ("
+                    : "CAPÍTULO 4 • VENÇA 2 LUTAS LOCAIS NA ACADEMIA DE BOXE ("
                       + player.getLutasLocais() + "/2).";
             case 5 -> "CAPÍTULO 5 • RETORNE À ACADEMIA DE BOXE.";
             case 6 -> player.getLutasEstaduais() >= 2
@@ -431,21 +431,16 @@ public class MapaController {
             case "academia_boxe" -> Tela.ACADEMIA_BOXE;
             case "clube_luta" -> Tela.CLUBE_DE_LUTA;
             case "loja" -> Tela.LOJA;
-            case "campeonato_mundial" -> Tela.MAPA; // O capítulo 10 é uma cutscene pré-combate.
+            case "campeonato_mundial" -> Tela.CAMPEONATO_MUNDIAL;
             default -> null;
         };
         if (telaDestino == null) {
             lblInfoLocal.setText("LOCAL SELECIONADO: " + local.getNome().toUpperCase());
             return;
         }
-        // Não entra em um local sem tela própria (Campeonato Mundial), salvo para iniciar a história.
         if ("campeonato_mundial".equals(localId)) {
-            if (SceneManager.iniciarCapituloSeDisponivel(local, Tela.MAPA)) return;
-            if (jogo.getPlayer().isCapituloConcluido("CAPITULO_10")) {
-                lblInfoLocal.setText(MundialFx.disputar(jogo.getPlayer(), areaMapa.getScene().getWindow()));
-                return;
-            }
-            lblInfoLocal.setText("O CAPÍTULO DO CAMPEONATO MUNDIAL AINDA NÃO ESTÁ DISPONÍVEL.");
+            if (SceneManager.iniciarCapituloSeDisponivel(local, Tela.CAMPEONATO_MUNDIAL)) return;
+            SceneManager.irPara(Tela.CAMPEONATO_MUNDIAL);
             return;
         }
         jogo.entrarLocal(local);

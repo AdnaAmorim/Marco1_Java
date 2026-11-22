@@ -1,5 +1,6 @@
 package com.exa863.anselmo_adna.controller.fx;
 
+import com.exa863.anselmo_adna.controller.GameController;
 import com.exa863.anselmo_adna.controller.MatchController;
 import com.exa863.anselmo_adna.exception.FalhaCarregamentoException;
 import com.exa863.anselmo_adna.exception.FalhaSalvamentoException;
@@ -10,15 +11,11 @@ import com.exa863.anselmo_adna.model.stats.Atributo;
 import com.exa863.anselmo_adna.persistencia.*;
 import com.exa863.anselmo_adna.view.fx.LutaContexto;
 import com.exa863.anselmo_adna.view.fx.Tela;
-import javafx.scene.control.ChoiceDialog;
-import javafx.stage.Window;
 import java.util.ArrayList;
 import java.util.List;
 
 final class MundialFx {
     static final String EVENTO = "Campeonato Mundial";
-    private static final int TAXA = 3000;
-    private static final int PREMIO = 15000;
 
     enum Final {
         DERROTA("01", "FINAL_1_ALMA_VENDIDA_DERROTA", "A alma vendida", "Você cumpriu o acordo e caiu na lona. As organizações por trás das apostas não perdoaram sua covardia."),
@@ -43,39 +40,23 @@ final class MundialFx {
         return venceu ? Final.CAMPEAO : Final.LEGADO;
     }
 
-    static String disputar(Player player, Window janela) {
-        if (player.getDinheiro() < TAXA) return "A inscrição no Mundial custa R$ 3000.";
-        if (player.getAtributos().getSaude() < 70 || player.getAtributos().getEnergia() < 70)
-            return "Você precisa de pelo menos 70 de saúde e energia para disputar o Mundial.";
-        var escolha = new ChoiceDialog<>("Velocista", "Velocista", "Nocauteador", "Contragolpeador");
-        escolha.initOwner(janela);
-        escolha.setTitle(EVENTO);
-        escolha.setHeaderText("Anthony • Inscrição R$ 3000 • Prêmio R$ 15000");
-        escolha.setContentText("Sua postura");
-        var postura = escolha.showAndWait();
-        if (postura.isEmpty()) return "Inscrição cancelada.";
-        EstiloLuta estilo = switch (postura.get()) {
-            case "Nocauteador" -> new Nocauteador();
-            case "Contragolpeador" -> new Contragolpeador();
-            default -> new Velocista();
-        };
+    static void iniciarCombate(Player player, EstiloLuta estilo) {
         var desafiante = new Lutador(player, player.getAtributos(), estilo);
         var anthony = new Personagem(6, "Anthony", "O Trovão", Cores.CASTANHO, Sexo.MASCULINO);
         var campeao = new Lutador(anthony, new Atributo(100, 10, 9, 8, 8, 100), new Nocauteador());
         var match = new MatchController().executarPartida(desafiante, campeao);
-        player.setDinheiro(player.getDinheiro() - TAXA);
+        player.setDinheiro(player.getDinheiro() - GameController.TAXA_MUNDIAL);
         SceneManager.iniciarLuta(new LutaContexto(EVENTO, "/images/locais/Campeonato_Mundial.png",
                 "/images/visual_novel/Anthony.png", LutaContexto.NARRADOR_PROFISSIONAL,
                 desafiante, campeao, match, Tela.MENU_INICIAL,
                 resultado -> registrar(player, desfecho(player, resultado.isVencedor(desafiante)))));
-        return "";
     }
 
     private static List<String> registrar(Player player, Final fim) {
         List<String> linhas = new ArrayList<>();
         if (fim == Final.CAMPEAO) {
-            player.setDinheiro(player.getDinheiro() + PREMIO);
-            linhas.add("+Prêmio do Mundial: R$ 15000");
+            player.setDinheiro(player.getDinheiro() + GameController.PREMIO_MUNDIAL);
+            linhas.add("+Prêmio do Mundial: R$ " + GameController.PREMIO_MUNDIAL);
         }
         if ((fim == Final.CAMPEAO || fim == Final.LEGADO) && player.isCapituloConcluido("INVESTIGACAO_COMPLETA"))
             linhas.add("A reportagem de Alexandra Cruz levou à prisão de Victor Noor.");

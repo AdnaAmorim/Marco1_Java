@@ -18,6 +18,7 @@ public enum Tela {
     CLUBE_DE_LUTA("ClubeDeLuta", Musica.MENU),
     LOJA("Loja", Musica.MENU),
     ACADEMIA_VENDA("AcademiaVenda", Musica.MENU),
+    CAMPEONATO_MUNDIAL("CampeonatoMundial", Musica.CUTSCENE),
     LUTA("Luta", Musica.CUTSCENE),
     INVENTARIO("Inventario"),
     CONQUISTAS("Conquistas"),

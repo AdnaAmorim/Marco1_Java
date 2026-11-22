@@ -262,7 +262,7 @@ public class AcademiaBoxeView implements View {
                     desbloquearConquista(Conquistas.NOME_NACIONAL);
                 }
 
-            } else if (tipoCampeonato == 0) {
+            } else if (tipoCampeonato == 0 && resultado.isVencedor(lutadorPlayer)) {
                 player.registrarLutaLocal();
             }
 

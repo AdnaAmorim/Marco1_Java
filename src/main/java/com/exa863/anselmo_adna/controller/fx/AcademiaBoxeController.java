@@ -466,7 +466,7 @@ public class AcademiaBoxeController {
                                 && tentarDesbloquear(Conquistas.NOME_NACIONAL)) {
                             resumo.add("+CONQUISTA DESBLOQUEADA: " + Conquistas.getNome(Conquistas.NOME_NACIONAL));
                         }
-                    } else {
+                    } else if (resultado.isVencedor(lutadorPlayer)) {
                         player.registrarLutaLocal();
                     }
 

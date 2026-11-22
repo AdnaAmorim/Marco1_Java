@@ -78,8 +78,8 @@ public class CampeonatoMundialView implements View {
                 + String.format("%-3d", attr.getEnergia()) + "/100  |  Dinheiro: " + player.getDinheiro() + " Reais" + " ".repeat(15) + "│");
         console.printlnConsole("  └────────────────────────────────────────────────────────────────────┘\n");
 
-        int taxa = 3000;
-        int premio = 15000;
+        int taxa = GameController.TAXA_MUNDIAL;
+        int premio = GameController.PREMIO_MUNDIAL;
 
         CEscolha[] opcoes = new CEscolha[] {
                 new CEscolha("Disputar o Cinturão Mundial (Taxa: " + taxa + " Reais | Prêmio: " + premio + ")", 0),
@@ -103,8 +103,9 @@ public class CampeonatoMundialView implements View {
                 return;
             }
 
-            if (attr.getSaude() < 70 || attr.getEnergia() < 70) {
-                console.printlnConsole("\n  [!] A comissão barrou você! Para lutar no mundial, precisa de pelo menos 70 de Saúde e Energia.");
+            if (attr.getSaude() < GameController.MIN_STATUS_MUNDIAL || attr.getEnergia() < GameController.MIN_STATUS_MUNDIAL) {
+                console.printlnConsole("\n  [!] A comissão barrou você! Para lutar no mundial, precisa de pelo menos "
+                        + GameController.MIN_STATUS_MUNDIAL + " de Saúde e Energia.");
                 console.esperarEnter("       [ ENTER ] Voltar");
                 sceneController.trocarCena(this);
                 return;

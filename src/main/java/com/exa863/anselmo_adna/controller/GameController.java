@@ -20,6 +20,10 @@ import java.util.Objects;
  */
 public class GameController {
 
+    public static final int TAXA_MUNDIAL = 3000;
+    public static final int PREMIO_MUNDIAL = 15000;
+    public static final int MIN_STATUS_MUNDIAL = 70;
+
     private GameState gameState;
     private NarrativaController narrativaController;
 
