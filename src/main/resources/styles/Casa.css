@@ -1,0 +1,251 @@
+.casa-root {
+    -fx-background-color: -cor-fundo;
+}
+
+.casa-cortina-sono {
+    -fx-background-color: #05070d;
+}
+
+.vn-dock {
+    -fx-padding: 0 22 18 22;
+    -fx-spacing: 14;
+    -fx-max-width: 1120px;
+}
+
+.vn-dialogo-card {
+    -fx-background-color: rgba(12, 16, 28, 0.90);
+    -fx-border-color: -cor-destaque;
+    -fx-border-width: 2.5px;
+    -fx-border-radius: 7px;
+    -fx-background-radius: 7px;
+    -fx-padding: 14 18 14 18;
+    -fx-spacing: 10;
+    -fx-min-height: 170px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.85), 16, 0.45, 0, 4);
+}
+
+.vn-topo {
+    -fx-spacing: 12;
+}
+
+.vn-badge {
+    -fx-background-color: rgba(255, 209, 102, 0.16);
+    -fx-border-color: -cor-destaque;
+    -fx-border-width: 1.5px;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-padding: 3 10 3 10;
+    -fx-font-size: 16px;
+    -fx-text-fill: -cor-destaque;
+}
+
+.vn-treinos {
+    -fx-font-size: 15px;
+    -fx-text-fill: -cor-texto-suave;
+}
+
+.vn-texto {
+    -fx-font-size: 18px;
+    -fx-text-fill: -cor-texto;
+    -fx-line-spacing: 3px;
+}
+
+.vn-detalhes {
+    -fx-spacing: 5;
+    -fx-padding: 6 0 0 0;
+}
+
+.vn-linha-positiva {
+    -fx-font-size: 16px;
+    -fx-text-fill: #9BF09B;
+}
+
+.vn-linha-alerta {
+    -fx-font-size: 16px;
+    -fx-text-fill: #FF7B85;
+}
+
+.vn-linha-info {
+    -fx-font-size: 15px;
+    -fx-text-fill: -cor-texto-suave;
+}
+
+.vn-stat-grid {
+    -fx-spacing: 6;
+}
+
+.vn-stat-linha {
+    -fx-spacing: 14;
+    -fx-alignment: center-left;
+}
+
+.vn-stat-nome {
+    -fx-font-size: 16px;
+    -fx-text-fill: -cor-destaque;
+    -fx-min-width: 145px;
+}
+
+.vn-stat-valor {
+    -fx-font-size: 16px;
+    -fx-text-fill: -cor-texto;
+}
+
+.vn-opcoes-card {
+    -fx-background-color: rgba(12, 16, 28, 0.92);
+    -fx-border-color: rgba(255, 209, 102, 0.75);
+    -fx-border-width: 2.5px;
+    -fx-border-radius: 7px;
+    -fx-background-radius: 7px;
+    -fx-padding: 10 12 10 12;
+    -fx-spacing: 7;
+    -fx-min-width: 340px;
+    -fx-max-width: 360px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.85), 16, 0.45, 0, 4);
+}
+
+.vn-opcao {
+    -fx-background-color: rgba(24, 32, 52, 0.82);
+    -fx-border-color: rgba(255, 209, 102, 0.45);
+    -fx-border-width: 1.5px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-padding: 8 12 8 12;
+    -fx-alignment: center-left;
+    -fx-font-size: 16px;
+    -fx-text-fill: -cor-texto;
+    -fx-cursor: hand;
+}
+
+.vn-opcao:hover {
+    -fx-background-color: rgba(255, 209, 102, 0.18);
+    -fx-border-color: -cor-destaque;
+    -fx-text-fill: -cor-destaque;
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
+}
+
+.vn-opcao:pressed {
+    -fx-scale-x: 0.98;
+    -fx-scale-y: 0.98;
+}
+
+.vn-opcao-sair {
+    -fx-border-color: rgba(230, 57, 70, 0.55);
+}
+
+.vn-opcao-sair:hover {
+    -fx-background-color: rgba(230, 57, 70, 0.18);
+    -fx-border-color: -cor-perigo;
+    -fx-text-fill: #FF7B85;
+}
+
+.clube-card-adversario {
+    -fx-background-color: rgba(12, 16, 28, 0.90);
+    -fx-border-color: -cor-perigo;
+    -fx-border-width: 2.5px;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-padding: 14 20 14 14;
+    -fx-spacing: 18;
+    -fx-translate-y: -85px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.88), 22, 0.5, 0, 6);
+}
+
+.clube-retrato-moldura {
+    -fx-background-color: radial-gradient(center 50% 45%, radius 65%, rgba(230, 57, 70, 0.22), rgba(8, 11, 20, 0.95));
+    -fx-border-color: rgba(255, 209, 102, 0.65);
+    -fx-border-width: 2px;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-padding: 4;
+    -fx-min-width: 164px;
+    -fx-min-height: 178px;
+    -fx-max-width: 164px;
+    -fx-max-height: 178px;
+}
+
+.clube-info-adversario {
+    -fx-spacing: 7;
+}
+
+.clube-tag-adversario {
+    -fx-font-size: 13px;
+    -fx-text-fill: #FF7B85;
+}
+
+.clube-nome-adversario {
+    -fx-font-size: 26px;
+    -fx-text-fill: -cor-texto;
+    -fx-effect: dropshadow(one-pass-box, rgba(0, 0, 0, 0.85), 2, 0.7, 1, 1);
+}
+
+.clube-estilo-adversario {
+    -fx-font-size: 16px;
+    -fx-text-fill: -cor-destaque;
+}
+
+.clube-stats-linha {
+    -fx-spacing: 8;
+    -fx-padding: 4 0 2 0;
+}
+
+.clube-stat-pill {
+    -fx-background-color: rgba(24, 32, 52, 0.88);
+    -fx-border-color: rgba(250, 240, 220, 0.28);
+    -fx-border-width: 1.5px;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-padding: 4 9 4 9;
+    -fx-font-size: 15px;
+    -fx-text-fill: -cor-texto;
+}
+
+.clube-premio-adversario {
+    -fx-font-size: 17px;
+    -fx-text-fill: #9BF09B;
+    -fx-padding: 2 0 0 0;
+}
+
+.postura-linha {
+    -fx-spacing: 8;
+    -fx-alignment: center-left;
+    -fx-padding: 4 8 4 8;
+    -fx-background-color: rgba(20, 27, 45, 0.72);
+    -fx-border-color: rgba(255, 209, 102, 0.22);
+    -fx-border-width: 1px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+}
+
+.postura-linha-ativa {
+    -fx-background-color: rgba(255, 209, 102, 0.12);
+    -fx-border-color: -cor-destaque;
+}
+
+.postura-nome {
+    -fx-font-size: 15px;
+    -fx-text-fill: -cor-destaque;
+    -fx-min-width: 168px;
+}
+
+.postura-tag-pos {
+    -fx-background-color: rgba(155, 240, 155, 0.14);
+    -fx-border-color: rgba(155, 240, 155, 0.55);
+    -fx-border-width: 1px;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-padding: 2 7 2 7;
+    -fx-font-size: 13px;
+    -fx-text-fill: #9BF09B;
+}
+
+.postura-tag-neg {
+    -fx-background-color: rgba(230, 57, 70, 0.16);
+    -fx-border-color: rgba(230, 57, 70, 0.65);
+    -fx-border-width: 1px;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-padding: 2 7 2 7;
+    -fx-font-size: 13px;
+    -fx-text-fill: #FF7B85;
+}

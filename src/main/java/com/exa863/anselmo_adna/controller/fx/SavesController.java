@@ -9,6 +9,7 @@ import com.exa863.anselmo_adna.model.GameState;
 import com.exa863.anselmo_adna.model.save.SaveGame;
 import com.exa863.anselmo_adna.view.fx.Icone;
 import com.exa863.anselmo_adna.view.fx.Som;
+import com.exa863.anselmo_adna.view.fx.Tela;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -76,9 +77,8 @@ public class SavesController {
         }
 
         SceneManager.getGameController().carregarGameState(save.getGameState());
-        atualizarBotoes();
         AudioManager.tocar(Som.CONFIRMAR);
-        mostrarMensagem("PARTIDA CARREGADA: " + save.getGameState().getPlayer().getNome().toUpperCase() + ".");
+        SceneManager.irPara(Tela.MAPA);
     }
 
     @FXML

@@ -1,6 +1,8 @@
 package com.exa863.anselmo_adna.controller.fx;
 
+import com.exa863.anselmo_adna.controller.SaveGameController;
 import com.exa863.anselmo_adna.view.fx.Icone;
+import com.exa863.anselmo_adna.view.fx.Som;
 import com.exa863.anselmo_adna.view.fx.Tela;
 import javafx.animation.Animation;
 import javafx.animation.Interpolator;
@@ -45,6 +47,7 @@ public class MenuInicialController {
     @FXML private Button btnContinuar;
     @FXML private Button btnNovoJogo;
     @FXML private Button btnCarregar;
+    @FXML private Button btnConquistas;
     @FXML private Button btnTutorial;
     @FXML private Button btnOpcoes;
     @FXML private Button btnCreditos;
@@ -63,18 +66,27 @@ public class MenuInicialController {
         rootPane.setClip(clip);
 
         configurarIcones();
+        atualizarBotaoContinuar();
         iniciarVideoFundo();
         iniciarBrilhoLogo();
         iniciarPulsoLogo();
+    }
+
+    private void atualizarBotaoContinuar() {
+        if (btnContinuar != null) {
+            boolean temSave = new SaveGameController().carregarMaisRecente() != null;
+            btnContinuar.setDisable(!temSave);
+        }
     }
 
     private void configurarIcones() {
         IconManager.aplicarBotao(btnContinuar, Icone.PLAY, 16);
         IconManager.aplicarBotao(btnNovoJogo, Icone.GAME_CONTROLLER, 18);
         IconManager.aplicarBotao(btnCarregar, Icone.FLOPPY_DRIVE, 17);
+        IconManager.aplicarBotao(btnConquistas, Icone.STAR, 17);
         IconManager.aplicarBotao(btnTutorial, Icone.QUESTION_MARK, 17);
         IconManager.aplicarBotao(btnOpcoes, Icone.GEAR, 17);
-        IconManager.aplicarBotao(btnCreditos, Icone.STAR, 17);
+        IconManager.aplicarBotao(btnCreditos, Icone.INFO, 17);
         IconManager.aplicarBotao(btnSair, Icone.EXIT, 17);
     }
 
@@ -259,6 +271,19 @@ public class MenuInicialController {
     }
 
     @FXML
+    public void continuarCarreira() {
+        SaveGameController.SaveRecente recente = new SaveGameController().carregarMaisRecente();
+        if (recente == null || recente.save() == null || recente.save().getGameState() == null) {
+            AudioManager.tocar(Som.ERRO);
+            atualizarBotaoContinuar();
+            return;
+        }
+        SceneManager.getGameController().carregarGameState(recente.save().getGameState());
+        AudioManager.tocar(Som.CONFIRMAR);
+        SceneManager.irPara(Tela.MAPA);
+    }
+
+    @FXML
     public void iniciarCarreira() {
         SceneManager.irPara(Tela.CRIACAO_PERSONAGEM);
     }
@@ -266,6 +291,11 @@ public class MenuInicialController {
     @FXML
     public void abrirSaves() {
         SceneManager.abrirModal(Tela.SAVES);
+    }
+
+    @FXML
+    public void abrirConquistas() {
+        SceneManager.abrirModal(Tela.CONQUISTAS);
     }
 
     @FXML

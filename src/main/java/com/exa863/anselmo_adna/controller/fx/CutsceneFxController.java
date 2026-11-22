@@ -277,15 +277,14 @@ public class CutsceneFxController {
         lblTitulo.setText(titulo);
         lblProgresso.setText(capituloConcluido ? "DEMONSTRAÇÃO JAVA FX" : "FIM DO PRÓLOGO");
         lblEmissor.setText("SISTEMA");
-        lblTexto.setText(aviso + "\n\nA tela do mapa ainda não foi migrada para JavaFX. " +
-                "Você pode voltar ao menu e gerenciar seus saves.");
-        lblAviso.setText("FIM DA DEMONSTRAÇÃO DAS CENAS");
+        lblTexto.setText(aviso + "\n\nAgora você pode explorar a Cidade Natal no mapa.");
+        lblAviso.setText("ENTER OU CLIQUE PARA IR AO MAPA");
         caixaOpcoes.getChildren().clear();
         caixaOpcoes.setVisible(false);
         caixaOpcoes.setManaged(false);
         btnPular.setDisable(true);
         btnAvancar.setDisable(false);
-        btnAvancar.setText("VOLTAR AO MENU  →");
+        btnAvancar.setText("IR PARA O MAPA  →");
     }
 
     @FXML
@@ -301,7 +300,7 @@ public class CutsceneFxController {
                 indiceDialogo++;
                 mostrarDialogo();
             }
-            case CONCLUIDA -> SceneManager.irPara(Tela.MENU_INICIAL);
+            case CONCLUIDA -> SceneManager.irPara(Tela.MAPA);
         }
     }
 

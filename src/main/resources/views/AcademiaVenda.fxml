@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane fx:id="rootPane" minHeight="0.0" minWidth="0.0" prefHeight="540.0" prefWidth="960.0" styleClass="casa-root" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.exa863.anselmo_adna.controller.fx.AcademiaVendaController">
+   <stylesheets>
+      <URL value="@../styles/Mapa.css" />
+      <URL value="@../styles/Casa.css" />
+   </stylesheets>
+   <children>
+      <BorderPane>
+         <top>
+            <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" styleClass="mapa-hud">
+               <children>
+                  <Label fx:id="lblAtleta" styleClass="hud-nome" text="ATLETA" />
+                  <Label fx:id="lblSaude" styleClass="hud-stat, hud-saude" text="100/100" />
+                  <Label fx:id="lblEnergia" styleClass="hud-stat, hud-energia" text="100/100" />
+                  <Label fx:id="lblDinheiro" styleClass="hud-stat, hud-dinheiro" text="R$ 0" />
+                  <Region HBox.hgrow="ALWAYS" />
+                  <Label fx:id="lblDataHora" styleClass="hud-data" text="DIA 1 • 06:00" />
+                  <Button fx:id="btnPausa" focusTraversable="false" mnemonicParsing="false" onAction="#abrirPausa" styleClass="hud-botao" text="" />
+               </children>
+            </HBox>
+         </top>
+
+         <center>
+            <StackPane fx:id="areaCenario" minHeight="0.0" minWidth="0.0" styleClass="mapa-area">
+               <children>
+                  <ImageView fx:id="imgFundoBlur" managed="false" mouseTransparent="true" preserveRatio="false" smooth="true" visible="false" />
+                  <Region fx:id="blurEscuro" mouseTransparent="true" styleClass="mapa-blur-escuro" visible="false" />
+
+                  <Pane fx:id="cenarioCanvas" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" styleClass="mapa-canvas">
+                     <children>
+                        <ImageView fx:id="imgFundo" fitHeight="540.0" fitWidth="960.0" pickOnBounds="true" preserveRatio="false" smooth="true" />
+                     </children>
+                  </Pane>
+
+                  <HBox alignment="BOTTOM_CENTER" maxHeight="-Infinity" pickOnBounds="false" styleClass="vn-dock" StackPane.alignment="BOTTOM_CENTER">
+                     <children>
+                        <VBox styleClass="vn-dialogo-card" HBox.hgrow="ALWAYS">
+                           <children>
+                              <HBox alignment="CENTER_LEFT" styleClass="vn-topo">
+                                 <children>
+                                    <Label styleClass="vn-badge" text="PROJETO • ABRIR UMA ACADEMIA" />
+                                    <Region HBox.hgrow="ALWAYS" />
+                                    <Label fx:id="lblCapital" styleClass="vn-treinos" text="CAPITAL: R$ 0 / R$ 5.000" />
+                                 </children>
+                              </HBox>
+                              <Label styleClass="vn-texto" text="CONSTRUIR SUA PRÓPRIA ACADEMIA DE BOXE PROFISSIONAL NA CIDADE B É O SEU MAIOR SONHO COMO ATLETA E MESTRE!" wrapText="true" />
+                              <VBox fx:id="boxDetalhes" styleClass="vn-detalhes" />
+                           </children>
+                        </VBox>
+
+                        <VBox fx:id="boxOpcoes" alignment="CENTER" styleClass="vn-opcoes-card" />
+                     </children>
+                  </HBox>
+               </children>
+            </StackPane>
+         </center>
+      </BorderPane>
+   </children>
+</StackPane>

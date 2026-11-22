@@ -2,6 +2,7 @@ package com.exa863.anselmo_adna.controller.fx;
 
 import com.exa863.anselmo_adna.controller.GameController;
 import com.exa863.anselmo_adna.controller.fx.modais.ConfirmacaoController;
+import com.exa863.anselmo_adna.view.fx.LutaContexto;
 import com.exa863.anselmo_adna.view.fx.Som;
 import com.exa863.anselmo_adna.view.fx.Tela;
 import javafx.fxml.FXMLLoader;
@@ -75,6 +76,22 @@ public final class SceneManager {
         limparEstadoPausa();
         containerRaiz.getChildren().setAll(carregar(tela));
         AudioManager.tocarMusica(tela.getMusica());
+    }
+
+    public static void iniciarLuta(LutaContexto contexto) {
+        verificarInicializacao();
+        limparEstadoPausa();
+        FXMLLoader loader = criarLoader(Tela.LUTA);
+        try {
+            Parent raiz = loader.load();
+            AudioManager.aplicarHoverNosBotoes(raiz);
+            LutaController controller = loader.getController();
+            controller.iniciar(contexto);
+            containerRaiz.getChildren().setAll(raiz);
+            AudioManager.tocarMusica(Tela.LUTA.getMusica());
+        } catch (IOException e) {
+            throw new RuntimeException("Falha ao carregar a tela de luta.", e);
+        }
     }
 
     public static void abrirModal(Tela tela) {
