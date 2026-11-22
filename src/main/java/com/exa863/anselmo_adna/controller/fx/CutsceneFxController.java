@@ -26,10 +26,13 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import com.exa863.anselmo_adna.model.character.Sexo;
+import com.exa863.anselmo_adna.model.character.Cores;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
@@ -37,13 +40,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-/** Executa o prólogo e, em seguida, os diálogos reais do capítulo Origens. */
+/** Exibe o prólogo e os dez capítulos do grafo narrativo no mesmo palco JavaFX. */
 public class CutsceneFxController {
 
     private enum Etapa { PROLOGO, CAPITULO, CONCLUIDA }
 
     @FXML private StackPane rootPane;
     @FXML private ImageView imgCenario;
+    @FXML private HBox painelPersonagens;
+    @FXML private ImageView imgProtagonista;
+    @FXML private ImageView imgInterlocutor;
     @FXML private Label lblParte;
     @FXML private Label lblTitulo;
     @FXML private Label lblProgresso;
@@ -68,7 +74,10 @@ public class CutsceneFxController {
     private boolean finalizado;
     private final Map<String, Image> imagens = new HashMap<>();
     private String imagemAtual;
+    private final Map<String, Image> spritesPersonagens = new HashMap<>();
+    private String interlocutorAtual;
     private boolean digitacaoPausadaPeloMenu;
+    private Tela telaRetorno = Tela.MAPA;
 
     @FXML
     public void initialize() {
@@ -80,6 +89,17 @@ public class CutsceneFxController {
         IconManager.aplicarBotao(btnMenuPausa, Icone.PAUSE, 18);
         imgCenario.fitWidthProperty().bind(rootPane.widthProperty());
         imgCenario.fitHeightProperty().bind(rootPane.heightProperty());
+        // Dimensiona sprites de 340x780 de acordo com a altura da janela.
+        imgProtagonista.fitHeightProperty().bind(rootPane.heightProperty().multiply(0.78));
+        imgInterlocutor.fitHeightProperty().bind(rootPane.heightProperty().multiply(0.78));
+        // Deixa os retratos mais parecidos com a composicao das telas de mapa e locais:
+        // o protagonista fica mais para a esquerda e o interlocutor um pouco para a direita.
+        imgProtagonista.setTranslateX(-170);
+        imgProtagonista.translateYProperty().bind(rootPane.heightProperty().multiply(0.035));
+        imgInterlocutor.setTranslateX(95);
+        painelPersonagens.spacingProperty().bind(rootPane.widthProperty().multiply(0.10));
+        painelPersonagens.setVisible(false);
+        painelPersonagens.setManaged(false);
         rootPane.widthProperty().addListener((obs, antes, depois) -> ajustarRecorte());
         rootPane.heightProperty().addListener((obs, antes, depois) -> ajustarRecorte());
         rootPane.setOnKeyPressed(event -> {
@@ -95,13 +115,20 @@ public class CutsceneFxController {
         rootPane.sceneProperty().addListener((obs, antes, depois) -> {
             if (depois == null) pararDigitacao();
         });
-        quadros = PrologoRoteiro.criar(player);
-        etapa = Etapa.PROLOGO;
-        indiceQuadro = 0;
-        mostrarQuadro();
+        SceneManager.InicioCapitulo inicio = SceneManager.consumirInicioCapitulo();
+        if (inicio != null) {
+            telaRetorno = inicio.telaRetorno();
+            iniciarCapitulo(inicio.capitulo());
+        } else {
+            quadros = PrologoRoteiro.criar(player);
+            etapa = Etapa.PROLOGO;
+            indiceQuadro = 0;
+            mostrarQuadro();
+        }
     }
 
     private void mostrarQuadro() {
+        ocultarPersonagens(); // O prologo ja possui artes completas, sem retratos sobrepostos.
         if (indiceQuadro >= quadros.size()) {
             iniciarPrimeiroCapitulo();
             return;
@@ -144,9 +171,9 @@ public class CutsceneFxController {
         mostrarImagem("capitulo_01_porao_" + (feminina ? "feminino" : "masculino") + ".png");
     }
 
-    /** Carrega a imagem do classpath, aplica recorte proporcional e transição suave. */
+    /** Carrega imagens de cutscenes e também os cenários existentes de cada local. */
     private void mostrarImagem(String arquivo) {
-        String caminho = "/images/cutscenes/" + arquivo;
+        String caminho = arquivo.startsWith("/") ? arquivo : "/images/cutscenes/" + arquivo;
         if (caminho.equals(imagemAtual)) return;
         Image imagem = imagens.computeIfAbsent(caminho, p -> {
             URL recurso = getClass().getResource(p);
@@ -194,14 +221,47 @@ public class CutsceneFxController {
             mostrarConclusao("O PRÓLOGO TERMINOU", "Não há capítulo disponível para esta partida.", false);
             return;
         }
-        // A história agora se passa no porão, diante das luvas guardadas pelo pai.
-        // A arte é escolhida automaticamente para o protagonista masculino ou feminino.
-        mostrarImagemPorao();
-        capituloController = new CutsceneController(disponivel.get(), jogo.getGameState());
+        telaRetorno = Tela.MAPA;
+        iniciarCapitulo(disponivel.get());
+    }
+
+    /** Inicia qualquer capítulo sem recriar seus diálogos, escolhas ou consequências. */
+    private void iniciarCapitulo(Capitulo capitulo) {
+        finalizado = false;
+        capituloController = new CutsceneController(capitulo, jogo.getGameState());
         dialogos = new ArrayList<>(capituloController.getDialogos());
         indiceDialogo = 0;
+        interlocutorAtual = null;
+        imgInterlocutor.setImage(null);
         etapa = Etapa.CAPITULO;
+        mostrarImagemDoCapitulo(capitulo.getId());
         mostrarDialogo();
+    }
+
+    /** Para capítulos sem ilustração exclusiva, usa o fundo existente do respectivo local. */
+    private void mostrarImagemDoCapitulo(String id) {
+        String imagem = switch (id) {
+            case "CAPITULO_01" -> null; // usa a versão masculina/feminina do porão
+            case "CAPITULO_02" -> "/images/locais/Academia_Cidade_Natal.png";
+            case "CAPITULO_03", "CAPITULO_04", "CAPITULO_05", "CAPITULO_08" ->
+                    "/images/locais/Academia_De_Boxe.png";
+            case "CAPITULO_06" -> "/images/locais/Academia_Profissional.png";
+            case "CAPITULO_07" -> "/images/locais/Quarto.png";
+            case "CAPITULO_09" -> "/images/cidades/Cidade_B_Noite.png";
+            case "CAPITULO_10" -> "/images/locais/Campeonato_Mundial.png";
+            default -> "/images/locais/Academia_De_Boxe.png";
+        };
+        if (imagem == null) mostrarImagemPorao();
+        else mostrarImagem(imagem);
+    }
+
+    private int numeroCapitulo() {
+        String id = capituloController.getCapitulo().getId();
+        try {
+            return Integer.parseInt(id.substring(id.lastIndexOf('_') + 1));
+        } catch (NumberFormatException e) {
+            return 1;
+        }
     }
 
     private void mostrarDialogo() {
@@ -210,7 +270,29 @@ public class CutsceneFxController {
             return;
         }
         Dialogo dialogo = dialogos.get(indiceDialogo);
-        lblParte.setText("CAPÍTULO 01  /  O PORÃO");
+        String imagemEspecial = imagemEspecialDoDialogo(dialogo);
+        if (imagemEspecial != null) {
+            mostrarImagem(imagemEspecial);
+            ocultarPersonagens();
+        } else {
+            String cena = switch (numeroCapitulo()) {
+                case 3 -> "05";
+                case 4 -> "01";
+                case 5 -> "02";
+                case 7 -> "03";
+                case 9 -> "06";
+                default -> null;
+            };
+            if (cena != null && indiceDialogo == 0) {
+                String sexo = jogo.getPlayer().getSexo() == Sexo.FEMININO ? "feminino" : "masculino";
+                mostrarImagem("cena_" + cena + "_" + sexo + ".png");
+                ocultarPersonagens();
+            } else {
+                if (cena != null) mostrarImagemDoCapitulo(capituloController.getCapitulo().getId());
+                atualizarPersonagens(dialogo);
+            }
+        }
+        lblParte.setText(String.format("CAPÍTULO %02d  /  O LEGADO DO RINGUE", numeroCapitulo()));
         lblTitulo.setText(capituloController.getCapitulo().getTitulo().toUpperCase());
         lblProgresso.setText("DIÁLOGO " + (indiceDialogo + 1) + " DE " + dialogos.size());
         lblEmissor.setText(dialogo.getNomeEmissor().toUpperCase());
@@ -240,6 +322,121 @@ public class CutsceneFxController {
         }
     }
 
+    private String imagemEspecialDoDialogo(Dialogo dialogo) {
+        if (etapa != Etapa.CAPITULO) return null;
+        if (numeroCapitulo() != 9 || dialogo == null || dialogo.isEscolha()) return null;
+
+        String sexo = jogo.getPlayer().getSexo() == Sexo.FEMININO ? "feminino" : "masculino";
+        Player player = jogo.getPlayer();
+
+        if (indiceDialogo == 0) {
+            return "cena_06_" + sexo + ".png";
+        }
+        if (player.isCapituloConcluido("ROMANCE_OLIVIA")) {
+            return "romance_olivia_" + sexo + ".png";
+        }
+        if (player.isCapituloConcluido("ROMANCE_JAMES")) {
+            return "romance_james_" + sexo + ".png";
+        }
+        if (player.isCapituloConcluido("FOCO_NA_CARREIRA")) {
+            return "protagonista_sozinho_" + sexo + ".png";
+        }
+        return null;
+    }
+
+    /**
+     * Personagens da novel: protagonista a esquerda, interlocutor a direita.
+     * No Capitulo 1, o protagonista nao aparece sobre a arte do porao, conforme pedido.
+     * Os arquivos sao os PNGs originais enviados, com transparencia e 4 cores de olhos.
+     * Nao altera o texto, a logica de escolhas ou os dados salvos do jogo.
+     */
+    private void atualizarPersonagens(Dialogo dialogo) {
+        if (etapa != Etapa.CAPITULO) return;
+
+        boolean mostrarProtagonista = numeroCapitulo() >= 2;
+        if (mostrarProtagonista) {
+            Player player = jogo.getPlayer();
+            imgProtagonista.setImage(spritePersonagem(spriteProtagonista(player)));
+            imgProtagonista.setVisible(true);
+            imgProtagonista.setManaged(true);
+        } else {
+            imgProtagonista.setImage(null);
+            imgProtagonista.setVisible(false);
+            imgProtagonista.setManaged(false);
+        }
+
+        if (dialogo.getTipoEmissor() == TipoEmissor.PERSONAGEM
+                && dialogo.getPersonagem() != null
+                && !(dialogo.getPersonagem() instanceof Player)) {
+            String nome = dialogo.getPersonagem().getNome();
+            if (!nome.equalsIgnoreCase(interlocutorAtual == null ? "" : interlocutorAtual)) {
+                interlocutorAtual = nome;
+                String arquivo = spriteInterlocutor(nome);
+                // Nao inventa sprites para personagens que ainda nao foram enviados.
+                imgInterlocutor.setImage(arquivo == null ? null : spritePersonagem(arquivo));
+            }
+        }
+
+        boolean haInterlocutor = imgInterlocutor.getImage() != null;
+        imgInterlocutor.setVisible(haInterlocutor);
+        imgInterlocutor.setManaged(haInterlocutor);
+
+        boolean exibirPainel = mostrarProtagonista || haInterlocutor;
+        painelPersonagens.setManaged(exibirPainel);
+        painelPersonagens.setVisible(exibirPainel);
+
+        boolean falaJogador = dialogo.getTipoEmissor() == TipoEmissor.PERSONAGEM
+                && dialogo.getPersonagem() instanceof Player;
+        boolean falaInterlocutor = dialogo.getTipoEmissor() == TipoEmissor.PERSONAGEM && !falaJogador;
+        if (mostrarProtagonista) {
+            imgProtagonista.setOpacity(falaJogador ? 1.0 : falaInterlocutor ? 0.62 : 0.83);
+        }
+        if (haInterlocutor) {
+            imgInterlocutor.setOpacity(falaInterlocutor ? 1.0 : falaJogador ? 0.62 : 0.83);
+        }
+    }
+
+    private String spriteProtagonista(Player player) {
+        String genero = player.getSexo() == Sexo.FEMININO ? "Feminina" : "Masculino";
+        Cores cor = player.getCorOlhos();
+        String sufixo = switch (cor == null ? Cores.CASTANHO : cor) {
+            case AZUL -> "_Olhos_Azuis";
+            case PRETO -> "_Olhos_Pretos";
+            case VERDE -> "_Olhos_Verdes";
+            case CASTANHO -> "";
+        };
+        return "Protagonista_" + genero + sufixo + ".png";
+    }
+
+    private String spriteInterlocutor(String nome) {
+        return switch (nome.toLowerCase(Locale.ROOT).trim()) {
+            case "olivia" -> "Olivia.png";
+            case "mestre smith" -> "Mestre_Smith.png";
+            case "chris" -> "Chris.png";
+            case "victor noor" -> "Victor_Noor.png";
+            case "anthony" -> "Anthony.png";
+            case "alexandra cruz" -> "Alexandra_Cruz.png";
+            case "james" -> "James.png";
+            default -> null;
+        };
+    }
+
+    private Image spritePersonagem(String arquivo) {
+        String caminho = "/images/visual_novel/" + arquivo;
+        return spritesPersonagens.computeIfAbsent(caminho, key -> {
+            URL recurso = getClass().getResource(key);
+            if (recurso == null) {
+                throw new IllegalStateException("Sprite da visual novel nao encontrado: " + key);
+            }
+            return new Image(recurso.toExternalForm(), false);
+        });
+    }
+
+    private void ocultarPersonagens() {
+        painelPersonagens.setVisible(false);
+        painelPersonagens.setManaged(false);
+    }
+
     private void processarEscolha(Dialogo dialogo, int indiceOpcao) {
         if (etapa != Etapa.CAPITULO || indiceDialogo >= dialogos.size()
                 || dialogos.get(indiceDialogo) != dialogo) return;
@@ -267,24 +464,29 @@ public class CutsceneFxController {
         } catch (FalhaSalvamentoException ex) {
             aviso = "Capítulo concluído, mas não foi possível salvar. Use o menu de saves.";
         }
-        mostrarConclusao("CAPÍTULO CONCLUÍDO", aviso, true);
+        mostrarConclusao("CAPÍTULO " + String.format("%02d", numeroCapitulo()) + " CONCLUÍDO",
+                aviso, true);
     }
 
     private void mostrarConclusao(String titulo, String aviso, boolean capituloConcluido) {
+        ocultarPersonagens();
         etapa = Etapa.CONCLUIDA;
         pararDigitacao();
         lblParte.setText("O LEGADO DO RINGUE");
         lblTitulo.setText(titulo);
-        lblProgresso.setText(capituloConcluido ? "DEMONSTRAÇÃO JAVA FX" : "FIM DO PRÓLOGO");
+        lblProgresso.setText(capituloConcluido ? "PROGRESSO REGISTRADO" : "FIM DO PRÓLOGO");
         lblEmissor.setText("SISTEMA");
-        lblTexto.setText(aviso + "\n\nAgora você pode explorar a Cidade Natal no mapa.");
-        lblAviso.setText("ENTER OU CLIQUE PARA IR AO MAPA");
+        lblTexto.setText(aviso + "\n\nContinue explorando os locais do mapa para encontrar novos capítulos."
+                + (capituloConcluido && numeroCapitulo() == 10
+                ? "\nNa Cidade B, selecione o Campeonato Mundial para disputar o cinturão."
+                : ""));
+        lblAviso.setText("ENTER OU CLIQUE PARA CONTINUAR");
         caixaOpcoes.getChildren().clear();
         caixaOpcoes.setVisible(false);
         caixaOpcoes.setManaged(false);
         btnPular.setDisable(true);
         btnAvancar.setDisable(false);
-        btnAvancar.setText("IR PARA O MAPA  →");
+        btnAvancar.setText(telaRetorno == Tela.MAPA ? "IR PARA O MAPA  →" : "CONTINUAR EXPLORANDO  →");
     }
 
     @FXML
@@ -300,7 +502,12 @@ public class CutsceneFxController {
                 indiceDialogo++;
                 mostrarDialogo();
             }
-            case CONCLUIDA -> SceneManager.irPara(Tela.MAPA);
+            case CONCLUIDA -> {
+                // Se o próximo capítulo acontece no mesmo local e já está liberado, inicia em sequência.
+                if (!SceneManager.iniciarCapituloSeDisponivel(jogo.getLocalAtual(), telaRetorno)) {
+                    SceneManager.irPara(telaRetorno);
+                }
+            }
         }
     }
 

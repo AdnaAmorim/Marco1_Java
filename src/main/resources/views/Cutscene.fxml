@@ -10,6 +10,14 @@
     <children>
         <ImageView fx:id="imgCenario" mouseTransparent="true" preserveRatio="false" />
         <Region mouseTransparent="true" styleClass="cutscene-filtro" />
+        <!-- Retratos em camada acima do cenario, mas atras da caixa de dialogo. -->
+        <HBox fx:id="painelPersonagens" alignment="BOTTOM_CENTER" mouseTransparent="true"
+              visible="false" managed="false" spacing="110" styleClass="cutscene-personagens">
+            <children>
+                <ImageView fx:id="imgProtagonista" preserveRatio="true" smooth="true" mouseTransparent="true" />
+                <ImageView fx:id="imgInterlocutor" preserveRatio="true" smooth="true" mouseTransparent="true" />
+            </children>
+        </HBox>
         <BorderPane styleClass="cutscene-layout" pickOnBounds="false">
             <top>
                 <VBox alignment="CENTER_LEFT" spacing="6" styleClass="cutscene-cabecalho">

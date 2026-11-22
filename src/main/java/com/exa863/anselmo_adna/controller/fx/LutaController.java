@@ -381,7 +381,13 @@ public class LutaController {
         mostrarBanner(textoBanner);
 
         List<Label> linhas = new ArrayList<>();
+        String variante = jogo.getPlayer() != null && jogo.getPlayer().getSexo() == Sexo.FEMININO
+                ? "feminino" : "masculino";
+        boolean mundial = MundialFx.EVENTO.equals(contexto.tituloEvento());
         if (verificarPrimeirosPassos(resultado)) {
+            if (!mundial) {
+                mostrarIlustracao("cena_04_" + variante);
+            }
             linhas.add(criarLinhaResumo("CONQUISTA DESBLOQUEADA: " + Conquistas.getNome(Conquistas.PRIMEIROS_PASSOS).toUpperCase(),
                     "luta-resumo-pos"));
         }
@@ -399,6 +405,13 @@ public class LutaController {
         }
 
         salvarAutomaticamente();
+        if (mundial) {
+            MundialFx.Final fim = MundialFx.desfecho(jogo.getPlayer(), resultado.isVencedor(contexto.lutador1()));
+            mostrarIlustracao("final_" + fim.numero + "_" + variante);
+            lblRound.setText("FINAL " + fim.numero);
+            lblEmissor.setText(fim.titulo.toUpperCase());
+            lblTexto.setText(fim.texto);
+        }
 
         if (!linhas.isEmpty()) {
             boxResumoResultado.getChildren().setAll(linhas);
@@ -411,6 +424,14 @@ public class LutaController {
         lblAviso.setText("ENTER OU CLIQUE PARA VOLTAR");
     }
 
+    private void mostrarIlustracao(String nome) {
+        URL recurso = getClass().getResource("/images/cutscenes/" + nome + ".png");
+        if (recurso != null) {
+            imgCenario.setImage(new Image(recurso.toExternalForm()));
+            ajustarRecorteCenario();
+        }
+        palcoLuta.setVisible(false);
+    }
     private Label criarLinhaResumo(String texto, String classeCss) {
         Label label = new Label(texto);
         label.setWrapText(true);
@@ -491,6 +512,8 @@ public class LutaController {
         if (resultadoExibido) {
             AudioManager.tocar(Som.CLIQUE);
             Tela retorno = contexto.telaRetorno() != null ? contexto.telaRetorno() : Tela.MAPA;
+            // Se a luta liberou o próximo capítulo no local atual, mostra a história antes do retorno.
+            if (SceneManager.iniciarCapituloSeDisponivel(jogo.getLocalAtual(), retorno)) return;
             SceneManager.irPara(retorno);
             return;
         }

@@ -103,7 +103,39 @@ public class MapaController {
         atualizarFundoHorario(animar);
         atualizarHud();
         construirMarcadores();
-        lblInfoLocal.setText(INFO_PADRAO);
+        lblInfoLocal.setText(textoObjetivo());
+    }
+
+    /** Orienta o jogador pelo próximo capítulo sem ignorar bloqueios do grafo. */
+    private String textoObjetivo() {
+        Player player = jogo.getPlayer();
+        if (player == null) return INFO_PADRAO;
+        int capitulo = 1;
+        while (capitulo <= 10 && player.isCapituloConcluido(
+                String.format("CAPITULO_%02d", capitulo))) {
+            capitulo++;
+        }
+        return switch (capitulo) {
+            case 1 -> "CAPÍTULO 1 • VISITE SUA CASA PARA DESCOBRIR O LEGADO.";
+            case 2 -> "CAPÍTULO 2 • VISITE A ACADEMIA DA CIDADE NATAL.";
+            case 3 -> "CAPÍTULO 3 • VISITE A ACADEMIA DE BOXE.";
+            case 4 -> player.getLutasLocais() >= 2
+                    ? "CAPÍTULO 4 • RETORNE À ACADEMIA DE BOXE."
+                    : "CAPÍTULO 4 • FAÇA 2 LUTAS LOCAIS NA ACADEMIA DE BOXE ("
+                      + player.getLutasLocais() + "/2).";
+            case 5 -> "CAPÍTULO 5 • RETORNE À ACADEMIA DE BOXE.";
+            case 6 -> player.getLutasEstaduais() >= 2
+                    ? "CAPÍTULO 6 • VÁ À ACADEMIA PROFISSIONAL DA CIDADE A."
+                    : "CAPÍTULO 6 • COMPLETE 2 LUTAS ESTADUAIS ("
+                      + player.getLutasEstaduais() + "/2).";
+            case 7 -> "CAPÍTULO 7 • VOLTE À SUA CASA NA CIDADE NATAL.";
+            case 8 -> "CAPÍTULO 8 • RETORNE À ACADEMIA DE BOXE.";
+            case 9 -> player.getLutasNacionais() >= 1
+                    ? "CAPÍTULO 9 • VIAJE PARA A CIDADE B."
+                    : "CAPÍTULO 9 • COMPLETE 1 LUTA NACIONAL NA ACADEMIA DE BOXE.";
+            case 10 -> "CAPÍTULO 10 • VISITE O CAMPEONATO MUNDIAL NA CIDADE B.";
+            default -> "OS 10 CAPÍTULOS FORAM CONCLUÍDOS. CONTINUE EXPLORANDO!";
+        };
     }
 
     /**
@@ -350,7 +382,7 @@ public class MapaController {
                 botao.hoverProperty().addListener((obs, antes, hover) ->
                         lblInfoLocal.setText(hover
                                 ? marcador.rotulo() + " — VIAJE PARA OUTRAS CIDADES QUANDO ESTIVEREM LIBERADAS."
-                                : INFO_PADRAO));
+                                : textoObjetivo()));
                 botao.setOnAction(e -> abrirViagem());
             } else {
                 Local local = buscarSubLocal(jogo.getLocalAtual(), marcador.localId());
@@ -363,7 +395,7 @@ public class MapaController {
                         : marcador.rotulo();
                 String textoHover = bloqueado ? descricao + " (BLOQUEADO NA HISTÓRIA)" : descricao;
                 botao.hoverProperty().addListener((obs, antes, hover) ->
-                        lblInfoLocal.setText(hover ? textoHover : INFO_PADRAO));
+                        lblInfoLocal.setText(hover ? textoHover : textoObjetivo()));
                 botao.setOnAction(e -> selecionarLocal(marcador.localId()));
             }
 
@@ -393,32 +425,32 @@ public class MapaController {
         }
 
         AudioManager.tocar(Som.CLIQUE);
-        if ("casa".equals(localId)) {
-            jogo.entrarLocal(local);
-            SceneManager.irPara(Tela.CASA);
+        Tela telaDestino = switch (localId) {
+            case "casa" -> Tela.CASA;
+            case "academia", "academia_profissional" -> Tela.ACADEMIA;
+            case "academia_boxe" -> Tela.ACADEMIA_BOXE;
+            case "clube_luta" -> Tela.CLUBE_DE_LUTA;
+            case "loja" -> Tela.LOJA;
+            case "campeonato_mundial" -> Tela.MAPA; // O capítulo 10 é uma cutscene pré-combate.
+            default -> null;
+        };
+        if (telaDestino == null) {
+            lblInfoLocal.setText("LOCAL SELECIONADO: " + local.getNome().toUpperCase());
             return;
         }
-        if ("academia".equals(localId) || "academia_profissional".equals(localId)) {
-            jogo.entrarLocal(local);
-            SceneManager.irPara(Tela.ACADEMIA);
+        // Não entra em um local sem tela própria (Campeonato Mundial), salvo para iniciar a história.
+        if ("campeonato_mundial".equals(localId)) {
+            if (SceneManager.iniciarCapituloSeDisponivel(local, Tela.MAPA)) return;
+            if (jogo.getPlayer().isCapituloConcluido("CAPITULO_10")) {
+                lblInfoLocal.setText(MundialFx.disputar(jogo.getPlayer(), areaMapa.getScene().getWindow()));
+                return;
+            }
+            lblInfoLocal.setText("O CAPÍTULO DO CAMPEONATO MUNDIAL AINDA NÃO ESTÁ DISPONÍVEL.");
             return;
         }
-        if ("academia_boxe".equals(localId)) {
-            jogo.entrarLocal(local);
-            SceneManager.irPara(Tela.ACADEMIA_BOXE);
-            return;
-        }
-        if ("clube_luta".equals(localId)) {
-            jogo.entrarLocal(local);
-            SceneManager.irPara(Tela.CLUBE_DE_LUTA);
-            return;
-        }
-        if ("loja".equals(localId)) {
-            jogo.entrarLocal(local);
-            SceneManager.irPara(Tela.LOJA);
-            return;
-        }
-        lblInfoLocal.setText("LOCAL SELECIONADO: " + local.getNome().toUpperCase() + " — " + local.getDescricao().toUpperCase());
+        jogo.entrarLocal(local);
+        if (SceneManager.iniciarCapituloSeDisponivel(local, telaDestino)) return;
+        SceneManager.irPara(telaDestino);
     }
 
     @FXML
@@ -435,7 +467,9 @@ public class MapaController {
                 texto += "  •  R$ " + destino.getCustoAcesso();
             }
 
-            Button btnDestino = new Button(texto);
+            boolean bloqueadoPelaHistoria = isBloqueado(destino);
+            Button btnDestino = new Button(texto + (bloqueadoPelaHistoria ? "  •  BLOQUEADA PELA HISTÓRIA" : ""));
+            btnDestino.setDisable(bloqueadoPelaHistoria);
             btnDestino.setMaxWidth(Double.MAX_VALUE);
             btnDestino.setFocusTraversable(false);
             btnDestino.getStyleClass().add("viagem-destino");
@@ -451,6 +485,13 @@ public class MapaController {
     }
 
     private void viajarPara(Local destino) {
+        if (isBloqueado(destino)) {
+            AudioManager.tocar(Som.ERRO);
+            fecharViagemSilencioso();
+            lblInfoLocal.setText("CONCLUA O CAPÍTULO ATUAL ANTES DE VIAJAR PARA "
+                    + destino.getNome().toUpperCase() + ".");
+            return;
+        }
         int custo = destino.getCustoAcesso();
         if (custo > 0 && !destino.isAcessoLiberado()) {
             Player player = jogo.getPlayer();
@@ -472,6 +513,7 @@ public class MapaController {
                         destino.setAcessoLiberado(true);
                         AudioManager.tocar(Som.CONFIRMAR);
                         carregarMapa(MapaConfig.paraLocal(destino.getId()));
+                        SceneManager.iniciarCapituloSeDisponivel(destino, Tela.MAPA);
                     }
             );
             return;
@@ -480,6 +522,7 @@ public class MapaController {
         AudioManager.tocar(Som.CONFIRMAR);
         fecharViagemSilencioso();
         carregarMapa(MapaConfig.paraLocal(destino.getId()));
+        SceneManager.iniciarCapituloSeDisponivel(destino, Tela.MAPA);
     }
 
     @FXML
