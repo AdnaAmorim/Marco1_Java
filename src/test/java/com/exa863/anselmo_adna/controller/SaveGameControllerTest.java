@@ -36,6 +36,19 @@ public class SaveGameControllerTest {
     }
 
     @Test
+    public void continuarIgnoraSlotComNomeAusente() throws Exception {
+        controller.salvar(2, gameState);
+        gameState.getPlayer().setNome(null);
+        SaveGame incompleto = new SaveGame(gameState);
+        incompleto.setDataSalvamento("2099-01-01 00:00:00");
+        new XmlFileController(tempDir).salvar("save_game_1", incompleto);
+
+        assertThrows(com.exa863.anselmo_adna.exception.DadosInvalidosException.class,
+                () -> controller.carregar(1));
+        assertEquals(2, controller.carregarMaisRecente().slotId());
+    }
+
+    @Test
     public void testSalvarManual() throws Exception {
         boolean salvou = controller.salvar(1, gameState);
         assertTrue(salvou);

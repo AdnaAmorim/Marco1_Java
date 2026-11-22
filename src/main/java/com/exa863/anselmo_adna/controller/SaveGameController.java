@@ -154,6 +154,10 @@ public class SaveGameController {
         if (save.getGameState() == null || save.getGameState().getPlayer() == null) {
             throw new DadosInvalidosException("O save não contém uma partida válida.");
         }
+        String nome = save.getGameState().getPlayer().getNome();
+        if (nome == null || nome.isBlank()) {
+            throw new DadosInvalidosException("O save não contém o nome do protagonista.");
+        }
     }
 
     /** Entrega o estado pronto para GameController.carregarGameState ou seu construtor. */

@@ -1,0 +1,26 @@
+
+.cutscene-fundo { -fx-background-color: #070b14; }
+.cutscene-filtro { -fx-background-color: linear-gradient(to bottom, rgba(4,6,12,0.78) 0%, rgba(4,6,12,0.18) 25%, rgba(4,6,12,0.02) 52%, rgba(4,6,12,0.35) 70%, rgba(4,6,12,0.88) 100%); }
+.cutscene-layout { -fx-padding: 16 28 16 28; }
+.cutscene-cabecalho { -fx-padding: 3 2; }
+.cutscene-menu { -fx-font-size: 13px; -fx-text-fill: #f3e3ce; -fx-background-color: rgba(17,23,38,0.84); -fx-cursor: hand; -fx-padding: 6 11; }
+.cutscene-parte, .cutscene-contador { -fx-font-size: 13px; -fx-text-fill: #f7c771; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, #000000, 5, 0.6, 0, 1); }
+.cutscene-contador { -fx-text-fill: #eee3d4; }
+.cutscene-titulo { -fx-font-size: 34px; -fx-font-weight: bold; -fx-text-fill: #ffe0a0; -fx-effect: dropshadow(gaussian, #000000, 8, 0.65, 1, 2); }
+.cutscene-base { -fx-padding: 0 0 2 0; }
+.cutscene-dialogo { -fx-padding: 13 17 12 17; -fx-background-color: rgba(8,13,23,0.88); -fx-border-color: rgba(234,176,83,0.95); -fx-border-width: 2; -fx-border-radius: 6; -fx-background-radius: 6; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.72), 12, 0.55, 0, 4); }
+.cutscene-emissor { -fx-font-size: 15px; -fx-text-fill: #ffd166; -fx-font-weight: bold; }
+.cutscene-texto { -fx-font-size: 17px; -fx-text-fill: #fff1df; -fx-line-spacing: 2px; }
+.cutscene-ajuda { -fx-font-size: 11px; -fx-text-fill: #d0d2d9; -fx-effect: dropshadow(gaussian, #000000, 4, 0.6, 0, 1); }
+.cutscene-pular, .cutscene-avancar { -fx-font-size: 14px; -fx-text-fill: #f3e5d3; -fx-background-color: rgba(25,35,55,0.94); -fx-padding: 8 13; -fx-cursor: hand; -fx-background-radius: 4; }
+.cutscene-avancar { -fx-background-color: #aa3934; -fx-text-fill: #ffffff; }
+.cutscene-pular:hover, .cutscene-avancar:hover, .cutscene-menu:hover { -fx-background-color: #f2c566; -fx-text-fill: #171b27; }
+.cutscene-avancar:disabled, .cutscene-pular:disabled { -fx-opacity: 0.38; }
+.cutscene-opcao { -fx-font-size: 16px; -fx-text-fill: #ffe7ca; -fx-padding: 8 13; -fx-background-color: rgba(27,40,60,0.97); -fx-border-color: rgba(255,209,102,0.45); -fx-cursor: hand; -fx-background-radius: 4; -fx-alignment: CENTER_LEFT; }
+.cutscene-opcao:hover { -fx-border-color: #ffd166; -fx-background-color: #6c3835; }
+
+/* Retratos originais enviados: fundo transparente, layout responsivo e destaque para quem fala. */
+.cutscene-personagens { -fx-padding: 0 34 105 34; -fx-spacing: 170; }
+.cutscene-personagens .image-view {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.75), 18, 0.55, 0, 6);
+}

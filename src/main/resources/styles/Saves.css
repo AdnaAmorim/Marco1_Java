@@ -1,0 +1,97 @@
+.saves-card {
+    -fx-padding: 18 26 16 26;
+    -fx-spacing: 12;
+    -fx-pref-width: 740px;
+}
+
+.saves-conteudo {
+    -fx-spacing: 16;
+    -fx-alignment: top-center;
+    -fx-pref-width: 688px;
+}
+
+.lista-slots {
+    -fx-spacing: 6;
+    -fx-pref-width: 280px;
+    -fx-min-width: 280px;
+}
+
+.slot-botao {
+    -fx-background-color: -cor-painel;
+    -fx-border-color: rgba(250, 240, 220, 0.25);
+    -fx-border-width: 2px;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-alignment: center-left;
+    -fx-font-size: 16px;
+    -fx-text-fill: -cor-texto;
+    -fx-padding: 7 12 7 12;
+    -fx-cursor: hand;
+}
+
+.slot-botao:hover {
+    -fx-border-color: -cor-destaque;
+    -fx-text-fill: -cor-destaque;
+}
+
+.slot-selecionado {
+    -fx-background-color: rgba(255, 209, 102, 0.16);
+    -fx-border-color: -cor-destaque;
+    -fx-text-fill: -cor-destaque;
+}
+
+.detalhes-box {
+    -fx-background-color: -cor-painel;
+    -fx-border-color: rgba(255, 209, 102, 0.45);
+    -fx-border-width: 2px;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-padding: 14 16 14 16;
+    -fx-spacing: 8;
+    -fx-pref-width: 392px;
+    -fx-min-height: 205px;
+    -fx-alignment: top-left;
+}
+
+.detalhe-titulo {
+    -fx-font-size: 20px;
+    -fx-text-fill: -cor-destaque;
+}
+
+.detalhe-destaque {
+    -fx-font-size: 16px;
+    -fx-text-fill: -cor-perigo;
+}
+
+.detalhe-texto {
+    -fx-font-size: 16px;
+    -fx-text-fill: -cor-texto;
+}
+
+.detalhe-secundario {
+    -fx-font-size: 14px;
+    -fx-text-fill: -cor-texto-suave;
+}
+
+.mensagem-box {
+    -fx-spacing: 6;
+    -fx-min-height: 36px;
+    -fx-alignment: center;
+}
+
+.mensagem-texto {
+    -fx-font-size: 15px;
+    -fx-text-fill: -cor-destaque;
+    -fx-text-alignment: center;
+}
+
+.acoes-bar {
+    -fx-spacing: 22;
+    -fx-alignment: center;
+    -fx-padding: 4 0 0 0;
+}
+
+.botao-acao {
+    -fx-font-size: 22px;
+    -fx-padding: 2 10 2 10;
+}

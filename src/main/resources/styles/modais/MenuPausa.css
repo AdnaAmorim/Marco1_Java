@@ -1,0 +1,32 @@
+.pausa-scroll, .pausa-scroll > .viewport { -fx-background-color: transparent; }
+.pausa-scroll { -fx-background: transparent; -fx-border-width: 0; -fx-padding: 0; }
+/* Menu de pausa sobreposto ao jogo: a cena antiga permanece visível e desfocada. */
+.pausa-overlay { -fx-background-color: rgba(7, 9, 17, 0.34); -fx-padding: 20; }
+.pausa-card {
+    -fx-padding: 29 36 27 36;
+    -fx-background-color: rgba(16, 22, 36, 0.95);
+    -fx-background-radius: 14;
+    -fx-border-color: #efbf75;
+    -fx-border-width: 2;
+    -fx-border-radius: 14;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.73), 25, 0.20, 0, 10);
+}
+.pausa-marca { -fx-font-size: 17px; -fx-text-fill: #d5aa73; }
+.pausa-titulo { -fx-font-size: 37px; -fx-text-fill: #ffdc9d; -fx-font-weight: bold; }
+.pausa-subtitulo { -fx-font-size: 13px; -fx-text-fill: #c5c7d4; -fx-alignment: center; -fx-text-alignment: center; }
+.pausa-opcoes { -fx-padding: 10 0 0 0; }
+.pausa-botao {
+    -fx-min-height: 52; -fx-font-size: 21px;
+    -fx-background-color: #323f59;
+    -fx-background-radius: 7;
+    -fx-text-fill: #fff5e5;
+    -fx-border-color: #617187;
+    -fx-border-width: 1;
+    -fx-border-radius: 7;
+    -fx-cursor: hand;
+}
+.pausa-botao:hover { -fx-background-color: #455676; -fx-border-color: #ffe09b; }
+.pausa-primario { -fx-background-color: #9e3c31; -fx-border-color: #e9ae75; }
+.pausa-primario:hover { -fx-background-color: #c34e40; }
+.pausa-perigo:hover { -fx-background-color: #73404b; }
+.pausa-rodape { -fx-font-size: 14px; -fx-text-fill: #aab1c4; }

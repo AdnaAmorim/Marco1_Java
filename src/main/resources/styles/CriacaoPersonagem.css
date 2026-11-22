@@ -1,0 +1,39 @@
+/* Seleção de personagem: cenário cinematográfico do próprio jogo + painéis responsivos. */
+.criacao-fundo {
+    -fx-background-color: #2c1b1b;
+    -fx-background-image: url("../images/cutscenes/02_sonho_do_pai.png");
+    -fx-background-size: cover;
+    -fx-background-position: center center;
+    -fx-background-repeat: no-repeat;
+}
+.criacao-vinheta {
+    -fx-background-color: linear-gradient(to right, rgba(21,15,24,0.62), rgba(29,20,26,0.34) 48%, rgba(23,16,25,0.63));
+}
+.criacao-conteudo { -fx-padding: 18 22 18 22; }
+.criacao-titulo { -fx-font-size: 46px; -fx-text-fill: #ffe0a1; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, #08040a, 10, 0.85, 0, 3); }
+.criacao-subtitulo { -fx-font-size: 17px; -fx-text-fill: #fff2d4; -fx-effect: dropshadow(gaussian, #08040a, 6, 0.7, 0, 2); }
+.criacao-corpo { -fx-padding: 3 0; }
+.criacao-form { -fx-padding: 21 22; -fx-background-color: rgba(14,19,34,0.88); -fx-background-radius: 12; -fx-border-color: rgba(255,205,116,0.60); -fx-border-width: 2; -fx-border-radius: 12; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.60), 20, 0.2, 0, 8); }
+.criacao-secao { -fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #ffdc91; }
+.criacao-entrada, .criacao-combo { -fx-font-size: 18px; -fx-text-fill: #fff0db; -fx-prompt-text-fill: #b4bcc9; -fx-background-color: #152237; -fx-border-color: #8a7b68; -fx-border-width: 1.5; -fx-border-radius: 6; -fx-background-radius: 6; -fx-padding: 10 13; }
+.criacao-combo .list-cell { -fx-text-fill: #fff0db; -fx-background-color: #152237; }
+.criacao-combo .list-view .list-cell:hover { -fx-background-color: #48516a; }
+.personagem-card { -fx-min-width: 220; -fx-pref-width: 220; -fx-padding: 10 9 12 9; -fx-background-color: rgba(32,44,66,0.98); -fx-background-radius: 9; -fx-border-color: #697386; -fx-border-width: 2; -fx-border-radius: 9; -fx-cursor: hand; }
+.personagem-card:hover { -fx-border-color: #ffd166; }
+.personagem-selecionado { -fx-border-color: #ffe09c; -fx-background-color: #364660; -fx-effect: dropshadow(gaussian, rgba(255,209,102,0.50), 14, 0.25, 0, 0); }
+.personagem-legenda { -fx-font-size: 17px; -fx-font-weight: bold; -fx-text-fill: #fff5e2; }
+.personagem-botao { -fx-background-color: #4a556f; -fx-text-fill: #fff1d4; -fx-padding: 7 13; -fx-cursor: hand; -fx-font-size: 15px; }
+.personagem-botao:hover { -fx-background-color: #c23e34; -fx-text-fill: white; }
+.criacao-ficha { -fx-padding: 12 18; -fx-background-color: rgba(18,25,40,0.92); -fx-border-color: #e8b96a; -fx-border-width: 2; -fx-border-radius: 10; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.60), 20, 0.2, 0, 8); }
+.criacao-ficha-titulo { -fx-font-size: 27px; -fx-font-weight: bold; -fx-text-fill: #ffdc91; }
+.criacao-palco { -fx-background-color: radial-gradient(center 50% 65%, radius 75%, rgba(169,80,42,0.32), rgba(32,25,36,0.04) 80%); -fx-cursor: hand; }
+.criacao-halo { -fx-background-color: radial-gradient(center 50% 60%, radius 60%, rgba(253,184,105,0.20), transparent 80%); }
+.criacao-nome { -fx-font-size: 27px; -fx-font-weight: bold; -fx-text-fill: #fff4d8; -fx-alignment: center; }
+.criacao-ficha-campo { -fx-text-fill: #aeb7c8; -fx-font-size: 16px; }
+.criacao-ficha-valor { -fx-font-size: 17px; -fx-text-fill: #ffe0a6; }
+.criacao-ficha-dica { -fx-font-size: 14px; -fx-text-fill: #d7c9b4; }
+.criacao-erro { -fx-font-size: 15px; -fx-text-fill: #ffb1a3; -fx-min-height: 20; -fx-effect: dropshadow(gaussian, #000, 5, 0.5, 0, 1); }
+.criacao-acoes { -fx-padding: 0 0 12 0; }
+.criacao-voltar, .criacao-confirmar { -fx-font-size: 19px; -fx-background-color: #273552; -fx-text-fill: #fff5e2; -fx-padding: 11 21; -fx-cursor: hand; -fx-background-radius: 6; -fx-border-radius: 6; }
+.criacao-confirmar { -fx-background-color: #b93632; -fx-text-fill: white; -fx-border-color: #f1ad66; }
+.criacao-voltar:hover, .criacao-confirmar:hover { -fx-background-color: #e1ad59; -fx-text-fill: #171521; }

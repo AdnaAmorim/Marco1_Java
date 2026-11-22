@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane fx:id="overlayPane" alignment="CENTER" styleClass="modal-overlay" stylesheets="@../styles/Tutorial.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.exa863.anselmo_adna.controller.fx.TutorialController">
+   <children>
+      <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" scaleX="${overlayPane.height / 540.0}" scaleY="${overlayPane.height / 540.0}" styleClass="modal-card, tutorial-card">
+         <children>
+            <Label styleClass="modal-titulo" text="GUIA DO BOXEADOR" />
+
+            <HBox alignment="CENTER" styleClass="tutorial-abas">
+               <children>
+                  <Button fx:id="btnAbaRotina" focusTraversable="false" mnemonicParsing="false" onAction="#abrirRotina" styleClass="aba-botao" text="1. ROTINA" />
+                  <Button fx:id="btnAbaAtributos" focusTraversable="false" mnemonicParsing="false" onAction="#abrirAtributos" styleClass="aba-botao" text="2. ATRIBUTOS" />
+                  <Button fx:id="btnAbaHistoria" focusTraversable="false" mnemonicParsing="false" onAction="#abrirHistoria" styleClass="aba-botao" text="3. HISTÓRIA" />
+                  <Button fx:id="btnAbaEconomia" focusTraversable="false" mnemonicParsing="false" onAction="#abrirEconomia" styleClass="aba-botao" text="4. ECONOMIA" />
+               </children>
+            </HBox>
+
+            <VBox styleClass="tutorial-painel">
+               <children>
+                  <Label fx:id="lblSecaoTitulo" styleClass="tutorial-secao" text="CICLO DE VIDA E ROTINA" wrapText="true" />
+                  <Label fx:id="lblItem1" styleClass="tutorial-item" text="" wrapText="true" />
+                  <Label fx:id="lblItem2" styleClass="tutorial-item" text="" wrapText="true" />
+                  <Label fx:id="lblItem3" styleClass="tutorial-item" text="" wrapText="true" />
+                  <Label fx:id="lblItem4" styleClass="tutorial-item" text="" wrapText="true" />
+                  <Label fx:id="lblItem5" styleClass="tutorial-item" text="" wrapText="true" />
+               </children>
+            </VBox>
+
+            <Button fx:id="btnVoltar" focusTraversable="false" mnemonicParsing="false" onAction="#voltar" styleClass="botao-jogo, botao-tutorial" text="VOLTAR" />
+         </children>
+      </VBox>
+   </children>
+</StackPane>

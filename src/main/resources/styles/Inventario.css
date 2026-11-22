@@ -1,0 +1,133 @@
+.inv-card {
+    -fx-padding: 18 24 16 24;
+    -fx-spacing: 12;
+    -fx-pref-width: 760px;
+    -fx-max-width: 760px;
+}
+
+.inv-header {
+    -fx-spacing: 14;
+    -fx-alignment: center-left;
+}
+
+.inv-status-pill {
+    -fx-background-color: rgba(10, 14, 24, 0.78);
+    -fx-border-color: rgba(255, 209, 102, 0.45);
+    -fx-border-width: 1.5px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-padding: 5 12 5 12;
+    -fx-font-size: 15px;
+    -fx-text-fill: -cor-texto;
+}
+
+.inv-scroll,
+.inv-scroll > .viewport {
+    -fx-background-color: transparent;
+}
+
+.inv-scroll {
+    -fx-background-color: rgba(10, 14, 24, 0.55);
+    -fx-border-color: rgba(255, 209, 102, 0.30);
+    -fx-border-width: 1.5px;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-pref-height: 220px;
+    -fx-max-height: 220px;
+}
+
+.inv-grid {
+    -fx-padding: 10;
+    -fx-hgap: 10;
+    -fx-vgap: 10;
+}
+
+.inv-item-tile {
+    -fx-background-color: rgba(24, 32, 52, 0.85);
+    -fx-border-color: rgba(255, 209, 102, 0.32);
+    -fx-border-width: 1.5px;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-padding: 8 10 8 10;
+    -fx-spacing: 4;
+    -fx-alignment: center;
+    -fx-pref-width: 162px;
+    -fx-cursor: hand;
+}
+
+.inv-item-tile:hover {
+    -fx-background-color: rgba(255, 209, 102, 0.14);
+    -fx-border-color: -cor-destaque;
+}
+
+.inv-item-selecionado {
+    -fx-background-color: rgba(255, 209, 102, 0.20);
+    -fx-border-color: -cor-destaque;
+    -fx-border-width: 2.5px;
+}
+
+.inv-item-nome {
+    -fx-font-size: 14px;
+    -fx-text-fill: -cor-texto;
+    -fx-text-alignment: center;
+}
+
+.inv-item-sub {
+    -fx-font-size: 12px;
+    -fx-text-fill: -cor-destaque;
+}
+
+.inv-item-preco {
+    -fx-font-size: 13px;
+    -fx-text-fill: #9BF09B;
+}
+
+.inv-detalhe-box {
+    -fx-background-color: rgba(10, 14, 24, 0.78);
+    -fx-border-color: rgba(255, 209, 102, 0.45);
+    -fx-border-width: 1.5px;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-padding: 10 14 10 14;
+    -fx-spacing: 14;
+    -fx-alignment: center-left;
+}
+
+.inv-detalhe-titulo {
+    -fx-font-size: 19px;
+    -fx-text-fill: -cor-destaque;
+}
+
+.inv-detalhe-desc {
+    -fx-font-size: 14px;
+    -fx-text-fill: -cor-texto;
+}
+
+.inv-detalhe-efeito {
+    -fx-font-size: 14px;
+    -fx-text-fill: #9BF09B;
+}
+
+.inv-mensagem {
+    -fx-font-size: 14px;
+    -fx-text-fill: -cor-destaque;
+}
+
+.inv-vazio {
+    -fx-font-size: 17px;
+    -fx-text-fill: -cor-texto-suave;
+    -fx-padding: 40 20 40 20;
+    -fx-text-alignment: center;
+}
+
+.loja-vitrine {
+    -fx-background-color: rgba(10, 14, 24, 0.88);
+    -fx-border-color: rgba(255, 209, 102, 0.72);
+    -fx-border-width: 2.5px;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-padding: 12 14 12 14;
+    -fx-translate-y: -85px;
+    -fx-max-width: 720px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.88), 20, 0.5, 0, 6);
+}

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+
+<StackPane fx:id="rootPane" minHeight="0.0" minWidth="0.0" prefHeight="540.0" prefWidth="960.0"
+           styleClass="criacao-fundo" stylesheets="@../styles/CriacaoPersonagem.css"
+           xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.exa863.anselmo_adna.controller.fx.CriacaoPersonagemController">
+    <children>
+        <Region mouseTransparent="true" styleClass="criacao-vinheta" />
+        <VBox fx:id="conteudoContainer" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity"
+              spacing="14" styleClass="criacao-conteudo">
+            <children>
+                <Label text="ESCOLHA SEU PERSONAGEM" styleClass="criacao-titulo" />
+                <Label text="SUA HISTÓRIA  •  SEU NOME  •  SEU LEGADO" styleClass="criacao-subtitulo" />
+                <HBox alignment="CENTER" spacing="28" styleClass="criacao-corpo">
+                    <children>
+                        <VBox spacing="10" styleClass="criacao-form" prefWidth="510" maxWidth="510">
+                            <children>
+                                <Label text="01  IDENTIDADE" styleClass="criacao-secao" />
+                                <TextField fx:id="txtNome" promptText="Qual é o seu nome?" styleClass="criacao-entrada" />
+                                <Label text="02  PERSONAGEM" styleClass="criacao-secao" />
+                                <HBox spacing="12" alignment="CENTER">
+                                    <children>
+                                        <VBox fx:id="cardMasculino" spacing="5" alignment="CENTER" styleClass="personagem-card"
+                                              onMouseClicked="#selecionarMasculino">
+                                            <children>
+                                                <ImageView fx:id="imgMasculino" fitWidth="196" fitHeight="220" preserveRatio="true" smooth="false" />
+                                                <Label text="MASCULINO" styleClass="personagem-legenda" />
+                                                <Button focusTraversable="false" text="SELECIONAR" onAction="#selecionarMasculino" styleClass="personagem-botao" />
+                                            </children>
+                                        </VBox>
+                                        <VBox fx:id="cardFeminino" spacing="5" alignment="CENTER" styleClass="personagem-card"
+                                              onMouseClicked="#selecionarFeminino">
+                                            <children>
+                                                <ImageView fx:id="imgFeminino" fitWidth="196" fitHeight="220" preserveRatio="true" smooth="false" />
+                                                <Label text="FEMININO" styleClass="personagem-legenda" />
+                                                <Button focusTraversable="false" text="SELECIONAR" onAction="#selecionarFeminino" styleClass="personagem-botao" />
+                                            </children>
+                                        </VBox>
+                                    </children>
+                                </HBox>
+                                <Label text="03  COR DOS OLHOS" styleClass="criacao-secao" />
+                                <ComboBox fx:id="cmbOlhos" maxWidth="1.7976931348623157E308" styleClass="criacao-combo" />
+                            </children>
+                        </VBox>
+                        <VBox spacing="8" alignment="CENTER" styleClass="criacao-ficha" prefWidth="468" maxWidth="468">
+                            <children>
+                                <Label text="SEU LUTADOR" styleClass="criacao-ficha-titulo" />
+                                <StackPane fx:id="palcoPreview" styleClass="criacao-palco" prefHeight="390" minHeight="390" maxHeight="390">
+                                    <children>
+                                        <Region styleClass="criacao-halo" maxWidth="350" maxHeight="370" />
+                                        <ImageView fx:id="imgPersonagemPrincipal" fitHeight="375" fitWidth="310"
+                                                   preserveRatio="true" smooth="false" />
+                                    </children>
+                                </StackPane>
+                                <Label fx:id="lblNomePreview" text="SEU BOXEADOR" styleClass="criacao-nome" wrapText="true" />
+                                <HBox spacing="9" alignment="CENTER">
+                                    <children>
+                                        <Label fx:id="lblSexoPreview" text="MASCULINO" styleClass="criacao-ficha-valor" />
+                                        <Label text="•" styleClass="criacao-ficha-campo" />
+                                        <Label fx:id="lblOlhosPreview" text="CASTANHO" styleClass="criacao-ficha-valor" />
+                                    </children>
+                                </HBox>
+                                <Label text="O RINGUE ESPERA POR VOCÊ." styleClass="criacao-ficha-dica" wrapText="true" />
+                            </children>
+                        </VBox>
+                    </children>
+                </HBox>
+                <Label fx:id="lblMensagem" text="" styleClass="criacao-erro" />
+                <HBox spacing="20" alignment="CENTER" styleClass="criacao-acoes">
+                    <children>
+                        <Button focusTraversable="false" text="← VOLTAR" onAction="#voltar" styleClass="criacao-voltar" />
+                        <Button fx:id="btnConfirmar" focusTraversable="false" text="COMEÇAR HISTÓRIA  →" onAction="#confirmar"
+                                styleClass="criacao-confirmar" />
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+    </children>
+</StackPane>

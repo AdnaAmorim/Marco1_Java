@@ -27,8 +27,8 @@ O objetivo é chegar ao Campeonato Mundial e enfrentar Anthony, decidindo até o
 | Ambientação | Universo contemporâneo de boxe, entre Cidade Natal, Cidade A e Cidade B |
 | Protagonista | Jovem boxeador com nome, sexo e cor dos olhos configurados pelo jogador |
 | Estrutura | Introdução, dez capítulos, exploração livre entre os locais disponíveis e passagem de dias e horas |
-| Visual | Interface textual com arte ASCII/Unicode, molduras, menus por teclado e animações no terminal |
-| Som | Não há reprodução de áudio; os sons fazem parte das descrições narrativas |
+| Visual | Interface gráfica responsiva em JavaFX 21 (FXML + CSS), arte pixel art, vídeo de fundo animado, modais e ícones SVG |
+| Som | Trilha sonora em loop, vinheta de abertura e efeitos sonoros de interface com controle independente de volume (música e efeitos) |
 | Público-alvo | Pessoas interessadas em histórias de esporte, escolhas e gestão de personagem; a narrativa aborda violência e corrupção |
 
 ## Personagens e caminhos narrativos
@@ -49,7 +49,7 @@ O desfecho combina o resultado da luta mundial com as decisões sobre Noor. Exis
 - **Combate:** escolha entre Velocista, Nocauteador e Contragolpeador. O resultado é calculado a partir dos atributos e estilos; os rounds narram esse resultado com animações no terminal (com opção de pular direto para o resultado final nas configurações).
 - **Progressão:** capítulos dependem de acontecimentos anteriores, locais visitados e quantidade de lutas disputadas. Algumas escolhas também dependem de afinidade e decisões anteriores.
 - **Sistema de Saves e Persistência:** múltiplos slots de salvamento manuais (`saves/slot_*.xml`), salvamento automático inteligente (`saves/autosave.xml`) com detecção automática do save mais recente no Menu Inicial ("Continuar"), além de exportação/importação e tratamento de exceções de persistência (`FalhaSalvamentoException`, `FalhaCarregamentoException`, `DadosInvalidosException`).
-- **Configurações e Acessibilidade:** menu de configurações com persistência em `configuracao.xml`, permitindo alternar auto-save, exibição da logo inicial e velocidade de exibição/pulo de animações de combate.
+- **Configurações e Acessibilidade:** menu de configurações com persistência em `configuracao.xml`, permitindo alternar auto-save, pular animações de combate e cutscenes, além de ajustar o volume da música e dos efeitos sonoros em steps de 10%.
 - **Progresso Global e Conquistas:** rastreamento contínuo em `progresso.xml`, registrando finais desbloqueados e conquistas da carreira (como *Primeiros Passos*).
 
 ## Organização do código
@@ -57,22 +57,35 @@ O desfecho combina o resultado da luta mundial com as decisões sobre Noor. Exis
 O projeto é organizado segundo o padrão MVC, com classes e responsabilidades distribuídas nos seguintes pacotes:
 
 ```text
-src/main/java/com/exa863/anselmo_adna/
-├── Main.java             # Ponto de entrada
-├── controller/           # Controle do jogo, cenas, narrativa, combate e saves
-│   ├── cenas/            # Controle de abertura e cutscenes
-│   ├── SaveGameController.java   # Gerenciamento de slots e autosave
-│   └── XmlFileController.java    # Serialização e desserialização XML (Jackson)
-├── exception/            # Exceções customizadas de persistência e validação
-├── persistencia/         # Modelos e manipuladores de configurações, progresso e conquistas
-├── model/
-│   ├── character/        # Jogador e personagens
-│   ├── combat/           # Lutadores, estilos, rounds e resultados
-│   ├── narrativa/        # Diálogos, capítulos e dependências da história
-│   ├── stats/            # Atributos, itens, inventário e relacionamentos
-│   └── world/            # Locais, tempo e estados do jogo (GameState)
-├── view/console/         # Telas, menus navegáveis, saves e interação com o terminal
-└── utils/                # Formatação de textos e caixas
+src/main/
+├── java/com/exa863/anselmo_adna/
+│   ├── Main.java                 # Ponto de entrada agnóstico da aplicação
+│   ├── Application.java          # Inicialização da janela JavaFX (Stage, ícone e fonte)
+│   ├── controller/               # Regras do jogo, cenas, narrativa, combate e saves
+│   │   ├── fx/                   # Controllers JavaFX (SceneManager, AudioManager, IconManager e telas)
+│   │   │   └── modais/           # Controllers de modais reutilizáveis (ex.: ConfirmacaoController)
+│   │   ├── cenas/                # Controle de abertura e cutscenes
+│   │   ├── SaveGameController.java   # Gerenciamento de slots e autosave
+│   │   └── XmlFileController.java    # Serialização e desserialização XML (Jackson)
+│   ├── exception/                # Exceções customizadas de persistência e validação
+│   ├── persistencia/             # Modelos e manipuladores de configurações, progresso e conquistas
+│   ├── model/
+│   │   ├── character/            # Jogador e personagens
+│   │   ├── combat/               # Lutadores, estilos, rounds e resultados
+│   │   ├── narrativa/            # Diálogos, capítulos e dependências da história
+│   │   ├── stats/                # Atributos, itens, inventário e relacionamentos
+│   │   └── world/                # Locais, tempo e estados do jogo (GameState)
+│   ├── view/
+│   │   ├── fx/                   # Enums de mapeamento (Tela, Som, Musica, Icone)
+│   │   └── console/              # Interface textual da Fase 1
+│   └── utils/                    # Formatação de textos e caixas
+└── resources/
+    ├── views/                    # Telas e modais em FXML (inclui views/modais/)
+    ├── styles/                   # Estilos CSS (global.css + CSS específico por tela)
+    ├── audios/                   # Trilha sonora (.mp3) e efeitos sonoros (.wav)
+    ├── videos/                   # Vídeo de fundo animado (.mp4)
+    ├── fonts/                    # Fonte pixel art (upheavtt.ttf)
+    └── images/                   # Logo, ícone da janela e ícones SVG pixel art
 ```
 
 São utilizados herança e polimorfismo nos estilos de luta e capítulos, encapsulamento dos atributos e composição entre os componentes da partida. O grafo de capítulos organiza os pré-requisitos da narrativa.
@@ -82,8 +95,9 @@ São utilizados herança e polimorfismo nos estilos de luta e capítulos, encaps
 | Tecnologia | Versão no projeto | Uso |
 | --- | --- | --- |
 | Java | 21 | Linguagem e execução |
-| Maven | Instalação externa | Compilação e gerenciamento de dependências |
-| JLine | 3.29.0 | Terminal, leitura de teclas e menus interativos |
+| JavaFX (Controls, FXML, Media) | 21.0.5 | Interface gráfica, telas FXML, CSS, áudio e vídeo |
+| Maven | Instalação externa | Compilação, execução (`javafx-maven-plugin`) e empacotamento |
+| JLine | 3.29.0 | Suporte ao terminal da Fase 1 |
 | JGraphT | 1.5.2 | Grafo de dependências entre capítulos |
 | Jackson Dataformat XML | 2.17.2 | Serialização e persistência de dados em XML |
 | JUnit Jupiter | 5.10.2 | Testes automatizados de unidade e integração |
@@ -92,58 +106,37 @@ Não é utilizada uma engine de jogos.
 
 ## Requisitos para executar
 
-- **Java 21:** para compilar, instale um **JDK 21**, que inclui `java` e `javac`. Para apenas jogar uma distribuição já compilada, basta um ambiente de execução compatível com Java 21.
-- **Apache Maven:** necessário para compilar e preparar a distribuição a partir do código-fonte. O repositório não contém um Maven Wrapper completo.
-- **Internet na preparação inicial:** o Maven precisa baixar as dependências e os plugins que ainda não estiverem no cache local.
-- **Terminal interativo externo**, com suporte a sequências ANSI, caracteres Unicode e teclas direcionais.
-- Janela com pelo menos **80 colunas e 32 linhas**. Uma janela maior melhora a leitura dos textos.
-
-### Atenção ao terminal
-
-**Não execute pelo console Run/Debug do IntelliJ IDEA ou por consoles semelhantes de IDEs.** Esses consoles não oferecem o comportamento de terminal interativo exigido pelo jogo, e a leitura das setas, limpeza de tela e formatação podem falhar.
-
-No Windows, abra o **Windows Terminal com PowerShell** e execute os comandos por lá. O painel Terminal de uma IDE é diferente do console Run/Debug, mas sua compatibilidade não está garantida nesta versão; para jogar, utilize uma janela externa.
-
-Use uma fonte monoespaçada que exiba os caracteres das molduras. A tela inicial verifica as dimensões da janela e permite continuar com Enter mesmo abaixo do mínimo, mas o conteúdo pode ficar desalinhado ou cortado.
-
-### Acentos e caracteres especiais (UTF-8)
-
-O jogo usa acentos, setas e caracteres especiais como `╔`, `║`, `►` e `✓`. Para exibi-los corretamente, use um terminal configurado para **UTF-8** e uma fonte com suporte a esses símbolos. UTF-8 é a codificação de texto; não confundir com UTC, que é uma referência de horário.
-
-Se aparecerem letras trocadas ou símbolos estranhos no Windows, configure a sessão do terminal para UTF-8 e abra o JAR assim, na pasta onde ele está:
-
-```powershell
-chcp 65001
-java -Dfile.encoding=UTF-8 -jar PBLGame-1.5.jar
-```
-
-Se estiver na pasta do projeto, use `target/PBLGame-1.5.jar` no comando. No Linux/macOS, configure o terminal e a localidade do sistema para UTF-8; `chcp` é exclusivo do Windows.
-
-Se os caracteres aparecerem como quadradinhos mesmo com UTF-8, confira a fonte do terminal: mudar a codificação não adiciona símbolos que a fonte não possui. Se as molduras estiverem cortadas, aumente também o tamanho da janela.
+- **Java 21 (JDK 21):** necessário para compilar e executar a aplicação (inclui `java` e `javac`).
+- **Apache Maven:** necessário para baixar as dependências do JavaFX, compilar e rodar pelo código-fonte.
+- **Internet na primeira execução:** o Maven baixa automaticamente as dependências (JavaFX 21, Jackson, JGraphT, JUnit, etc.) para o cache local.
+- **Ambiente gráfico desktop:** janela redimensionável com resolução base **16:9 (`960 x 540`)** e mínimo de **`640 x 360`**.
 
 ## Como compilar e abrir pelo código-fonte
 
 Os exemplos abaixo usam PowerShell no Windows.
 
-### Onde baixar e como preparar o Maven
+### Onde baixar e como preparar o JDK 21 e o Maven
 
-**As orientações abaixo são um resumo genérico**, com exemplos para Windows. Os caminhos, a versão disponível e a configuração podem variar entre computadores. Para instalar, **siga o [guia oficial de instalação do Apache Maven](https://maven.apache.org/install.html)**, usando as instruções correspondentes ao seu sistema operacional. O guia oficial é a referência principal; esta seção serve apenas para orientar o que será necessário.
+#### Opção rápida no Windows (via Scoop — sem precisar de Administrador)
 
-Com o **JDK 21 já instalado**, o processo básico no Windows é:
+```powershell
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+Invoke-RestMethod -Uri https://get.scoop.sh | Invoke-Expression
+scoop bucket add java
+scoop install temurin21-jdk maven
+```
 
-1. Abra a [página oficial de downloads](https://maven.apache.org/download.cgi) e baixe a distribuição estável do Maven na opção **Binary zip archive**.
-2. Extraia o ZIP em uma pasta permanente, como `C:\Ferramentas`. A pasta extraída terá um nome como `apache-maven-3.9.x`, conforme a versão baixada.
-3. Nas **Variáveis de Ambiente** do Windows, adicione ao `Path` a pasta `bin` do Maven extraído, por exemplo `C:\Ferramentas\apache-maven-3.9.x\bin`. Substitua o exemplo pelo caminho real da sua instalação.
-4. Confira se `JAVA_HOME` aponta para a pasta do **JDK 21**, sem o `\bin` no final.
-5. Abra uma nova janela do PowerShell e execute `mvn -version`. A saída deve mostrar a versão do Maven e o Java 21 utilizado por ele.
+Depois de instalar, **feche e abra o PowerShell novamente** para carregar `JAVA_HOME` e `PATH`.
 
-Para Linux e macOS, o mesmo guia oficial apresenta as opções de instalação por gerenciador de pacotes.
+#### Instalação manual
 
-O Maven só é necessário para preparar o jogo a partir do código-fonte. Quem quiser apenas jogar pode baixar o JAR diretamente na [página de releases do projeto](https://github.com/AdnaAmorim/Marco1_Java/releases) e seguir a seção **Como executar uma versão já compilada**.
+Se preferir instalar manualmente, siga o [guia oficial de instalação do Apache Maven](https://maven.apache.org/install.html):
+
+1. Instale o **JDK 21** e configure `JAVA_HOME` apontando para a pasta do JDK (sem `\bin` no final).
+2. Baixe o **Binary zip archive** na [página oficial do Maven](https://maven.apache.org/download.cgi), extraia em uma pasta fixa (ex.: `C:\Ferramentas\apache-maven-3.9.x`) e adicione a pasta `bin` ao `Path` do Windows.
+3. Abra um novo terminal e confira as versões.
 
 ### 1. Confira as instalações
-
-Depois de instalar o JDK e o Maven e disponibilizá-los no `PATH`, abra uma nova janela do terminal:
 
 ```powershell
 java -version
@@ -151,60 +144,50 @@ javac -version
 mvn -version
 ```
 
-Confira se o Java e o compilador são da versão 21 e se o Maven está usando esse mesmo JDK. Caso necessário, ajuste `JAVA_HOME` para a pasta do JDK 21 e inclua sua pasta `bin` no `PATH`.
+Confira se o Java e o compilador são da versão **21** e se o Maven está usando esse mesmo JDK.
 
 ### 2. Entre na pasta do projeto
-
-Baixe ou clone o repositório e entre na pasta que contém o arquivo `pom.xml`. Substitua o caminho do exemplo pelo caminho real:
 
 ```powershell
 cd "C:\caminho\Marco1_Java"
 ```
 
-### 3. Compile e abra o jogo
+### 3. Execute o jogo (JavaFX)
 
 ```powershell
-mvn compile exec:java
+mvn javafx:run
 ```
 
-Esse é o jeito mais simples de jogar pelo código-fonte: o Maven baixa as dependências necessárias (incluindo JLine, JGraphT e Jackson Dataformat XML), compila e inicia o jogo. A primeira execução pode demorar por causa dos downloads. Use um terminal externo.
+O Maven baixa as dependências necessárias (incluindo JavaFX Controls, FXML e Media), compila e abre a janela gráfica do jogo. A primeira execução pode demorar um pouco por causa dos downloads iniciais.
+
+#### Rodando direto pela IDE
+
+- **VS Code:** instale o **Extension Pack for Java** (Microsoft) e aperte **`F5`** (ou **`Ctrl+Shift+B`** para rodar `mvn javafx:run`).
+- **IntelliJ IDEA:** abra a aba **Maven** (lateral direita) → **PBLGame → Plugins → javafx** → duplo clique em **`javafx:run`**.
 
 ### 4. Executar os testes automatizados
-
-Para rodar toda a suíte de testes unitários e de integração:
 
 ```powershell
 mvn test
 ```
 
-### 5. Gere um JAR para compartilhar
-
-Para reunir o jogo e todas as dependências de execução em um único arquivo executável (fat JAR):
+### 5. Gerar um JAR executável para compartilhar
 
 ```powershell
 mvn clean package
 ```
 
-O arquivo final é `target/PBLGame-1.5.jar`. O Maven Shade inclui as bibliotecas e configura a classe principal. Compartilhe esse arquivo; o arquivo com prefixo `original-`, também gerado no processo, não contém as dependências.
+O arquivo final é `target/PBLGame-2.0.jar` (fat JAR gerado pelo Maven Shade com todas as dependências). Compartilhe esse arquivo — o arquivo com prefixo `original-` não contém as dependências.
 
 ## Como executar uma versão já compilada
 
-Baixe a versão publicada diretamente na página de **[Releases do GitHub](https://github.com/AdnaAmorim/Marco1_Java/releases)**.
-
-Você só precisa baixar o arquivo **`PBLGame-1.5.jar`** (disponível na seção de *Assets* da release) e ter o **Java 21 instalado**. Não precisa de Maven, código-fonte nem pasta de dependências.
-
-Abra um terminal externo na pasta onde salvou o JAR e execute:
+Baixe o arquivo **`PBLGame-2.0.jar`** na página de **[Releases do GitHub](https://github.com/AdnaAmorim/Marco1_Java/releases)** (necessário ter **Java 21** instalado):
 
 ```powershell
-cd "C:\caminho\BoxingGame"
-java -jar PBLGame-1.5.jar
+java -jar PBLGame-2.0.jar
 ```
 
-Se ainda estiver na pasta do projeto, use `java -jar target/PBLGame-1.5.jar`.
-
-**Abra pelo terminal, não por duplo clique:** no Windows, o duplo clique pode usar o Java sem uma janela de console, impedindo a interação. O JAR inclui as bibliotecas do jogo, mas não inclui o próprio Java. Confira `java -version` antes de abrir. O comando é o mesmo no Linux/macOS, mas a interação nesses ambientes ainda precisa de validação.
-
-O jogo compilado não precisa de conexão com a internet para funcionar.
+Se estiver na pasta do projeto após `mvn clean package`, execute `java -jar target/PBLGame-2.0.jar`. O jogo compilado não precisa de internet para funcionar.
 
 ## Guia rápido de jogo
 
@@ -226,12 +209,12 @@ O jogo compilado não precisa de conexão com a internet para funcionar.
 | Problema | O que conferir |
 | --- | --- |
 | `java` ou `mvn` não reconhecido | Instalação e `PATH`; abra um novo terminal após configurar |
+| `JAVA_HOME is not defined correctly` | Configure `JAVA_HOME` apontando para o JDK 21 (ou instale via Scoop) e reabra o terminal |
 | Erro de versão do Java | Compare `java -version`, `javac -version` e o Java mostrado por `mvn -version` |
+| `NoClassDefFoundError: javafx/...` | Rode `mvn compile` para baixar as dependências do JavaFX e sincronize o projeto na IDE (`Java: Update Project` no VS Code) |
+| `Unsupported JavaFX configuration (unnamed module)` | Aviso normal ao executar fora do `--module-path` (como no `F5` ou fat JAR); não afeta o funcionamento |
 | JAR não encontrado | Pasta atual e caminho informado depois de `java -jar` |
-| `NoClassDefFoundError: XmlMapper` | O Maven não baixou as dependências ou executou sem compilar. Execute `mvn compile exec:java` ou rode via JAR empacotado |
-| `NoClassDefFoundError` para JLine ou JGraphT | Use o JAR completo gerado por `mvn clean package`, sem o prefixo `original-` |
-| Mensagem sobre ausência de manifesto principal | Confira se está usando o JAR completo atualizado, e não um artefato antigo ou com prefixo `original-` |
-| Setas, molduras ou limpeza de tela não funcionam | Execute em terminal externo, amplie a janela e confira a fonte |
+| `NoClassDefFoundError` ao rodar o JAR | Use o JAR completo gerado por `mvn clean package`, sem o prefixo `original-` |
 
 ## Relação com o PBL — Fase 1
 
