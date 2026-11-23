@@ -54,56 +54,97 @@ import java.util.List;
  */
 public class LutaController {
 
+    /** Fala e indicações visuais de uma etapa do combate. */
     private record PassoLuta(String roundLabel, String emissor, String texto, String banner,
                              int alvoImpacto, boolean mostrarNarrador, int focoLutador) {
     }
 
+    /** Painel principal da tela. */
     @FXML private StackPane rootPane;
+    /** Imagem — cenário. */
     @FXML private ImageView imgCenario;
+    /** Botão — menu de pausa. */
     @FXML private Button btnMenuPausa;
+    /** Texto — evento. */
     @FXML private Label lblEvento;
+    /** Texto exibido — round. */
     @FXML private Label lblRound;
 
+    /** Texto — nome 1. */
     @FXML private Label lblNome1;
+    /** Texto — estilo 1. */
     @FXML private Label lblEstilo1;
+    /** Texto — saúde 1. */
     @FXML private Label lblHp1;
+    /** Texto — energia 1. */
     @FXML private Label lblSt1;
+    /** Indicador — saúde 1. */
     @FXML private ProgressBar barHp1;
+    /** Indicador — energia 1. */
     @FXML private ProgressBar barSt1;
+    /** Texto exibido — atributos 1. */
     @FXML private Label lblAttr1;
 
+    /** Texto — nome 2. */
     @FXML private Label lblNome2;
+    /** Texto — estilo 2. */
     @FXML private Label lblEstilo2;
+    /** Texto — saúde 2. */
     @FXML private Label lblHp2;
+    /** Texto — energia 2. */
     @FXML private Label lblSt2;
+    /** Indicador — saúde 2. */
     @FXML private ProgressBar barHp2;
+    /** Indicador — energia 2. */
     @FXML private ProgressBar barSt2;
+    /** Texto exibido — atributos 2. */
     @FXML private Label lblAttr2;
 
+    /** Palco luta. */
     @FXML private StackPane palcoLuta;
+    /** Imagem — lutador 1. */
     @FXML private ImageView imgLutador1;
+    /** Imagem — lutador 2. */
     @FXML private ImageView imgLutador2;
+    /** Imagem — narrador. */
     @FXML private ImageView imgNarrador;
+    /** Texto exibido — banner central. */
     @FXML private Label lblBannerCentral;
 
+    /** Texto — emissor. */
     @FXML private Label lblEmissor;
+    /** Texto — texto. */
     @FXML private Label lblTexto;
+    /** Painel — resumo resultado. */
     @FXML private VBox boxResumoResultado;
+    /** Texto — aviso. */
     @FXML private Label lblAviso;
+    /** Botão — pular. */
     @FXML private Button btnPular;
+    /** Botão — avancar. */
     @FXML private Button btnAvancar;
 
+    /** Controlador da partida compartilhado pela interface. */
     private final GameController jogo = SceneManager.getGameController();
+    /** Contexto. */
     private LutaContexto contexto;
+    /** Passos. */
     private List<PassoLuta> passos;
+    /** Índice passo. */
     private int indicePasso;
+    /** Resultado exibido. */
     private boolean resultadoExibido;
 
+    /** Digitação. */
     private Timeline digitacao;
+    /** Texto completo. */
     private String textoCompleto = "";
+    /** Caracteres exibidos. */
     private int caracteresExibidos;
+    /** Digitação pausada pelo menu. */
     private boolean digitacaoPausadaPeloMenu;
 
+    /** Prepara os componentes da tela após o carregamento do FXML. */
     @FXML
     public void initialize() {
         rootPane.setFocusTraversable(true);
@@ -137,6 +178,7 @@ public class LutaController {
         });
     }
 
+    /** Prepara a apresentação da luta a partir do contexto recebido. */
     public void iniciar(LutaContexto contexto) {
         this.contexto = contexto;
         this.resultadoExibido = false;
@@ -152,12 +194,14 @@ public class LutaController {
         Platform.runLater(rootPane::requestFocus);
     }
 
+    /** Atualiza visibilidade do botão de pular. */
     private void atualizarVisibilidadePular() {
         boolean visivel = !resultadoExibido && pularAnimacaoHabilitado();
         btnPular.setVisible(visivel);
         btnPular.setManaged(visivel);
     }
 
+    /** Carrega imagens. */
     private void carregarImagens() {
         URL recCenario = getClass().getResource(contexto.imagemCenario());
         if (recCenario != null) {
@@ -171,6 +215,7 @@ public class LutaController {
         carregarSprite(imgNarrador, contexto.imagemNarrador(), 0.04, 0.0, 0.92, 0.72);
     }
 
+    /** Determina imagem do protagonista. */
     private String resolverImagemPlayer() {
         Player player = jogo.getPlayer();
         if (player == null) {
@@ -181,6 +226,7 @@ public class LutaController {
         return "/images/personagens/" + sexo + "_" + cor.name().toLowerCase() + ".png";
     }
 
+    /** Carrega sprite. */
     private void carregarSprite(ImageView alvo, String caminho, double xPct, double yPct, double wPct, double hPct) {
         if (caminho == null) {
             return;
@@ -198,6 +244,7 @@ public class LutaController {
         }
     }
 
+    /** Ajusta recorte do cenário. */
     private void ajustarRecorteCenario() {
         Image imagem = imgCenario.getImage();
         if (imagem == null || rootPane.getWidth() <= 0 || rootPane.getHeight() <= 0) {
@@ -216,6 +263,7 @@ public class LutaController {
         }
     }
 
+    /** Preenche indicadores dos dois lutadores. */
     private void preencherHudLutadores() {
         Lutador l1 = contexto.lutador1();
         Lutador l2 = contexto.lutador2();
@@ -239,6 +287,7 @@ public class LutaController {
         lblAttr2.setText(String.format("FOR %.0f | AGI %.0f | RES %.0f", e2.forca, e2.agilidade, e2.resistencia));
     }
 
+    /** Transforma os rounds da partida já calculada em falas e indicações de impacto para a animação. */
     private void construirRoteiro() {
         passos = new ArrayList<>();
         Lutador l1 = contexto.lutador1();
@@ -295,6 +344,7 @@ public class LutaController {
         }
     }
 
+    /** Identifica lutador que recebe o efeito de impacto. */
     private int detectarAlvoImpacto(String texto, String nome1, String nome2) {
         int pos1 = texto.indexOf(nome1);
         int pos2 = texto.indexOf(nome2);
@@ -304,6 +354,7 @@ public class LutaController {
         return 0;
     }
 
+    /** Mostra etapa atual da narração da luta. */
     private void mostrarPassoAtual() {
         if (indicePasso >= passos.size()) {
             exibirResultadoOficial();
@@ -332,6 +383,7 @@ public class LutaController {
         mostrarDigitando(passo.texto());
     }
 
+    /** Atualiza visibilidade dos personagens no palco. */
     private void atualizarPresencaPalco(boolean mostrarNarrador, int focoLutador) {
         imgNarrador.setVisible(mostrarNarrador);
         imgNarrador.setManaged(mostrarNarrador);
@@ -352,6 +404,7 @@ public class LutaController {
         imgLutador2.setScaleY(focoLutador == 2 ? 1.05 : 1.0);
     }
 
+    /** Aplica as consequências da luta uma única vez, inclusive quando o jogador pula a animação. */
     private void exibirResultadoOficial() {
         if (resultadoExibido) {
             return;
@@ -424,6 +477,7 @@ public class LutaController {
         lblAviso.setText("ENTER OU CLIQUE PARA VOLTAR");
     }
 
+    /** Mostra ilustracao. */
     private void mostrarIlustracao(String nome) {
         URL recurso = getClass().getResource("/images/cutscenes/" + nome + ".png");
         if (recurso != null) {
@@ -432,6 +486,7 @@ public class LutaController {
         }
         palcoLuta.setVisible(false);
     }
+    /** Cria linha do resumo do combate. */
     private Label criarLinhaResumo(String texto, String classeCss) {
         Label label = new Label(texto);
         label.setWrapText(true);
@@ -439,6 +494,7 @@ public class LutaController {
         return label;
     }
 
+    /** Verifica condições da conquista Primeiros Passos. */
     private boolean verificarPrimeirosPassos(ResultadoLuta resultado) {
         if (!resultado.isVencedor(contexto.lutador1())) {
             return false;
@@ -450,6 +506,7 @@ public class LutaController {
         }
     }
 
+    /** Salva automaticamente. */
     private void salvarAutomaticamente() {
         try {
             SaveGameController saves = new SaveGameController();
@@ -460,6 +517,7 @@ public class LutaController {
         }
     }
 
+    /** Consulta a preferência de pular a animação de combate. */
     private boolean pularAnimacaoHabilitado() {
         Configuracao config = new Configuracao();
         try {
@@ -470,6 +528,7 @@ public class LutaController {
         }
     }
 
+    /** Mostra banner. */
     private void mostrarBanner(String texto) {
         lblBannerCentral.setText(texto);
         lblBannerCentral.setVisible(true);
@@ -488,11 +547,13 @@ public class LutaController {
         scale.play();
     }
 
+    /** Oculta banner. */
     private void ocultarBanner() {
         lblBannerCentral.setVisible(false);
         lblBannerCentral.setManaged(false);
     }
 
+    /** Anima efeito de impacto do golpe. */
     private void animarImpacto(Node alvo) {
         TranslateTransition shake = new TranslateTransition(Duration.millis(55), alvo);
         shake.setFromX(0);
@@ -503,6 +564,7 @@ public class LutaController {
         shake.play();
     }
 
+    /** Continua a sequência exibida na tela. */
     @FXML
     public void avancar() {
         if (digitacao != null && digitacao.getStatus() == Animation.Status.RUNNING) {
@@ -522,6 +584,7 @@ public class LutaController {
         mostrarPassoAtual();
     }
 
+    /** Avança para o próximo ponto permitido da sequência. */
     @FXML
     public void pular() {
         if (!resultadoExibido && pularAnimacaoHabilitado()) {
@@ -530,6 +593,7 @@ public class LutaController {
         }
     }
 
+    /** Abre menu de pausa. */
     @FXML
     public void abrirMenuPausa() {
         if (SceneManager.pausaAtiva()) {
@@ -553,6 +617,7 @@ public class LutaController {
         }
     }
 
+    /** Revela o texto aos poucos na caixa de diálogo. */
     private void mostrarDigitando(String texto) {
         pararDigitacao();
         textoCompleto = texto;
@@ -569,11 +634,13 @@ public class LutaController {
         digitacao.play();
     }
 
+    /** Conclui exibição gradual do texto. */
     private void concluirDigitacao() {
         pararDigitacao();
         lblTexto.setText(textoCompleto);
     }
 
+    /** Interrompe exibição gradual do texto. */
     private void pararDigitacao() {
         if (digitacao != null) {
             digitacao.stop();

@@ -48,51 +48,90 @@ import java.util.Random;
  */
 public class ClubeDeLutaController {
 
+    /** Largura cenário. */
     private static final double LARGURA_CENARIO = 960.0;
+    /** Altura cenário. */
     private static final double ALTURA_CENARIO = 540.0;
+    /** Imagem clube. */
     private static final String IMG_CLUBE = "/images/locais/Clube_De_Luta.png";
+    /** Imagem adversário. */
     private static final String IMG_ADVERSARIO = "/images/personagens/lutador_desconhecido.png";
 
+    /** Painel principal da tela. */
     @FXML private StackPane rootPane;
+    /** Area cenário. */
     @FXML private StackPane areaCenario;
+    /** Imagem — fundo desfocado. */
     @FXML private ImageView imgFundoBlur;
+    /** Desfocado escuro. */
     @FXML private Region blurEscuro;
+    /** Cenário canvas. */
     @FXML private Pane cenarioCanvas;
+    /** Imagem — fundo. */
     @FXML private ImageView imgFundo;
 
+    /** Card adversario. */
     @FXML private HBox cardAdversario;
+    /** Imagem — adversario. */
     @FXML private ImageView imgAdversario;
+    /** Texto — nome adversario. */
     @FXML private Label lblNomeAdversario;
+    /** Texto — estilo adversario. */
     @FXML private Label lblEstiloAdversario;
+    /** Texto — força do adversário. */
     @FXML private Label lblForcaAdv;
+    /** Texto — agilidade do adversário. */
     @FXML private Label lblAgilidadeAdv;
+    /** Texto — resistência do adversário. */
     @FXML private Label lblResistenciaAdv;
+    /** Texto — inteligência do adversário. */
     @FXML private Label lblInteligenciaAdv;
+    /** Texto exibido — prêmio adversário. */
     @FXML private Label lblPremioAdversario;
 
+    /** Texto — atleta. */
     @FXML private Label lblAtleta;
+    /** Texto — saúde. */
     @FXML private Label lblSaude;
+    /** Texto — energia. */
     @FXML private Label lblEnergia;
+    /** Texto — dinheiro. */
     @FXML private Label lblDinheiro;
+    /** Texto — data e hora. */
     @FXML private Label lblDataHora;
+    /** Botão — pausa. */
     @FXML private Button btnPausa;
 
+    /** Texto — falante. */
     @FXML private Label lblFalante;
+    /** Texto — aposta. */
     @FXML private Label lblAposta;
+    /** Texto — texto. */
     @FXML private Label lblTexto;
+    /** Painel — detalhes. */
     @FXML private VBox boxDetalhes;
+    /** Box opções. */
     @FXML private VBox boxOpcoes;
 
+    /** Controlador da partida compartilhado pela interface. */
     private final GameController jogo = SceneManager.getGameController();
+    /** Gerador usado nos sorteios da tela. */
     private final Random random = new Random();
 
+    /** Força oponente. */
     private int forcaOponente;
+    /** Agilidade oponente. */
     private int agilidadeOponente;
+    /** Resistência oponente. */
     private int resistenciaOponente;
+    /** Inteligência oponente. */
     private int inteligenciaOponente;
+    /** Dinheiro aposta. */
     private int dinheiroAposta;
+    /** Estilo oponente. */
     private EstiloLuta estiloOponente;
 
+    /** Prepara os componentes da tela após o carregamento do FXML. */
     @FXML
     public void initialize() {
         configurarEscalaCenario();
@@ -103,6 +142,7 @@ public class ClubeDeLutaController {
         verificarCondicoesEntrada();
     }
 
+    /** Carrega imagem de fundo. */
     private void carregarFundo() {
         URL recurso = getClass().getResource(IMG_CLUBE);
         if (recurso != null) {
@@ -123,6 +163,7 @@ public class ClubeDeLutaController {
         }
     }
 
+    /** Configura escala do cenário para o tamanho da janela. */
     private void configurarEscalaCenario() {
         Rectangle clip = new Rectangle();
         clip.widthProperty().bind(areaCenario.widthProperty());
@@ -159,6 +200,7 @@ public class ClubeDeLutaController {
         blurEscuro.visibleProperty().bind(temLacuna);
     }
 
+    /** Configura ícones do painel de status. */
     private void configurarIconesHud() {
         IconManager.aplicarBotao(btnPausa, Icone.PAUSE, 18);
         IconManager.aplicar(lblSaude, Icone.HEART, 17, IconManager.COR_PERIGO);
@@ -166,6 +208,7 @@ public class ClubeDeLutaController {
         IconManager.aplicar(lblDataHora, Icone.CLOCK, 17, IconManager.COR_DESTAQUE);
     }
 
+    /** Configura atalhos de teclado da tela. */
     private void configurarTeclado() {
         rootPane.setFocusTraversable(true);
         rootPane.setOnKeyPressed(event -> {
@@ -176,6 +219,7 @@ public class ClubeDeLutaController {
         });
     }
 
+    /** Atualiza painel de status. */
     private void atualizarHud() {
         Player player = jogo.getPlayer();
         DataDia data = jogo.getDataDia();
@@ -196,6 +240,7 @@ public class ClubeDeLutaController {
         lblDinheiro.setText("R$ " + player.getDinheiro());
     }
 
+    /** Verifica condições de entrada do jogador. */
     private void verificarCondicoesEntrada() {
         Player player = jogo.getPlayer();
         if (player == null) {
@@ -223,6 +268,7 @@ public class ClubeDeLutaController {
         exibirMenuClube();
     }
 
+    /** Atualiza ficha do adversário. */
     private void atualizarCardAdversario() {
         lblNomeAdversario.setText("LUTADOR DESCONHECIDO");
         lblEstiloAdversario.setText("ESTILO: " + estiloOponente.getNome().toUpperCase());
@@ -235,6 +281,7 @@ public class ClubeDeLutaController {
         cardAdversario.setManaged(true);
     }
 
+    /** Sorteia oponente. */
     private void sortearOponente() {
         forcaOponente = 1 + random.nextInt(2);
         agilidadeOponente = 1 + random.nextInt(2);
@@ -248,6 +295,7 @@ public class ClubeDeLutaController {
         };
     }
 
+    /** Exibe opções do clube de luta. */
     private void exibirMenuClube() {
         lblAposta.setText("APOSTA: R$ " + dinheiroAposta);
         lblFalante.setText("CLUBE DE LUTA • BRIGAS CLANDESTINAS");
@@ -263,6 +311,7 @@ public class ClubeDeLutaController {
         AudioManager.aplicarHoverNosBotoes(boxOpcoes);
     }
 
+    /** Exibe estilos de luta disponíveis. */
     private void exibirEscolhaPostura() {
         AudioManager.tocar(Som.CLIQUE);
         lblFalante.setText("POSTURA NA BRIGA DE RUA");
@@ -292,6 +341,7 @@ public class ClubeDeLutaController {
         AudioManager.aplicarHoverNosBotoes(boxOpcoes);
     }
 
+    /** Cria opção de estilo de luta. */
     private HBox criarLinhaPostura(String nome, List<String> bonus, List<String> penalidades) {
         HBox linha = new HBox();
         linha.getStyleClass().add("postura-linha");
@@ -313,6 +363,7 @@ public class ClubeDeLutaController {
         return linha;
     }
 
+    /** Vincula destaque visual à seleção da postura. */
     private void vincularDestaquePostura(Button botao, HBox linha) {
         botao.hoverProperty().addListener((obs, antes, hover) -> {
             if (hover) {
@@ -325,6 +376,7 @@ public class ClubeDeLutaController {
         });
     }
 
+    /** Seleciona postura. */
     private void selecionarPostura(EstiloLuta postura) {
         Player player = jogo.getPlayer();
         if (player == null) {
@@ -339,6 +391,7 @@ public class ClubeDeLutaController {
         Lutador lutadorOponente = new Lutador(pOponente, attrOponente, estiloOponente);
 
         Match match = new MatchController().executarPartida(lutadorPlayer, lutadorOponente);
+        // Guarda a aposta desta luta para calcular o pagamento quando o resultado for exibido.
         int aposta = dinheiroAposta;
 
         LutaContexto contexto = new LutaContexto(
@@ -385,17 +438,20 @@ public class ClubeDeLutaController {
         SceneManager.iniciarLuta(contexto);
     }
 
+    /** Retorna do clube ao mapa. */
     private void sairDoClube() {
         AudioManager.tocar(Som.CLIQUE);
         jogo.voltarLocal();
         SceneManager.irPara(Tela.MAPA);
     }
 
+    /** Abre menu de pausa. */
     @FXML
     public void abrirPausa() {
         SceneManager.abrirMenuPausa(null);
     }
 
+    /** Cria botão para uma opção do menu. */
     private Button criarBotaoOpcao(String texto, Icone icone, boolean estiloSair, Runnable acao) {
         Button botao = new Button(texto);
         botao.setMaxWidth(Double.MAX_VALUE);
@@ -409,11 +465,13 @@ public class ClubeDeLutaController {
         return botao;
     }
 
+    /** Define ação do botão de saída. */
     private void definirBotaoSaida(String texto) {
         boxOpcoes.getChildren().setAll(criarBotaoOpcao(texto, Icone.LEFT_ARROW, true, this::sairDoClube));
         AudioManager.aplicarHoverNosBotoes(boxOpcoes);
     }
 
+    /** Cria linha de detalhes do painel. */
     private Label criarLinhaDetalhe(String texto, String classeCss) {
         Label label = new Label(texto);
         label.setWrapText(true);
@@ -421,6 +479,7 @@ public class ClubeDeLutaController {
         return label;
     }
 
+    /** Mostra detalhes. */
     private void mostrarDetalhes(List<Label> linhas) {
         boxDetalhes.getChildren().setAll(linhas);
         boxDetalhes.setVisible(true);

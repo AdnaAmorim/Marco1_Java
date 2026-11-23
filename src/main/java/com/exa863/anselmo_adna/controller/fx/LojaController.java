@@ -39,37 +39,64 @@ import java.util.List;
  */
 public class LojaController {
 
+    /** Largura cenário. */
     private static final double LARGURA_CENARIO = 960.0;
+    /** Altura cenário. */
     private static final double ALTURA_CENARIO = 540.0;
+    /** Imagem loja. */
     private static final String IMG_LOJA = "/images/locais/Loja_De_Tudo.png";
 
+    /** Painel principal da tela. */
     @FXML private StackPane rootPane;
+    /** Area cenário. */
     @FXML private StackPane areaCenario;
+    /** Imagem — fundo desfocado. */
     @FXML private ImageView imgFundoBlur;
+    /** Desfocado escuro. */
     @FXML private Region blurEscuro;
+    /** Cenário canvas. */
     @FXML private Pane cenarioCanvas;
+    /** Imagem — fundo. */
     @FXML private ImageView imgFundo;
+    /** Vitrine itens. */
     @FXML private FlowPane vitrineItens;
 
+    /** Texto — atleta. */
     @FXML private Label lblAtleta;
+    /** Texto — saúde. */
     @FXML private Label lblSaude;
+    /** Texto — energia. */
     @FXML private Label lblEnergia;
+    /** Texto — dinheiro. */
     @FXML private Label lblDinheiro;
+    /** Texto — data e hora. */
     @FXML private Label lblDataHora;
+    /** Botão — mochila. */
     @FXML private Button btnMochila;
+    /** Botão — pausa. */
     @FXML private Button btnPausa;
 
+    /** Texto — falante. */
     @FXML private Label lblFalante;
+    /** Texto — preco. */
     @FXML private Label lblPreco;
+    /** Texto — texto. */
     @FXML private Label lblTexto;
+    /** Painel — detalhes. */
     @FXML private VBox boxDetalhes;
+    /** Box opções. */
     @FXML private VBox boxOpcoes;
 
+    /** Controlador da partida compartilhado pela interface. */
     private final GameController jogo = SceneManager.getGameController();
+    /** Item selecionado. */
     private Item itemSelecionado = Itens.ITENS_LOJA[0];
+    /** Feedback compra. */
     private String feedbackCompra;
+    /** Feedback erro. */
     private boolean feedbackErro;
 
+    /** Prepara os componentes da tela após o carregamento do FXML. */
     @FXML
     public void initialize() {
         configurarEscalaCenario();
@@ -79,6 +106,7 @@ public class LojaController {
         atualizarTela();
     }
 
+    /** Carrega imagem de fundo. */
     private void carregarFundo() {
         URL recurso = getClass().getResource(IMG_LOJA);
         if (recurso != null) {
@@ -88,6 +116,7 @@ public class LojaController {
         }
     }
 
+    /** Configura escala do cenário para o tamanho da janela. */
     private void configurarEscalaCenario() {
         Rectangle clip = new Rectangle();
         clip.widthProperty().bind(areaCenario.widthProperty());
@@ -124,6 +153,7 @@ public class LojaController {
         blurEscuro.visibleProperty().bind(temLacuna);
     }
 
+    /** Configura ícones do painel de status. */
     private void configurarIconesHud() {
         IconManager.aplicarBotao(btnMochila, Icone.BAG, 18);
         IconManager.aplicarBotao(btnPausa, Icone.PAUSE, 18);
@@ -132,6 +162,7 @@ public class LojaController {
         IconManager.aplicar(lblDataHora, Icone.CLOCK, 17, IconManager.COR_DESTAQUE);
     }
 
+    /** Configura atalhos de teclado da tela. */
     private void configurarTeclado() {
         rootPane.setFocusTraversable(true);
         rootPane.setOnKeyPressed(event -> {
@@ -142,12 +173,14 @@ public class LojaController {
         });
     }
 
+    /** Atualiza tela. */
     private void atualizarTela() {
         atualizarHud();
         construirVitrine();
         atualizarCaixaDialogo();
     }
 
+    /** Atualiza painel de status. */
     private void atualizarHud() {
         Player player = jogo.getPlayer();
         DataDia data = jogo.getDataDia();
@@ -168,6 +201,7 @@ public class LojaController {
         lblDinheiro.setText("R$ " + player.getDinheiro());
     }
 
+    /** Monta vitrine de itens à venda. */
     private void construirVitrine() {
         Player player = jogo.getPlayer();
         vitrineItens.getChildren().clear();
@@ -203,6 +237,7 @@ public class LojaController {
         }
     }
 
+    /** Atualiza caixa de diálogo. */
     private void atualizarCaixaDialogo() {
         lblFalante.setText("LOJA DE TUDO • " + itemSelecionado.getNome().toUpperCase());
         lblPreco.setText("PREÇO: R$ " + itemSelecionado.getPreco());
@@ -225,6 +260,7 @@ public class LojaController {
         AudioManager.aplicarHoverNosBotoes(boxOpcoes);
     }
 
+    /** Confere o saldo antes de debitar o preço e acrescentar uma unidade à mochila. */
     private void comprarSelecionado() {
         Player player = jogo.getPlayer();
         if (player == null || itemSelecionado == null) {
@@ -248,22 +284,26 @@ public class LojaController {
         atualizarTela();
     }
 
+    /** Abre mochila do jogador. */
     @FXML
     public void abrirMochila() {
         SceneManager.abrirModal(Tela.INVENTARIO);
     }
 
+    /** Retorna da loja ao mapa. */
     private void sairDaLoja() {
         AudioManager.tocar(Som.CLIQUE);
         jogo.voltarLocal();
         SceneManager.irPara(Tela.MAPA);
     }
 
+    /** Abre menu de pausa. */
     @FXML
     public void abrirPausa() {
         SceneManager.abrirMenuPausa(null);
     }
 
+    /** Cria botão para uma opção do menu. */
     private Button criarBotaoOpcao(String texto, Icone icone, boolean estiloSair, Runnable acao) {
         Button botao = new Button(texto);
         botao.setMaxWidth(Double.MAX_VALUE);
@@ -277,6 +317,7 @@ public class LojaController {
         return botao;
     }
 
+    /** Cria linha de detalhes do painel. */
     private Label criarLinhaDetalhe(String texto, String classeCss) {
         Label label = new Label(texto);
         label.setWrapText(true);

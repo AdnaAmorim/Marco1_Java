@@ -40,35 +40,60 @@ import java.util.List;
  */
 public class CampeonatoMundialController {
 
+    /** Largura cenário. */
     private static final double LARGURA_CENARIO = 960.0;
+    /** Altura cenário. */
     private static final double ALTURA_CENARIO = 540.0;
+    /** Imagem mundial. */
     private static final String IMG_MUNDIAL = "/images/locais/Campeonato_Mundial.png";
+    /** Imagem anthony. */
     private static final String IMG_ANTHONY = "/images/visual_novel/Anthony.png";
 
+    /** Painel principal da tela. */
     @FXML private StackPane rootPane;
+    /** Area cenário. */
     @FXML private StackPane areaCenario;
+    /** Imagem — fundo desfocado. */
     @FXML private ImageView imgFundoBlur;
+    /** Desfocado escuro. */
     @FXML private Region blurEscuro;
+    /** Cenário canvas. */
     @FXML private Pane cenarioCanvas;
+    /** Imagem — fundo. */
     @FXML private ImageView imgFundo;
+    /** Card adversario. */
     @FXML private HBox cardAdversario;
+    /** Imagem — adversário. */
     @FXML private ImageView imgAdversario;
 
+    /** Texto — atleta. */
     @FXML private Label lblAtleta;
+    /** Texto — saúde. */
     @FXML private Label lblSaude;
+    /** Texto — energia. */
     @FXML private Label lblEnergia;
+    /** Texto — dinheiro. */
     @FXML private Label lblDinheiro;
+    /** Texto — data e hora. */
     @FXML private Label lblDataHora;
+    /** Botão — pausa. */
     @FXML private Button btnPausa;
 
+    /** Texto — falante. */
     @FXML private Label lblFalante;
+    /** Texto — taxa. */
     @FXML private Label lblTaxa;
+    /** Texto — texto. */
     @FXML private Label lblTexto;
+    /** Painel — detalhes. */
     @FXML private VBox boxDetalhes;
+    /** Box opções. */
     @FXML private VBox boxOpcoes;
 
+    /** Controlador da partida compartilhado pela interface. */
     private final GameController jogo = SceneManager.getGameController();
 
+    /** Prepara os componentes da tela após o carregamento do FXML. */
     @FXML
     public void initialize() {
         configurarEscalaCenario();
@@ -79,6 +104,7 @@ public class CampeonatoMundialController {
         verificarAcesso();
     }
 
+    /** Carrega imagens. */
     private void carregarImagens() {
         URL recFundo = getClass().getResource(IMG_MUNDIAL);
         if (recFundo != null) {
@@ -99,6 +125,7 @@ public class CampeonatoMundialController {
         }
     }
 
+    /** Configura escala do cenário para o tamanho da janela. */
     private void configurarEscalaCenario() {
         Rectangle clip = new Rectangle();
         clip.widthProperty().bind(areaCenario.widthProperty());
@@ -135,6 +162,7 @@ public class CampeonatoMundialController {
         blurEscuro.visibleProperty().bind(temLacuna);
     }
 
+    /** Configura ícones do painel de status. */
     private void configurarIconesHud() {
         IconManager.aplicarBotao(btnPausa, Icone.PAUSE, 18);
         IconManager.aplicar(lblSaude, Icone.HEART, 17, IconManager.COR_PERIGO);
@@ -142,6 +170,7 @@ public class CampeonatoMundialController {
         IconManager.aplicar(lblDataHora, Icone.CLOCK, 17, IconManager.COR_DESTAQUE);
     }
 
+    /** Configura atalhos de teclado da tela. */
     private void configurarTeclado() {
         rootPane.setFocusTraversable(true);
         rootPane.setOnKeyPressed(event -> {
@@ -152,6 +181,7 @@ public class CampeonatoMundialController {
         });
     }
 
+    /** Atualiza painel de status. */
     private void atualizarHud() {
         Player player = jogo.getPlayer();
         DataDia data = jogo.getDataDia();
@@ -167,6 +197,7 @@ public class CampeonatoMundialController {
         lblDinheiro.setText("R$ " + player.getDinheiro());
     }
 
+    /** Libera a disputa do cinturão após a conclusão do capítulo 10. */
     private void verificarAcesso() {
         Player player = jogo.getPlayer();
         if (player == null) {
@@ -190,6 +221,7 @@ public class CampeonatoMundialController {
         exibirMenuMundial();
     }
 
+    /** Exibe opções do Campeonato Mundial. */
     private void exibirMenuMundial() {
         cardAdversario.setVisible(true);
         cardAdversario.setManaged(true);
@@ -208,6 +240,7 @@ public class CampeonatoMundialController {
         AudioManager.aplicarHoverNosBotoes(boxOpcoes);
     }
 
+    /** Confere a taxa de inscrição, a saúde e a energia antes de oferecer os estilos de luta. */
     private void validarEAvancarPostura() {
         Player player = jogo.getPlayer();
         if (player == null) {
@@ -241,6 +274,7 @@ public class CampeonatoMundialController {
         exibirEscolhaPostura();
     }
 
+    /** Exibe estilos de luta disponíveis. */
     private void exibirEscolhaPostura() {
         AudioManager.tocar(Som.CLIQUE);
         lblFalante.setText("POSTURA PARA A FINAL MUNDIAL");
@@ -270,6 +304,7 @@ public class CampeonatoMundialController {
         AudioManager.aplicarHoverNosBotoes(boxOpcoes);
     }
 
+    /** Inicia combate. */
     private void iniciarCombate(EstiloLuta postura) {
         Player player = jogo.getPlayer();
         if (player == null) {
@@ -279,16 +314,19 @@ public class CampeonatoMundialController {
         MundialFx.iniciarCombate(player, postura);
     }
 
+    /** Retorna à navegação pelo mapa. */
     private void voltarAoMapa() {
         AudioManager.tocar(Som.CLIQUE);
         SceneManager.irPara(Tela.MAPA);
     }
 
+    /** Abre menu de pausa. */
     @FXML
     public void abrirPausa() {
         SceneManager.abrirMenuPausa(null);
     }
 
+    /** Cria opção de estilo de luta. */
     private HBox criarLinhaPostura(String nome, List<String> bonus, List<String> penalidades) {
         HBox linha = new HBox();
         linha.getStyleClass().add("postura-linha");
@@ -310,6 +348,7 @@ public class CampeonatoMundialController {
         return linha;
     }
 
+    /** Vincula destaque visual à seleção da postura. */
     private void vincularDestaquePostura(Button botao, HBox linha) {
         botao.hoverProperty().addListener((obs, antes, hover) -> {
             if (hover) {
@@ -322,6 +361,7 @@ public class CampeonatoMundialController {
         });
     }
 
+    /** Cria botão para uma opção do menu. */
     private Button criarBotaoOpcao(String texto, Icone icone, boolean estiloSair, Runnable acao) {
         Button botao = new Button(texto);
         botao.setMaxWidth(Double.MAX_VALUE);
@@ -335,16 +375,19 @@ public class CampeonatoMundialController {
         return botao;
     }
 
+    /** Define ação do botão de saída. */
     private void definirBotaoSaida(String texto) {
         boxOpcoes.getChildren().setAll(criarBotaoOpcao(texto, Icone.LEFT_ARROW, true, this::voltarAoMapa));
         AudioManager.aplicarHoverNosBotoes(boxOpcoes);
     }
 
+    /** Define ação do botão de retorno. */
     private void definirBotaoVoltar(String texto, Runnable acao) {
         boxOpcoes.getChildren().setAll(criarBotaoOpcao(texto, Icone.LEFT_ARROW, false, acao));
         AudioManager.aplicarHoverNosBotoes(boxOpcoes);
     }
 
+    /** Cria linha de detalhes do painel. */
     private Label criarLinhaDetalhe(String texto, String classeCss) {
         Label label = new Label(texto);
         label.setWrapText(true);
@@ -352,6 +395,7 @@ public class CampeonatoMundialController {
         return label;
     }
 
+    /** Mostra detalhes. */
     private void mostrarDetalhes(List<Label> linhas) {
         boxDetalhes.getChildren().setAll(linhas);
         boxDetalhes.setVisible(true);

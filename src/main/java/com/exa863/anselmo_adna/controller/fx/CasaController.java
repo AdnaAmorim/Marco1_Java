@@ -45,45 +45,78 @@ import java.util.Random;
  */
 public class CasaController {
 
+    /** Largura cenário. */
     private static final double LARGURA_CENARIO = 960.0;
+    /** Altura cenário. */
     private static final double ALTURA_CENARIO = 540.0;
+    /** Chance fala avos. */
     private static final int CHANCE_FALA_AVOS = 40;
+    /** Duração fade fundo. */
     private static final Duration DURACAO_FADE_FUNDO = Duration.millis(550);
 
+    /** Imagem quarto. */
     private static final String IMG_QUARTO = "/images/locais/Quarto.png";
+    /** Imagem academia casa. */
     private static final String IMG_ACADEMIA_CASA = "/images/locais/Academia_Casa.png";
 
+    /** Painel principal da tela. */
     @FXML private StackPane rootPane;
+    /** Area cenário. */
     @FXML private StackPane areaCenario;
+    /** Imagem — fundo desfocado anterior. */
     @FXML private ImageView imgFundoBlurAnterior;
+    /** Imagem — fundo desfocado. */
     @FXML private ImageView imgFundoBlur;
+    /** Desfocado escuro. */
     @FXML private Region blurEscuro;
+    /** Cenário canvas. */
     @FXML private Pane cenarioCanvas;
+    /** Imagem — fundo anterior. */
     @FXML private ImageView imgFundoAnterior;
+    /** Imagem — fundo. */
     @FXML private ImageView imgFundo;
+    /** Cortina sono. */
     @FXML private Region cortinaSono;
 
+    /** Texto — atleta. */
     @FXML private Label lblAtleta;
+    /** Texto — saúde. */
     @FXML private Label lblSaude;
+    /** Texto — energia. */
     @FXML private Label lblEnergia;
+    /** Texto — dinheiro. */
     @FXML private Label lblDinheiro;
+    /** Texto — data e hora. */
     @FXML private Label lblDataHora;
+    /** Botão — pausa. */
     @FXML private Button btnPausa;
 
+    /** Texto — falante. */
     @FXML private Label lblFalante;
+    /** Texto — treinos. */
     @FXML private Label lblTreinos;
+    /** Texto — texto. */
     @FXML private Label lblTexto;
+    /** Painel — detalhes. */
     @FXML private VBox boxDetalhes;
+    /** Box opções. */
     @FXML private VBox boxOpcoes;
 
+    /** Controlador da partida compartilhado pela interface. */
     private final GameController jogo = SceneManager.getGameController();
+    /** Gerador usado nos sorteios da tela. */
     private final Random random = new Random();
+    /** Cache imagens. */
     private final Map<String, Image> cacheImagens = new HashMap<>();
 
+    /** Caminho imagem atual. */
     private String caminhoImagemAtual;
+    /** Transição fundo. */
     private ParallelTransition transicaoFundo;
+    /** Transição sono. */
     private SequentialTransition transicaoSono;
 
+    /** Prepara os componentes da tela após o carregamento do FXML. */
     @FXML
     public void initialize() {
         configurarEscalaCenario();
@@ -94,6 +127,7 @@ public class CasaController {
         exibirMenuPrincipal(true);
     }
 
+    /** Configura escala do cenário para o tamanho da janela. */
     private void configurarEscalaCenario() {
         Rectangle clip = new Rectangle();
         clip.widthProperty().bind(areaCenario.widthProperty());
@@ -141,6 +175,7 @@ public class CasaController {
         });
     }
 
+    /** Configura ícones do painel de status. */
     private void configurarIconesHud() {
         IconManager.aplicarBotao(btnPausa, Icone.PAUSE, 18);
         IconManager.aplicar(lblSaude, Icone.HEART, 17, IconManager.COR_PERIGO);
@@ -148,6 +183,7 @@ public class CasaController {
         IconManager.aplicar(lblDataHora, Icone.CLOCK, 17, IconManager.COR_DESTAQUE);
     }
 
+    /** Configura atalhos de teclado da tela. */
     private void configurarTeclado() {
         rootPane.setFocusTraversable(true);
         rootPane.setOnKeyPressed(event -> {
@@ -158,6 +194,7 @@ public class CasaController {
         });
     }
 
+    /** Interrompe animações. */
     private void pararAnimacoes() {
         if (transicaoFundo != null) {
             transicaoFundo.stop();
@@ -167,6 +204,7 @@ public class CasaController {
         }
     }
 
+    /** Atualiza painel de status. */
     private void atualizarHud() {
         Player player = jogo.getPlayer();
         DataDia data = jogo.getDataDia();
@@ -190,6 +228,7 @@ public class CasaController {
                 + " / " + Player.MAX_TREINOS_POR_DIA);
     }
 
+    /** Exibe opções principais da tela. */
     private void exibirMenuPrincipal(boolean sortearFalaAvos) {
         trocarFundo(IMG_QUARTO, true);
         limparDetalhes();
@@ -212,6 +251,7 @@ public class CasaController {
         AudioManager.aplicarHoverNosBotoes(boxOpcoes);
     }
 
+    /** Inicia o descanso do jogador em casa. */
     private void dormir() {
         Player player = jogo.getPlayer();
         if (player == null) {
@@ -234,6 +274,7 @@ public class CasaController {
         animarPassagemSono(() -> concluirSono(attr));
     }
 
+    /** Aplica as oito horas de descanso, recupera saúde e energia e sorteia uma possível perda de habilidade. */
     private void concluirSono(Atributo attr) {
         attr.setEnergia(Atributo.MAX_ENERGIA);
         attr.setSaude(Atributo.MAX_SAUDE);
@@ -291,6 +332,7 @@ public class CasaController {
         definirBotaoVoltar("LEVANTAR DA CAMA", () -> exibirMenuPrincipal(false));
     }
 
+    /** Treina em casa. */
     private void treinarEmCasa() {
         Player player = jogo.getPlayer();
         if (player == null) {
@@ -301,6 +343,7 @@ public class CasaController {
 
         trocarFundo(IMG_ACADEMIA_CASA, true);
 
+        // Os treinos em casa e na academia contam para o mesmo limite diário.
         if (!player.podeTreinarHoje(diaAtual)) {
             AudioManager.tocar(Som.ERRO);
             lblFalante.setText("ACADEMIA DA CASA • LIMITE DIÁRIO");
@@ -363,6 +406,7 @@ public class CasaController {
         AudioManager.aplicarHoverNosBotoes(boxOpcoes);
     }
 
+    /** Mostra os atributos atuais do jogador. */
     private void verAtributos() {
         Player player = jogo.getPlayer();
         if (player == null) {
@@ -389,6 +433,7 @@ public class CasaController {
         definirBotaoVoltar("VOLTAR AO QUARTO", () -> exibirMenuPrincipal(false));
     }
 
+    /** Cria linha de atributo do jogador. */
     private HBox criarLinhaStat(String nome1, String valor1, String nome2, String valor2) {
         Label lNome1 = new Label(nome1 + ":");
         lNome1.getStyleClass().add("vn-stat-nome");
@@ -408,17 +453,20 @@ public class CasaController {
         return linha;
     }
 
+    /** Retorna de casa ao mapa. */
     private void sairDeCasa() {
         AudioManager.tocar(Som.CLIQUE);
         jogo.voltarLocal();
         SceneManager.irPara(Tela.MAPA);
     }
 
+    /** Abre menu de pausa. */
     @FXML
     public void abrirPausa() {
         SceneManager.abrirMenuPausa(null);
     }
 
+    /** Cria botão para uma opção do menu. */
     private Button criarBotaoOpcao(String texto, Icone icone, boolean estiloSair, Runnable acao) {
         Button botao = new Button(texto);
         botao.setMaxWidth(Double.MAX_VALUE);
@@ -432,11 +480,13 @@ public class CasaController {
         return botao;
     }
 
+    /** Define ação do botão de retorno. */
     private void definirBotaoVoltar(String texto, Runnable acao) {
         boxOpcoes.getChildren().setAll(criarBotaoOpcao(texto, Icone.LEFT_ARROW, false, acao));
         AudioManager.aplicarHoverNosBotoes(boxOpcoes);
     }
 
+    /** Cria linha de detalhes do painel. */
     private Label criarLinhaDetalhe(String texto, String classeCss) {
         Label label = new Label(texto);
         label.setWrapText(true);
@@ -444,18 +494,21 @@ public class CasaController {
         return label;
     }
 
+    /** Mostra detalhes. */
     private void mostrarDetalhes(List<Label> linhas) {
         boxDetalhes.getChildren().setAll(linhas);
         boxDetalhes.setVisible(true);
         boxDetalhes.setManaged(true);
     }
 
+    /** Limpa detalhes. */
     private void limparDetalhes() {
         boxDetalhes.getChildren().clear();
         boxDetalhes.setVisible(false);
         boxDetalhes.setManaged(false);
     }
 
+    /** Anima passagem do tempo durante o sono. */
     private void animarPassagemSono(Runnable aoMeio) {
         if (transicaoSono != null) {
             transicaoSono.stop();
@@ -481,6 +534,7 @@ public class CasaController {
         transicaoSono.play();
     }
 
+    /** Troca imagem de fundo. */
     private void trocarFundo(String novoCaminho, boolean animar) {
         if (novoCaminho.equals(caminhoImagemAtual)) {
             return;
@@ -533,6 +587,7 @@ public class CasaController {
         transicaoFundo.play();
     }
 
+    /** Carrega imagem. */
     private Image carregarImagem(String caminho) {
         return cacheImagens.computeIfAbsent(caminho, key -> {
             URL recurso = getClass().getResource(key);

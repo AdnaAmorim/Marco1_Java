@@ -24,9 +24,11 @@ import java.util.List;
  */
 public class ConquistasController {
 
+    /** Dados de uma conquista apresentada no catálogo. */
     private record ItemConquista(String id, String descricao) {
     }
 
+    /** Catálogo. */
     private static final List<ItemConquista> CATALOGO = List.of(
             new ItemConquista(Conquistas.PRIMEIROS_PASSOS, "VENÇA SUA PRIMEIRA LUTA NO RINGUE OU NO CLUBE."),
             new ItemConquista(Conquistas.DESTAQUE_ESTADUAL, "COMPLETE AS LUTAS DO CINTURÃO ESTADUAL."),
@@ -40,11 +42,16 @@ public class ConquistasController {
             new ItemConquista(Conquistas.TODOS_OS_CAMINHOS, "DESBLOQUEOU TODOS OS FINAIS POSSÍVEIS DO JOGO.")
     );
 
+    /** Painel principal da tela. */
     @FXML private StackPane rootPane;
+    /** Texto — resumo. */
     @FXML private Label lblResumo;
+    /** Lista conquistas. */
     @FXML private VBox listaConquistas;
+    /** Botão — fechar. */
     @FXML private Button btnFechar;
 
+    /** Prepara os componentes da tela após o carregamento do FXML. */
     @FXML
     public void initialize() {
         IconManager.aplicarBotao(btnFechar, Icone.LEFT_ARROW, 15);
@@ -58,6 +65,7 @@ public class ConquistasController {
         carregarConquistas();
     }
 
+    /** Marca no catálogo as conquistas registradas no progresso global de todas as carreiras. */
     private void carregarConquistas() {
         ProgressoGlobal progresso = new ProgressoGlobal();
         try {
@@ -80,6 +88,7 @@ public class ConquistasController {
                 + "  •  FINAIS: " + progresso.finaisAlcancados.size());
     }
 
+    /** Cria linha do catálogo de conquistas. */
     private HBox criarLinhaConquista(ItemConquista item, boolean desbloqueada) {
         Label lblIcone = new Label();
         IconManager.aplicar(lblIcone,
@@ -117,6 +126,7 @@ public class ConquistasController {
         return linha;
     }
 
+    /** Fecha o painel atual. */
     @FXML
     public void fechar() {
         SceneManager.fecharModal();

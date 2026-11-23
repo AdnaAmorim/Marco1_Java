@@ -51,51 +51,89 @@ import java.util.List;
  */
 public class AcademiaBoxeController {
 
+    /** Largura cenário. */
     private static final double LARGURA_CENARIO = 960.0;
+    /** Altura cenário. */
     private static final double ALTURA_CENARIO = 540.0;
+    /** Limite lutas estaduais. */
     private static final int LIMITE_LUTAS_ESTADUAIS = 2;
+    /** Limite lutas nacionais. */
     private static final int LIMITE_LUTAS_NACIONAIS = 2;
 
+    /** Imagem academia boxe. */
     private static final String IMG_ACADEMIA_BOXE = "/images/locais/Academia_De_Boxe.png";
+    /** Imagem oponente. */
     private static final String IMG_OPONENTE = "/images/personagens/lutador_desconhecido.png";
 
+    /** Painel principal da tela. */
     @FXML private StackPane rootPane;
+    /** Area cenário. */
     @FXML private StackPane areaCenario;
+    /** Imagem — fundo desfocado. */
     @FXML private ImageView imgFundoBlur;
+    /** Desfocado escuro. */
     @FXML private Region blurEscuro;
+    /** Cenário canvas. */
     @FXML private Pane cenarioCanvas;
+    /** Imagem — fundo. */
     @FXML private ImageView imgFundo;
 
+    /** Card adversario. */
     @FXML private HBox cardAdversario;
+    /** Imagem — adversario. */
     @FXML private ImageView imgAdversario;
+    /** Texto — categoria do campeonato. */
     @FXML private Label lblTagCampeonato;
+    /** Texto — nome adversario. */
     @FXML private Label lblNomeAdversario;
+    /** Texto — estilo adversario. */
     @FXML private Label lblEstiloAdversario;
+    /** Texto — força do adversário. */
     @FXML private Label lblForcaAdv;
+    /** Texto — agilidade do adversário. */
     @FXML private Label lblAgilidadeAdv;
+    /** Texto — resistência do adversário. */
     @FXML private Label lblResistenciaAdv;
+    /** Texto — inteligência do adversário. */
     @FXML private Label lblInteligenciaAdv;
+    /** Texto exibido — prêmio adversário. */
     @FXML private Label lblPremioAdversario;
 
+    /** Texto — atleta. */
     @FXML private Label lblAtleta;
+    /** Texto — saúde. */
     @FXML private Label lblSaude;
+    /** Texto — energia. */
     @FXML private Label lblEnergia;
+    /** Texto — dinheiro. */
     @FXML private Label lblDinheiro;
+    /** Texto — data e hora. */
     @FXML private Label lblDataHora;
+    /** Botão — pausa. */
     @FXML private Button btnPausa;
 
+    /** Texto — falante. */
     @FXML private Label lblFalante;
+    /** Texto — progresso lutas. */
     @FXML private Label lblProgressoLutas;
+    /** Texto — texto. */
     @FXML private Label lblTexto;
+    /** Painel — detalhes. */
     @FXML private VBox boxDetalhes;
+    /** Box opções. */
     @FXML private VBox boxOpcoes;
 
+    /** Controlador da partida compartilhado pela interface. */
     private final GameController jogo = SceneManager.getGameController();
 
+    /** Oponente selecionado. */
     private InfoOponente oponenteSelecionado;
+    /** Taxa selecionada. */
     private int taxaSelecionada;
+    /** Tipo campeonato selecionado. */
     private int tipoCampeonatoSelecionado;
 
+    /** Prepara os componentes da tela após o carregamento do FXML. */
     @FXML
     public void initialize() {
         configurarEscalaCenario();
@@ -106,6 +144,7 @@ public class AcademiaBoxeController {
         verificarDisponibilidadeLuta();
     }
 
+    /** Carrega imagens. */
     private void carregarImagens() {
         URL recFundo = getClass().getResource(IMG_ACADEMIA_BOXE);
         if (recFundo != null) {
@@ -126,6 +165,7 @@ public class AcademiaBoxeController {
         }
     }
 
+    /** Configura escala do cenário para o tamanho da janela. */
     private void configurarEscalaCenario() {
         Rectangle clip = new Rectangle();
         clip.widthProperty().bind(areaCenario.widthProperty());
@@ -162,6 +202,7 @@ public class AcademiaBoxeController {
         blurEscuro.visibleProperty().bind(temLacuna);
     }
 
+    /** Configura ícones do painel de status. */
     private void configurarIconesHud() {
         IconManager.aplicarBotao(btnPausa, Icone.PAUSE, 18);
         IconManager.aplicar(lblSaude, Icone.HEART, 17, IconManager.COR_PERIGO);
@@ -169,6 +210,7 @@ public class AcademiaBoxeController {
         IconManager.aplicar(lblDataHora, Icone.CLOCK, 17, IconManager.COR_DESTAQUE);
     }
 
+    /** Configura atalhos de teclado da tela. */
     private void configurarTeclado() {
         rootPane.setFocusTraversable(true);
         rootPane.setOnKeyPressed(event -> {
@@ -179,6 +221,7 @@ public class AcademiaBoxeController {
         });
     }
 
+    /** Atualiza painel de status. */
     private void atualizarHud() {
         Player player = jogo.getPlayer();
         DataDia data = jogo.getDataDia();
@@ -202,6 +245,7 @@ public class AcademiaBoxeController {
                 + " • NACIONAIS: " + player.getLutasNacionais() + "/" + LIMITE_LUTAS_NACIONAIS);
     }
 
+    /** Consulta o dia da próxima luta antes de oferecer os circuitos ao jogador. */
     private void verificarDisponibilidadeLuta() {
         Player player = jogo.getPlayer();
         if (player == null) {
@@ -226,6 +270,7 @@ public class AcademiaBoxeController {
         exibirMenuCircuitos();
     }
 
+    /** Exibe circuitos de luta disponíveis. */
     private void exibirMenuCircuitos() {
         Player player = jogo.getPlayer();
         if (player == null) {
@@ -261,12 +306,14 @@ public class AcademiaBoxeController {
         AudioManager.aplicarHoverNosBotoes(boxOpcoes);
     }
 
+    /** Seleciona circuito local. */
     private void selecionarCircuitoLocal() {
         AudioManager.tocar(Som.CLIQUE);
         int diaAtual = jogo.getDataDia().getDias();
         abrirCardLuta(OponentesBoxe.obterPorDia(diaAtual), 0, 0);
     }
 
+    /** Seleciona estadual. */
     private void selecionarEstadual() {
         Player player = jogo.getPlayer();
         if (player == null) {
@@ -288,6 +335,7 @@ public class AcademiaBoxeController {
         abrirCardLuta(vitor, 500, 1);
     }
 
+    /** Seleciona nacional. */
     private void selecionarNacional() {
         Player player = jogo.getPlayer();
         if (player == null) {
@@ -320,6 +368,7 @@ public class AcademiaBoxeController {
         abrirCardLuta(igor, 1500, 2);
     }
 
+    /** Abre ficha da luta. */
     private void abrirCardLuta(InfoOponente oponente, int taxa, int tipoCampeonato) {
         this.oponenteSelecionado = oponente;
         this.taxaSelecionada = taxa;
@@ -357,6 +406,7 @@ public class AcademiaBoxeController {
         AudioManager.aplicarHoverNosBotoes(boxOpcoes);
     }
 
+    /** Valida requisitos para escolher um estilo de luta. */
     private void validarEAvancarPostura() {
         Player player = jogo.getPlayer();
         if (player == null) {
@@ -390,6 +440,7 @@ public class AcademiaBoxeController {
         exibirEscolhaPostura();
     }
 
+    /** Exibe estilos de luta disponíveis. */
     private void exibirEscolhaPostura() {
         AudioManager.tocar(Som.CLIQUE);
         lblFalante.setText("ESCOLHA SUA POSTURA DE LUTA");
@@ -420,6 +471,7 @@ public class AcademiaBoxeController {
         AudioManager.aplicarHoverNosBotoes(boxOpcoes);
     }
 
+    /** Inicia luta. */
     private void iniciarLuta(EstiloLuta postura) {
         Player player = jogo.getPlayer();
         if (player == null || oponenteSelecionado == null) {
@@ -467,6 +519,7 @@ public class AcademiaBoxeController {
                             resumo.add("+CONQUISTA DESBLOQUEADA: " + Conquistas.getNome(Conquistas.NOME_NACIONAL));
                         }
                     } else if (resultado.isVencedor(lutadorPlayer)) {
+                        // No circuito local, só as vitórias contam para a progressão.
                         player.registrarLutaLocal();
                     }
 
@@ -498,6 +551,7 @@ public class AcademiaBoxeController {
         SceneManager.iniciarLuta(contexto);
     }
 
+    /** Tenta registrar a conquista no progresso global. */
     private boolean tentarDesbloquear(String conquista) {
         try {
             return new ConquistaController().desbloquear(conquista);
@@ -506,22 +560,26 @@ public class AcademiaBoxeController {
         }
     }
 
+    /** Oculta ficha do adversário. */
     private void ocultarCardAdversario() {
         cardAdversario.setVisible(false);
         cardAdversario.setManaged(false);
     }
 
+    /** Retorna da academia ao mapa. */
     private void sairDaAcademia() {
         AudioManager.tocar(Som.CLIQUE);
         jogo.voltarLocal();
         SceneManager.irPara(Tela.MAPA);
     }
 
+    /** Abre menu de pausa. */
     @FXML
     public void abrirPausa() {
         SceneManager.abrirMenuPausa(null);
     }
 
+    /** Cria opção de estilo de luta. */
     private HBox criarLinhaPostura(String nome, List<String> bonus, List<String> penalidades) {
         HBox linha = new HBox();
         linha.getStyleClass().add("postura-linha");
@@ -543,6 +601,7 @@ public class AcademiaBoxeController {
         return linha;
     }
 
+    /** Vincula destaque visual à seleção da postura. */
     private void vincularDestaquePostura(Button botao, HBox linha) {
         botao.hoverProperty().addListener((obs, antes, hover) -> {
             if (hover) {
@@ -555,6 +614,7 @@ public class AcademiaBoxeController {
         });
     }
 
+    /** Cria botão para uma opção do menu. */
     private Button criarBotaoOpcao(String texto, Icone icone, boolean estiloSair, Runnable acao) {
         Button botao = new Button(texto);
         botao.setMaxWidth(Double.MAX_VALUE);
@@ -568,16 +628,19 @@ public class AcademiaBoxeController {
         return botao;
     }
 
+    /** Define ação do botão de saída. */
     private void definirBotaoSaida(String texto) {
         boxOpcoes.getChildren().setAll(criarBotaoOpcao(texto, Icone.LEFT_ARROW, true, this::sairDaAcademia));
         AudioManager.aplicarHoverNosBotoes(boxOpcoes);
     }
 
+    /** Define ação do botão de retorno. */
     private void definirBotaoVoltar(String texto, Runnable acao) {
         boxOpcoes.getChildren().setAll(criarBotaoOpcao(texto, Icone.LEFT_ARROW, false, acao));
         AudioManager.aplicarHoverNosBotoes(boxOpcoes);
     }
 
+    /** Cria linha de detalhes do painel. */
     private Label criarLinhaDetalhe(String texto, String classeCss) {
         Label label = new Label(texto);
         label.setWrapText(true);
@@ -585,6 +648,7 @@ public class AcademiaBoxeController {
         return label;
     }
 
+    /** Mostra detalhes. */
     private void mostrarDetalhes(List<Label> linhas) {
         boxDetalhes.getChildren().setAll(linhas);
         boxDetalhes.setVisible(true);

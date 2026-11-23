@@ -44,6 +44,7 @@ public class CutsceneController {
         return capitulo.getDialogos(getPlayer());
     }
 
+    /** Aplica a escolha e devolve um aviso para cada item cuja quantidade aumentou no inventário. */
     public List<Dialogo> processarEscolha(Dialogo dialogo, int indiceOpcao) {
         Dialogo.Opcao opcao = dialogo.getOpcoes().get(indiceOpcao);
         Map<Item, Integer> itens = getPlayer().getInventario().getItens();

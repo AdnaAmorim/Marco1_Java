@@ -32,32 +32,55 @@ import java.util.Map;
 /** Versão JavaFX da criação de personagem existente na interface de terminal. */
 public class CriacaoPersonagemController {
 
+    /** Largura base. */
     private static final double LARGURA_BASE = 1280.0;
+    /** Altura base. */
     private static final double ALTURA_BASE = 760.0;
+    /** Zoom hover. */
     private static final double ZOOM_HOVER = 3.1;
+    /** Deslocamento rosto y. */
     private static final double DESLOCAMENTO_ROSTO_Y = 345.0;
 
+    /** Painel principal da tela. */
     @FXML private StackPane rootPane;
+    /** Conteudo container. */
     @FXML private VBox conteudoContainer;
+    /** Palco na prévia. */
     @FXML private StackPane palcoPreview;
+    /** Campo — nome. */
     @FXML private TextField txtNome;
+    /** Seletor — cor dos olhos. */
     @FXML private ComboBox<Cores> cmbOlhos;
+    /** Card masculino. */
     @FXML private VBox cardMasculino;
+    /** Card feminino. */
     @FXML private VBox cardFeminino;
+    /** Texto — nome na prévia. */
     @FXML private Label lblNomePreview;
+    /** Texto — sexo na prévia. */
     @FXML private Label lblSexoPreview;
+    /** Texto — cor dos olhos na prévia. */
     @FXML private Label lblOlhosPreview;
+    /** Texto — mensagem. */
     @FXML private Label lblMensagem;
+    /** Botão — confirmar. */
     @FXML private Button btnConfirmar;
+    /** Imagem — masculino. */
     @FXML private ImageView imgMasculino;
+    /** Imagem — feminino. */
     @FXML private ImageView imgFeminino;
+    /** Imagem — personagem principal. */
     @FXML private ImageView imgPersonagemPrincipal;
 
+    /** Imagens. */
     private final Map<Sexo, Map<Cores, Image>> imagens = new EnumMap<>(Sexo.class);
 
+    /** Sexo selecionado. */
     private Sexo sexoSelecionado = Sexo.MASCULINO;
+    /** Animação zoom. */
     private ParallelTransition animacaoZoom;
 
+    /** Prepara os componentes da tela após o carregamento do FXML. */
     @FXML
     public void initialize() {
         configurarEscalaResponsiva();
@@ -71,10 +94,12 @@ public class CriacaoPersonagemController {
         btnConfirmar.setDefaultButton(true);
     }
 
+    /** Configura ampliação da prévia do personagem. */
     private void configurarZoomPreview() {
         if (palcoPreview == null || imgPersonagemPrincipal == null) {
             return;
         }
+        // Limita o zoom ao espaço da prévia quando a janela muda de tamanho.
         Rectangle clip = new Rectangle();
         clip.widthProperty().bind(palcoPreview.widthProperty());
         clip.heightProperty().bind(palcoPreview.heightProperty());
@@ -83,6 +108,7 @@ public class CriacaoPersonagemController {
         palcoPreview.hoverProperty().addListener((obs, antigo, hover) -> animarZoomPreview(hover));
     }
 
+    /** Anima ampliação da prévia do personagem. */
     private void animarZoomPreview(boolean aproximar) {
         if (animacaoZoom != null) {
             animacaoZoom.stop();
@@ -102,6 +128,7 @@ public class CriacaoPersonagemController {
         animacaoZoom.play();
     }
 
+    /** Configura escala dos elementos conforme o tamanho da janela. */
     private void configurarEscalaResponsiva() {
         DoubleBinding escala = Bindings.createDoubleBinding(() -> {
             double largura = rootPane.getWidth();
@@ -116,9 +143,12 @@ public class CriacaoPersonagemController {
         conteudoContainer.scaleYProperty().bind(escala);
     }
 
+    /** Seleciona — masculino. */
     @FXML public void selecionarMasculino() { selecionarSexo(Sexo.MASCULINO); }
+    /** Seleciona feminino. */
     @FXML public void selecionarFeminino() { selecionarSexo(Sexo.FEMININO); }
 
+    /** Seleciona sexo. */
     private void selecionarSexo(Sexo sexo) {
         boolean mudou = sexoSelecionado != sexo;
         sexoSelecionado = sexo;
@@ -130,6 +160,7 @@ public class CriacaoPersonagemController {
         atualizarPreview();
     }
 
+    /** Atualiza prévia do personagem. */
     private void atualizarPreview() {
         String nome = txtNome.getText() == null ? "" : txtNome.getText().trim();
         lblNomePreview.setText(nome.isEmpty() ? "SEU BOXEADOR" : nome.toUpperCase());
@@ -148,6 +179,7 @@ public class CriacaoPersonagemController {
         imgPersonagemPrincipal.setImage(obterSprite(sexoSelecionado, cor));
     }
 
+    /** Obtém sprite. */
     private Image obterSprite(Sexo sexo, Cores olhos) {
         Map<Cores, Image> variantes = imagens.computeIfAbsent(sexo, chave -> new EnumMap<>(Cores.class));
         return variantes.computeIfAbsent(olhos, cor -> {
@@ -159,6 +191,7 @@ public class CriacaoPersonagemController {
         });
     }
 
+    /** Confirma a seleção atual. */
     @FXML
     public void confirmar() {
         String nome = txtNome.getText() == null ? "" : txtNome.getText().trim();
@@ -185,6 +218,7 @@ public class CriacaoPersonagemController {
         SceneManager.irPara(Tela.CUTSCENE);
     }
 
+    /** Retorna à tela anterior. */
     @FXML
     public void voltar() {
         AudioManager.tocar(Som.CANCELAR);

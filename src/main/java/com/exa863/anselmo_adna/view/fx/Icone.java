@@ -108,15 +108,19 @@ public enum Icone {
     UP_ARROW("Up-Arrow"),
     UPLOAD("Upload");
 
+    /** Pasta icons. */
     private static final String PASTA_ICONS = "/images/icons/";
+    /** Extensão. */
     private static final String EXTENSAO = ".svg";
 
+    /** Caminho relativo. */
     private final String caminhoRelativo;
 
     Icone(String caminhoRelativo) {
         this.caminhoRelativo = caminhoRelativo;
     }
 
+    /** Retorna caminho do recurso no projeto. */
     public String getCaminho() {
         return PASTA_ICONS + caminhoRelativo + EXTENSAO;
     }

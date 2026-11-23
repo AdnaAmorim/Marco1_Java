@@ -45,48 +45,86 @@ import java.util.Map;
  */
 public class MapaController {
 
+    /** Largura mapa. */
     private static final double LARGURA_MAPA = 960.0;
+    /** Altura mapa. */
     private static final double ALTURA_MAPA = 540.0;
+    /** Duração fade fundo. */
     private static final Duration DURACAO_FADE_FUNDO = Duration.millis(650);
+    /** Intervalo monitor relogio. */
     private static final Duration INTERVALO_MONITOR_RELOGIO = Duration.millis(400);
+    /** Info padrão. */
     private static final String INFO_PADRAO = "CLIQUE EM UM LOCAL DA CIDADE PARA EXPLORAR.";
 
+    /** Painel principal da tela. */
     @FXML private StackPane rootPane;
+    /** Area mapa. */
     @FXML private StackPane areaMapa;
+    /** Imagem — mapa desfocado anterior. */
     @FXML private ImageView imgMapaBlurAnterior;
+    /** Imagem — mapa desfocado. */
     @FXML private ImageView imgMapaBlur;
+    /** Desfocado escuro. */
     @FXML private Region blurEscuro;
+    /** Mapa canvas. */
     @FXML private Pane mapaCanvas;
+    /** Imagem — mapa anterior. */
     @FXML private ImageView imgMapaAnterior;
+    /** Imagem — mapa. */
     @FXML private ImageView imgMapa;
+    /** Camada que reúne os marcadores do mapa. */
     @FXML private Pane pinsLayer;
 
+    /** Texto — atleta. */
     @FXML private Label lblAtleta;
+    /** Texto — saúde. */
     @FXML private Label lblSaude;
+    /** Texto — energia. */
     @FXML private Label lblEnergia;
+    /** Texto — dinheiro. */
     @FXML private Label lblDinheiro;
+    /** Texto — data e hora. */
     @FXML private Label lblDataHora;
+    /** Botão — mochila. */
     @FXML private Button btnMochila;
+    /** Botão — pausa. */
     @FXML private Button btnPausa;
 
+    /** Painel viagem. */
     @FXML private VBox painelViagem;
+    /** Lista destinos. */
     @FXML private VBox listaDestinos;
+    /** Botão — fechar viagem. */
     @FXML private Button btnFecharViagem;
+    /** Texto exibido — info local. */
     @FXML private Label lblInfoLocal;
 
+    /** Controlador da partida compartilhado pela interface. */
     private final GameController jogo = SceneManager.getGameController();
+    /** Cache imagens. */
     private final Map<String, Image> cacheImagens = new HashMap<>();
+    /** Config atual. */
     private MapaConfig configAtual;
+    /** Caminho imagem atual. */
     private String caminhoImagemAtual;
+    /** Transição fundo. */
     private ParallelTransition transicaoFundo;
+    /** Monitor relogio. */
     private Timeline monitorRelogio;
+    /** Último dia. */
     private int ultimoDia = -1;
+    /** Última hora. */
     private int ultimaHora = -1;
+    /** Último minuto. */
     private int ultimoMinuto = -1;
+    /** Última saúde. */
     private int ultimaSaude = -1;
+    /** Última energia. */
     private int ultimaEnergia = -1;
+    /** Último dinheiro. */
     private int ultimoDinheiro = -1;
 
+    /** Prepara os componentes da tela após o carregamento do FXML. */
     @FXML
     public void initialize() {
         configurarEscalaMapa();
@@ -96,6 +134,7 @@ public class MapaController {
         iniciarMonitorRelogio();
     }
 
+    /** Carrega mapa. */
     public void carregarMapa(MapaConfig config) {
         boolean animar = imgMapa.getImage() != null;
         this.configAtual = config;
@@ -146,11 +185,13 @@ public class MapaController {
         atualizarFundoHorario(true);
     }
 
+    /** Determina identificador do mapa da partida. */
     private String resolverIdMapaAtual() {
         Local atual = jogo.getLocalAtual();
         return atual != null ? atual.getId() : MapaConfig.CIDADE_NATAL.getLocalId();
     }
 
+    /** Sincroniza o local da partida com o mapa exibido. */
     private void garantirLocalDoMapa(String localId) {
         Local atual = jogo.getLocalAtual();
         if (atual == null || !localId.equals(atual.getId())) {
@@ -161,6 +202,7 @@ public class MapaController {
         }
     }
 
+    /** Configura escala do mapa para o tamanho da janela. */
     private void configurarEscalaMapa() {
         Rectangle clip = new Rectangle();
         clip.widthProperty().bind(areaMapa.widthProperty());
@@ -202,6 +244,7 @@ public class MapaController {
         blurEscuro.visibleProperty().bind(temLacuna);
     }
 
+    /** Configura ícones do painel de status. */
     private void configurarIconesHud() {
         IconManager.aplicarBotao(btnMochila, Icone.BAG, 18);
         IconManager.aplicarBotao(btnPausa, Icone.PAUSE, 18);
@@ -211,6 +254,7 @@ public class MapaController {
         IconManager.aplicar(lblDataHora, Icone.CLOCK, 17, IconManager.COR_DESTAQUE);
     }
 
+    /** Configura atalhos de teclado da tela. */
     private void configurarTeclado() {
         rootPane.setFocusTraversable(true);
         rootPane.setOnKeyPressed(event -> {
@@ -228,6 +272,7 @@ public class MapaController {
         });
     }
 
+    /** Inicia monitoramento do relógio do jogo. */
     private void iniciarMonitorRelogio() {
         registrarRelogioAtual();
         monitorRelogio = new Timeline(new KeyFrame(INTERVALO_MONITOR_RELOGIO, e -> verificarMudancaRelogio()));
@@ -241,6 +286,7 @@ public class MapaController {
         });
     }
 
+    /** Atualiza o mapa ao detectar mudanças no horário ou nos atributos exibidos no painel do jogador. */
     private void verificarMudancaRelogio() {
         DataDia data = jogo.getDataDia();
         Player player = jogo.getPlayer();
@@ -255,6 +301,7 @@ public class MapaController {
         }
     }
 
+    /** Registra horário usado na próxima comparação do relógio. */
     private void registrarRelogioAtual() {
         DataDia data = jogo.getDataDia();
         ultimoDia = data.getDias();
@@ -268,6 +315,7 @@ public class MapaController {
         }
     }
 
+    /** Interrompe animações. */
     private void pararAnimacoes() {
         if (monitorRelogio != null) {
             monitorRelogio.stop();
@@ -277,6 +325,7 @@ public class MapaController {
         }
     }
 
+    /** Atualiza imagem de fundo conforme a hora do jogo. */
     private void atualizarFundoHorario(boolean animar) {
         if (configAtual == null) {
             return;
@@ -336,6 +385,7 @@ public class MapaController {
         transicaoFundo.play();
     }
 
+    /** Carrega imagem. */
     private Image carregarImagem(String caminho) {
         return cacheImagens.computeIfAbsent(caminho, key -> {
             URL recurso = getClass().getResource(key);
@@ -343,6 +393,7 @@ public class MapaController {
         });
     }
 
+    /** Atualiza painel de status. */
     private void atualizarHud() {
         Player player = jogo.getPlayer();
         DataDia data = jogo.getDataDia();
@@ -364,6 +415,7 @@ public class MapaController {
         lblDinheiro.setText("R$ " + player.getDinheiro());
     }
 
+    /** Monta marcadores de locais do mapa. */
     private void construirMarcadores() {
         pinsLayer.getChildren().clear();
 
@@ -405,6 +457,7 @@ public class MapaController {
         AudioManager.aplicarHoverNosBotoes(pinsLayer);
     }
 
+    /** Seleciona local. */
     private void selecionarLocal(String localId) {
         fecharViagemSilencioso();
         if ("abrir_academia".equals(localId)) {
@@ -448,6 +501,7 @@ public class MapaController {
         SceneManager.irPara(telaDestino);
     }
 
+    /** Abre painel de viagens. */
     @FXML
     public void abrirViagem() {
         listaDestinos.getChildren().clear();
@@ -479,6 +533,7 @@ public class MapaController {
         painelViagem.setManaged(true);
     }
 
+    /** Solicita a compra da passagem no primeiro acesso pago. A liberação vale para as próximas viagens. */
     private void viajarPara(Local destino) {
         if (isBloqueado(destino)) {
             AudioManager.tocar(Som.ERRO);
@@ -520,6 +575,7 @@ public class MapaController {
         SceneManager.iniciarCapituloSeDisponivel(destino, Tela.MAPA);
     }
 
+    /** Fecha painel de viagens. */
     @FXML
     public void fecharViagem() {
         if (painelViagem.isVisible()) {
@@ -528,21 +584,25 @@ public class MapaController {
         }
     }
 
+    /** Recolhe o painel de viagem sem tocar o som de fechamento. */
     private void fecharViagemSilencioso() {
         painelViagem.setVisible(false);
         painelViagem.setManaged(false);
     }
 
+    /** Abre mochila do jogador. */
     @FXML
     public void abrirMochila() {
         SceneManager.abrirModal(Tela.INVENTARIO);
     }
 
+    /** Abre menu de pausa. */
     @FXML
     public void abrirPausa() {
         SceneManager.abrirMenuPausa(null);
     }
 
+    /** Verifica se a história bloqueia o acesso ao local. */
     private boolean isBloqueado(Local local) {
         if (local == null) {
             return false;
@@ -553,6 +613,7 @@ public class MapaController {
                 && narrativa.isLocalBloqueadoPelaNarrativa(local.getNome(), player);
     }
 
+    /** Busca local pelo identificador. */
     private Local buscarSubLocal(Local origem, String id) {
         if (origem == null || id == null) {
             return null;
@@ -565,6 +626,7 @@ public class MapaController {
         return null;
     }
 
+    /** Busca local percorrendo seus sublocais. */
     private Local buscarSubLocalRecursivo(Local origem, String id) {
         if (origem == null || id == null) {
             return null;

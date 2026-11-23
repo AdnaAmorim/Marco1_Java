@@ -13,23 +13,38 @@ import javafx.scene.control.Label;
  */
 public class TutorialController {
 
+    /** Botão — aba rotina. */
     @FXML private Button btnAbaRotina;
+    /** Botão — aba atributos. */
     @FXML private Button btnAbaAtributos;
+    /** Botão — aba historia. */
     @FXML private Button btnAbaHistoria;
+    /** Botão — aba economia. */
     @FXML private Button btnAbaEconomia;
+    /** Botão — voltar. */
     @FXML private Button btnVoltar;
 
+    /** Texto — título da seção. */
     @FXML private Label lblSecaoTitulo;
+    /** Texto — item 1. */
     @FXML private Label lblItem1;
+    /** Texto — item 2. */
     @FXML private Label lblItem2;
+    /** Texto — item 3. */
     @FXML private Label lblItem3;
+    /** Texto — item 4. */
     @FXML private Label lblItem4;
+    /** Texto exibido — item 5. */
     @FXML private Label lblItem5;
 
+    /** Abas. */
     private Button[] abas;
+    /** Itens. */
     private Label[] itens;
+    /** Aba atual. */
     private int abaAtual = -1;
 
+    /** Prepara os componentes da tela após o carregamento do FXML. */
     @FXML
     public void initialize() {
         abas = new Button[] { btnAbaRotina, btnAbaAtributos, btnAbaHistoria, btnAbaEconomia };
@@ -45,6 +60,7 @@ public class TutorialController {
                 "• DORMIR EM CASA RESTAURA SUAS FORÇAS PARA A PRÓXIMA JORNADA.");
     }
 
+    /** Abre rotina. */
     @FXML
     public void abrirRotina() {
         exibirSecao(0, true, "CICLO DE VIDA E ROTINA",
@@ -53,6 +69,7 @@ public class TutorialController {
                 "• DORMIR EM CASA RESTAURA SUAS FORÇAS PARA A PRÓXIMA JORNADA.");
     }
 
+    /** Abre atributos do jogador. */
     @FXML
     public void abrirAtributos() {
         exibirSecao(1, true, "SEUS ATRIBUTOS DE COMBATE",
@@ -63,6 +80,7 @@ public class TutorialController {
                 "• INTELIGÊNCIA: LEITURA TÁTICA DOS OPONENTES E ESTRATÉGIAS.");
     }
 
+    /** Abre história. */
     @FXML
     public void abrirHistoria() {
         exibirSecao(2, true, "EXPLORAÇÃO & HISTÓRIA (CAPÍTULOS)",
@@ -71,6 +89,7 @@ public class TutorialController {
                 "• SUAS ESCOLHAS DEFINEM ALIANÇAS, CONTRATOS E O DESFECHO FINAL!");
     }
 
+    /** Abre economia. */
     @FXML
     public void abrirEconomia() {
         exibirSecao(3, true, "ECONOMIA & ITENS",
@@ -79,11 +98,13 @@ public class TutorialController {
                 "• USE A MOCHILA PARA CONSUMIR ITENS E RECUPERAR ENERGIA OU SAÚDE.");
     }
 
+    /** Retorna à tela anterior. */
     @FXML
     public void voltar() {
         SceneManager.fecharModal();
     }
 
+    /** Exibe seção. */
     private void exibirSecao(int indiceAba, boolean tocarSom, String titulo, String... linhas) {
         if (tocarSom && indiceAba != abaAtual) {
             AudioManager.tocar(Som.TROCAR_ABA);

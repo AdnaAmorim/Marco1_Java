@@ -13,7 +13,9 @@ import static org.junit.jupiter.api.Assertions.*;
 /** Verifica que os capítulos são acionados pelo mapa na ordem e com os requisitos originais. */
 public class CapitulosNoMapaTest {
 
+    /** Controlador da partida compartilhado pela interface. */
     private GameController jogo;
+    /** Protagonista usado neste contexto. */
     private Player player;
 
     @BeforeEach
@@ -23,6 +25,7 @@ public class CapitulosNoMapaTest {
         jogo.setPlayer(player);
     }
 
+    /** Procura o local de teste pelo identificador. */
     private Local buscar(Local inicio, String id) {
         if (id.equals(inicio.getId())) return inicio;
         for (Local local : inicio.getSubLocais()) {
@@ -32,6 +35,7 @@ public class CapitulosNoMapaTest {
         return null;
     }
 
+    /** Confere se o local aciona o capítulo esperado. */
     private void confere(String idCapitulo, String idLocal) {
         Local local = buscar(jogo.getMapaGlobal(), idLocal);
         assertNotNull(local);

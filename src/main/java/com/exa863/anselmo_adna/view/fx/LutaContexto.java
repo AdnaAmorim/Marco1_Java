@@ -23,9 +23,12 @@ public record LutaContexto(
         Tela telaRetorno,
         Function<ResultadoLuta, List<String>> aoFinalizar
 ) {
+    /** Narrador bairro. */
     public static final String NARRADOR_BAIRRO = "/images/personagens/narrador_bairro.png";
+    /** Narrador profissional. */
     public static final String NARRADOR_PROFISSIONAL = "/images/personagens/narrador_luta.png";
 
+    /** Usa o narrador do bairro quando o local da luta não fornece um narrador próprio. */
     public LutaContexto(String tituloEvento, String imagemCenario, String imagemOponente,
                         Lutador lutador1, Lutador lutador2, Match match, Tela telaRetorno,
                         Function<ResultadoLuta, List<String>> aoFinalizar) {

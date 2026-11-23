@@ -24,15 +24,19 @@ public enum Som {
     NIVEL("Rewards/level_up"),
     FALA("Text/talk_mid_01");
 
+    /** Pasta audios. */
     private static final String PASTA_AUDIOS = "/audios/";
+    /** Extensão. */
     private static final String EXTENSAO = ".wav";
 
+    /** Caminho relativo. */
     private final String caminhoRelativo;
 
     Som(String caminhoRelativo) {
         this.caminhoRelativo = caminhoRelativo;
     }
 
+    /** Retorna caminho do recurso no projeto. */
     public String getCaminho() {
         return PASTA_AUDIOS + caminhoRelativo + EXTENSAO;
     }
