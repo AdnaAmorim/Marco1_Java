@@ -11,15 +11,19 @@ public enum Musica {
     MENU("background"),
     CUTSCENE("cutscene");
 
+    /** Pasta audios. */
     private static final String PASTA_AUDIOS = "/audios/";
+    /** Extensão. */
     private static final String EXTENSAO = ".mp3";
 
+    /** Caminho relativo. */
     private final String caminhoRelativo;
 
     Musica(String caminhoRelativo) {
         this.caminhoRelativo = caminhoRelativo;
     }
 
+    /** Retorna caminho do recurso no projeto. */
     public String getCaminho() {
         return PASTA_AUDIOS + caminhoRelativo + EXTENSAO;
     }

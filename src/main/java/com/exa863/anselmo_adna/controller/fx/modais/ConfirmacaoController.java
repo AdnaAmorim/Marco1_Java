@@ -16,20 +16,28 @@ import javafx.scene.control.Label;
  */
 public class ConfirmacaoController {
 
+    /** Texto — título. */
     @FXML private Label lblTitulo;
+    /** Texto — mensagem. */
     @FXML private Label lblMensagem;
+    /** Texto — aviso. */
     @FXML private Label lblAviso;
+    /** Botão — confirmar. */
     @FXML private Button btnConfirmar;
+    /** Botão — cancelar. */
     @FXML private Button btnCancelar;
 
+    /** Ação executada quando o jogador confirma. */
     private Runnable aoConfirmar;
 
+    /** Prepara os componentes da tela após o carregamento do FXML. */
     @FXML
     public void initialize() {
         IconManager.aplicarBotaoPerigo(btnConfirmar, Icone.EXCLAMATION_MARK, 16);
         IconManager.aplicarBotao(btnCancelar, Icone.LEFT_ARROW, 16);
     }
 
+    /** Define os textos e a ação da confirmação. */
     public void configurar(String titulo, String mensagem, String aviso,
                            String textoConfirmar, Runnable aoConfirmar) {
         lblTitulo.setText(titulo);
@@ -46,15 +54,18 @@ public class ConfirmacaoController {
         this.aoConfirmar = aoConfirmar;
     }
 
+    /** Confirma a seleção atual. */
     @FXML
     public void confirmar() {
         AudioManager.tocar(Som.CONFIRMAR);
+        // Fecha a confirmação antes da ação, que pode abrir outro modal ou trocar a tela.
         SceneManager.fecharModal(false);
         if (aoConfirmar != null) {
             aoConfirmar.run();
         }
     }
 
+    /** Descarta a ação pendente e fecha o painel. */
     @FXML
     public void cancelar() {
         SceneManager.fecharModal();

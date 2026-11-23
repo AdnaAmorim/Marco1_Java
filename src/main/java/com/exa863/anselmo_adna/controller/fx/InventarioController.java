@@ -30,22 +30,37 @@ import java.util.Map;
  */
 public class InventarioController {
 
+    /** Painel principal da tela. */
     @FXML private StackPane rootPane;
+    /** Texto — status. */
     @FXML private Label lblStatus;
+    /** Grade — itens. */
     @FXML private FlowPane gridItens;
+    /** Texto — vazio. */
     @FXML private Label lblVazio;
+    /** Painel — detalhe. */
     @FXML private HBox boxDetalhe;
+    /** Imagem — selecionado. */
     @FXML private ImageView imgSelecionado;
+    /** Texto — nome item. */
     @FXML private Label lblNomeItem;
+    /** Texto — descrição do item. */
     @FXML private Label lblDescItem;
+    /** Texto — efeito item. */
     @FXML private Label lblEfeitoItem;
+    /** Botão — usar. */
     @FXML private Button btnUsar;
+    /** Texto — mensagem. */
     @FXML private Label lblMensagem;
+    /** Botão — fechar. */
     @FXML private Button btnFechar;
 
+    /** Controlador da partida compartilhado pela interface. */
     private final GameController jogo = SceneManager.getGameController();
+    /** Item selecionado. */
     private Item itemSelecionado;
 
+    /** Prepara os componentes da tela após o carregamento do FXML. */
     @FXML
     public void initialize() {
         IconManager.aplicarBotao(btnUsar, Icone.PLAY, 15);
@@ -62,6 +77,7 @@ public class InventarioController {
         atualizarTela();
     }
 
+    /** Atualiza tela. */
     private void atualizarTela() {
         Player player = jogo.getPlayer();
         if (player == null) {
@@ -86,6 +102,7 @@ public class InventarioController {
         lblVazio.setManaged(false);
 
         List<Item> lista = new ArrayList<>(itens.keySet());
+        // Ao consumir a última unidade do item selecionado, o painel passa a mostrar outro item da mochila.
         if (itemSelecionado == null || !itens.containsKey(itemSelecionado)) {
             itemSelecionado = lista.get(0);
         }
@@ -99,6 +116,7 @@ public class InventarioController {
         atualizarDetalhe();
     }
 
+    /** Cria cartão do item na grade do inventário. */
     private VBox criarTileItem(Item item, int quantidade) {
         ImageView icone = new ImageView(ItemImagem.obter(item));
         icone.setFitWidth(48);
@@ -127,6 +145,7 @@ public class InventarioController {
         return tile;
     }
 
+    /** Atualiza detalhe. */
     private void atualizarDetalhe() {
         if (itemSelecionado == null) {
             imgSelecionado.setImage(null);
@@ -145,6 +164,7 @@ public class InventarioController {
         btnUsar.setDisable(!itemSelecionado.isConsumivel());
     }
 
+    /** Usa item selecionado. */
     @FXML
     public void usarSelecionado() {
         Player player = jogo.getPlayer();
@@ -163,6 +183,7 @@ public class InventarioController {
         }
     }
 
+    /** Fecha o painel atual. */
     @FXML
     public void fechar() {
         SceneManager.fecharModal();

@@ -10,8 +10,10 @@ import java.util.Optional;
 /** Liga os gatilhos narrativos aos locais reais do mapa, sem alterar o grafo original. */
 public final class CapitulosNoMapa {
 
+    /** Impede a criação de instâncias desta classe utilitária. */
     private CapitulosNoMapa() { }
 
+    /** Procura o capítulo disponível ao entrar no local. */
     public static Optional<Capitulo> localizar(GameController jogo, Local local) {
         if (jogo == null || local == null || jogo.getPlayer() == null) return Optional.empty();
         // O capítulo 1 usa "casa" como alvo; os demais usam nomes como "Academia de Boxe".

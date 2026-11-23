@@ -51,14 +51,21 @@ public enum MapaConfig {
             List.of("cidade_natal", "cidade_a")
     );
 
+    /** Posição e destino de um ponto interativo do mapa. */
     public record Marcador(String localId, String rotulo, Icone icone, double x, double y, boolean viagem) {
     }
 
+    /** Identificador do local. */
     private final String localId;
+    /** Imagem manha. */
     private final String imagemManha;
+    /** Imagem tarde. */
     private final String imagemTarde;
+    /** Imagem noite. */
     private final String imagemNoite;
+    /** Marcadores. */
     private final List<Marcador> marcadores;
+    /** Destinos viagem. */
     private final List<String> destinosViagem;
 
     MapaConfig(String localId, String imagemManha, String imagemTarde, String imagemNoite,
@@ -71,10 +78,12 @@ public enum MapaConfig {
         this.destinosViagem = destinosViagem;
     }
 
+    /** Retorna identificador do local. */
     public String getLocalId() {
         return localId;
     }
 
+    /** Retorna imagem por hora. */
     public String getImagemPorHora(int hora) {
         if (hora >= 5 && hora < 12) {
             return imagemManha;
@@ -85,14 +94,17 @@ public enum MapaConfig {
         return imagemNoite;
     }
 
+    /** Retorna marcadores de locais do mapa. */
     public List<Marcador> getMarcadores() {
         return marcadores;
     }
 
+    /** Retorna destinos de viagem disponíveis. */
     public List<String> getDestinosViagem() {
         return destinosViagem;
     }
 
+    /** Usa o mapa da Cidade Natal quando o identificador do local está ausente ou é desconhecido. */
     public static MapaConfig paraLocal(String id) {
         if (id != null) {
             for (MapaConfig config : values()) {

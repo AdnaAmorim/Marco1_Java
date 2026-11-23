@@ -14,6 +14,7 @@ import com.exa863.anselmo_adna.view.fx.Tela;
 import java.util.ArrayList;
 import java.util.List;
 
+/** Prepara a luta contra Anthony e registra o final da carreira no progresso global. */
 final class MundialFx {
     static final String EVENTO = "Campeonato Mundial";
 
@@ -32,6 +33,7 @@ final class MundialFx {
         }
     }
 
+    /** Combina o resultado da luta com o acordo de Noor, indicado pelo contrato aceito ou pela afinidade de pelo menos 50. */
     static Final desfecho(Player player, boolean venceu) {
         Personagem noor = new Personagem(5, "Victor Noor", "", Cores.PRETO, Sexo.MASCULINO);
         if (player.isCapituloConcluido("FLAG_CONTRATO_ACEITO") || player.getAfinidade(noor) >= 50) {
@@ -52,6 +54,7 @@ final class MundialFx {
                 resultado -> registrar(player, desfecho(player, resultado.isVencedor(desafiante)))));
     }
 
+    /** Registra o desfecho do Mundial e reúne os avisos para o jogador. */
     private static List<String> registrar(Player player, Final fim) {
         List<String> linhas = new ArrayList<>();
         if (fim == Final.CAMPEAO) {
@@ -61,6 +64,7 @@ final class MundialFx {
         if ((fim == Final.CAMPEAO || fim == Final.LEGADO) && player.isCapituloConcluido("INVESTIGACAO_COMPLETA"))
             linhas.add("A reportagem de Alexandra Cruz levou à prisão de Victor Noor.");
         try {
+            // Os finais das carreiras anteriores também contam para as conquistas de múltiplos destinos.
             var progresso = new ProgressoGlobal();
             var xml = new ProgressoXML();
             xml.carregar(progresso);

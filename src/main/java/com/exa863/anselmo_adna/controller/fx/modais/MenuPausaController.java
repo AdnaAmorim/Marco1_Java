@@ -13,12 +13,18 @@ import javafx.scene.layout.StackPane;
 /** Menu sobreposto ao jogo. ESC e CONTINUAR retomam exatamente do ponto pausado. */
 public class MenuPausaController {
 
+    /** Painel principal da tela. */
     @FXML private StackPane rootPane;
+    /** Botão — continuar. */
     @FXML private Button btnContinuar;
+    /** Botão — salvar. */
     @FXML private Button btnSalvar;
+    /** Botão — configurações. */
     @FXML private Button btnConfiguracoes;
+    /** Botão — voltar menu. */
     @FXML private Button btnVoltarMenu;
 
+    /** Prepara os componentes da tela após o carregamento do FXML. */
     @FXML
     public void initialize() {
         IconManager.aplicarBotao(btnContinuar, Icone.PLAY, 20);
@@ -34,21 +40,25 @@ public class MenuPausaController {
         Platform.runLater(btnContinuar::requestFocus);
     }
 
+    /** Fecha a pausa para retomar a partida. */
     @FXML
     public void continuar() {
         SceneManager.fecharMenuPausa();
     }
 
+    /** Abre slots de salvamento. */
     @FXML
     public void abrirSaves() {
         SceneManager.abrirModal(Tela.SAVES);
     }
 
+    /** Abre configurações. */
     @FXML
     public void abrirConfiguracoes() {
         SceneManager.abrirModal(Tela.CONFIGURACOES);
     }
 
+    /** Solicita confirmação para voltar ao menu inicial. */
     @FXML
     public void voltarAoMenu() {
         SceneManager.abrirConfirmacao(

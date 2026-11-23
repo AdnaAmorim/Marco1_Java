@@ -37,38 +37,65 @@ import java.util.Random;
  */
 public class AcademiaController {
 
+    /** Largura cenário. */
     private static final double LARGURA_CENARIO = 960.0;
+    /** Altura cenário. */
     private static final double ALTURA_CENARIO = 540.0;
+    /** Custo entrada. */
     private static final int CUSTO_ENTRADA = 50;
+    /** Custo energia. */
     private static final int CUSTO_ENERGIA = 25;
 
+    /** Imagem academia natal. */
     private static final String IMG_ACADEMIA_NATAL = "/images/locais/Academia_Cidade_Natal.png";
+    /** Imagem academia profissional. */
     private static final String IMG_ACADEMIA_PROFISSIONAL = "/images/locais/Academia_Profissional.png";
 
+    /** Painel principal da tela. */
     @FXML private StackPane rootPane;
+    /** Area cenário. */
     @FXML private StackPane areaCenario;
+    /** Imagem — fundo desfocado. */
     @FXML private ImageView imgFundoBlur;
+    /** Desfocado escuro. */
     @FXML private Region blurEscuro;
+    /** Cenário canvas. */
     @FXML private Pane cenarioCanvas;
+    /** Imagem — fundo. */
     @FXML private ImageView imgFundo;
 
+    /** Texto — atleta. */
     @FXML private Label lblAtleta;
+    /** Texto — saúde. */
     @FXML private Label lblSaude;
+    /** Texto — energia. */
     @FXML private Label lblEnergia;
+    /** Texto — dinheiro. */
     @FXML private Label lblDinheiro;
+    /** Texto — data e hora. */
     @FXML private Label lblDataHora;
+    /** Botão — pausa. */
     @FXML private Button btnPausa;
 
+    /** Texto — falante. */
     @FXML private Label lblFalante;
+    /** Texto — treinos. */
     @FXML private Label lblTreinos;
+    /** Texto — texto. */
     @FXML private Label lblTexto;
+    /** Painel — detalhes. */
     @FXML private VBox boxDetalhes;
+    /** Box opções. */
     @FXML private VBox boxOpcoes;
 
+    /** Controlador da partida compartilhado pela interface. */
     private final GameController jogo = SceneManager.getGameController();
+    /** Gerador usado nos sorteios da tela. */
     private final Random random = new Random();
+    /** Título academia. */
     private String tituloAcademia;
 
+    /** Prepara os componentes da tela após o carregamento do FXML. */
     @FXML
     public void initialize() {
         configurarEscalaCenario();
@@ -79,6 +106,7 @@ public class AcademiaController {
         verificarEntrada();
     }
 
+    /** Carrega fundo correspondente à academia atual. */
     private void carregarFundoPorLocal() {
         Local atual = jogo.getLocalAtual();
         boolean profissional = atual != null && "academia_profissional".equalsIgnoreCase(atual.getId());
@@ -93,6 +121,7 @@ public class AcademiaController {
         }
     }
 
+    /** Configura escala do cenário para o tamanho da janela. */
     private void configurarEscalaCenario() {
         Rectangle clip = new Rectangle();
         clip.widthProperty().bind(areaCenario.widthProperty());
@@ -129,6 +158,7 @@ public class AcademiaController {
         blurEscuro.visibleProperty().bind(temLacuna);
     }
 
+    /** Configura ícones do painel de status. */
     private void configurarIconesHud() {
         IconManager.aplicarBotao(btnPausa, Icone.PAUSE, 18);
         IconManager.aplicar(lblSaude, Icone.HEART, 17, IconManager.COR_PERIGO);
@@ -136,6 +166,7 @@ public class AcademiaController {
         IconManager.aplicar(lblDataHora, Icone.CLOCK, 17, IconManager.COR_DESTAQUE);
     }
 
+    /** Configura atalhos de teclado da tela. */
     private void configurarTeclado() {
         rootPane.setFocusTraversable(true);
         rootPane.setOnKeyPressed(event -> {
@@ -146,6 +177,7 @@ public class AcademiaController {
         });
     }
 
+    /** Atualiza painel de status. */
     private void atualizarHud() {
         Player player = jogo.getPlayer();
         DataDia data = jogo.getDataDia();
@@ -169,6 +201,7 @@ public class AcademiaController {
                 + " / " + Player.MAX_TREINOS_POR_DIA);
     }
 
+    /** Verifica entrada. */
     private void verificarEntrada() {
         Player player = jogo.getPlayer();
         if (player == null) {
@@ -204,6 +237,7 @@ public class AcademiaController {
         exibirRecepcao(player);
     }
 
+    /** Exibe recepcao. */
     private void exibirRecepcao(Player player) {
         lblFalante.setText("RECEPÇÃO • " + tituloAcademia);
         lblTexto.setText("A CATRACA DE ACESSO ESTÁ BLOQUEADA. PAGUE A DIÁRIA PARA LIBERAR OS APARELHOS.");
@@ -219,6 +253,7 @@ public class AcademiaController {
         AudioManager.aplicarHoverNosBotoes(boxOpcoes);
     }
 
+    /** Paga entrada. */
     private void pagarEntrada() {
         Player player = jogo.getPlayer();
         if (player == null) {
@@ -242,6 +277,7 @@ public class AcademiaController {
         exibirAparelhos(player);
     }
 
+    /** Exibe aparelhos. */
     private void exibirAparelhos(Player player) {
         Atributo attr = player.getAtributos();
         lblFalante.setText(tituloAcademia + " • TREINAMENTO");
@@ -265,6 +301,7 @@ public class AcademiaController {
         AudioManager.aplicarHoverNosBotoes(boxOpcoes);
     }
 
+    /** Treina atributo. */
     private void treinarAtributo(String nome, Runnable incremento, int valorAtual) {
         Player player = jogo.getPlayer();
         if (player == null) {
@@ -273,6 +310,7 @@ public class AcademiaController {
         Atributo attr = player.getAtributos();
         int diaAtual = jogo.getDataDia().getDias();
 
+        // Treinar uma habilidade no máximo consome uma tentativa do dia, mas preserva a energia.
         if (valorAtual >= Atributo.MAX_HABILIDADE) {
             AudioManager.tocar(Som.ERRO);
             player.registrarTreino(diaAtual);
@@ -313,17 +351,20 @@ public class AcademiaController {
         definirBotaoSaida("SAIR DA ACADEMIA");
     }
 
+    /** Retorna da academia ao mapa. */
     private void sairDaAcademia() {
         AudioManager.tocar(Som.CLIQUE);
         jogo.voltarLocal();
         SceneManager.irPara(Tela.MAPA);
     }
 
+    /** Abre menu de pausa. */
     @FXML
     public void abrirPausa() {
         SceneManager.abrirMenuPausa(null);
     }
 
+    /** Cria botão para uma opção do menu. */
     private Button criarBotaoOpcao(String texto, Icone icone, boolean estiloSair, Runnable acao) {
         Button botao = new Button(texto);
         botao.setMaxWidth(Double.MAX_VALUE);
@@ -337,11 +378,13 @@ public class AcademiaController {
         return botao;
     }
 
+    /** Define ação do botão de saída. */
     private void definirBotaoSaida(String texto) {
         boxOpcoes.getChildren().setAll(criarBotaoOpcao(texto, Icone.LEFT_ARROW, true, this::sairDaAcademia));
         AudioManager.aplicarHoverNosBotoes(boxOpcoes);
     }
 
+    /** Cria linha de detalhes do painel. */
     private Label criarLinhaDetalhe(String texto, String classeCss) {
         Label label = new Label(texto);
         label.setWrapText(true);
@@ -349,6 +392,7 @@ public class AcademiaController {
         return label;
     }
 
+    /** Mostra detalhes. */
     private void mostrarDetalhes(List<Label> linhas) {
         boxDetalhes.getChildren().setAll(linhas);
         boxDetalhes.setVisible(true);

@@ -36,28 +36,48 @@ import java.net.URL;
  */
 public class MenuInicialController {
 
+    /** Vídeo fundo. */
     private static final String VIDEO_FUNDO = "/videos/background.mp4";
+    /** Max tentativas vídeo. */
     private static final int MAX_TENTATIVAS_VIDEO = 3;
 
+    /** Painel principal da tela. */
     @FXML private StackPane rootPane;
+    /** Vídeo de fundo. */
     @FXML private MediaView bgMediaView;
+    /** Logo pulse. */
     @FXML private StackPane logoPulse;
+    /** Imagem — logo. */
     @FXML private ImageView imgLogo;
+    /** Shine layer. */
     @FXML private StackPane shineLayer;
+    /** Botão — continuar. */
     @FXML private Button btnContinuar;
+    /** Botão — novo jogo. */
     @FXML private Button btnNovoJogo;
+    /** Botão — carregar. */
     @FXML private Button btnCarregar;
+    /** Botão — conquistas. */
     @FXML private Button btnConquistas;
+    /** Botão — tutorial. */
     @FXML private Button btnTutorial;
+    /** Botão — opções. */
     @FXML private Button btnOpcoes;
+    /** Botão — créditos. */
     @FXML private Button btnCreditos;
+    /** Botão — sair. */
     @FXML private Button btnSair;
 
+    /** Reprodutor do vídeo de fundo. */
     private MediaPlayer mediaPlayer;
+    /** Animação brilho. */
     private SequentialTransition animacaoBrilho;
+    /** Animação pulso. */
     private ScaleTransition animacaoPulso;
+    /** Cena ativa. */
     private boolean cenaAtiva = true;
 
+    /** Prepara os componentes da tela após o carregamento do FXML. */
     @FXML
     public void initialize() {
         Rectangle clip = new Rectangle();
@@ -72,6 +92,7 @@ public class MenuInicialController {
         iniciarPulsoLogo();
     }
 
+    /** Atualiza disponibilidade da opção Continuar. */
     private void atualizarBotaoContinuar() {
         if (btnContinuar != null) {
             boolean temSave = new SaveGameController().carregarMaisRecente() != null;
@@ -79,6 +100,7 @@ public class MenuInicialController {
         }
     }
 
+    /** Configura ícones. */
     private void configurarIcones() {
         IconManager.aplicarBotao(btnContinuar, Icone.PLAY, 16);
         IconManager.aplicarBotao(btnNovoJogo, Icone.GAME_CONTROLLER, 18);
@@ -90,6 +112,7 @@ public class MenuInicialController {
         IconManager.aplicarBotao(btnSair, Icone.EXIT, 17);
     }
 
+    /** Inicia animação de pulsação do logo. */
     private void iniciarPulsoLogo() {
         if (logoPulse == null) {
             return;
@@ -105,6 +128,7 @@ public class MenuInicialController {
         animacaoPulso.play();
     }
 
+    /** Inicia animação de brilho do logo. */
     private void iniciarBrilhoLogo() {
         if (imgLogo == null || imgLogo.getImage() == null || shineLayer == null) {
             return;
@@ -162,6 +186,7 @@ public class MenuInicialController {
         animacaoBrilho.play();
     }
 
+    /** Inicia vídeo de fundo do menu. */
     private void iniciarVideoFundo() {
         URL recurso = getClass().getResource(VIDEO_FUNDO);
         if (recurso == null || bgMediaView == null) {
@@ -186,6 +211,7 @@ public class MenuInicialController {
         carregarVideo(recurso.toExternalForm(), 1);
     }
 
+    /** Carrega vídeo. */
     private void carregarVideo(String urlVideo, int tentativa) {
         if (!cenaAtiva) {
             return;
@@ -224,6 +250,7 @@ public class MenuInicialController {
         }));
     }
 
+    /** Tenta carregar o vídeo novamente enquanto o menu está ativo e oculta o fundo ao esgotar as tentativas. */
     private void reagendarVideo(String urlVideo, int tentativa, Throwable erro) {
         if (!cenaAtiva) {
             return;
@@ -238,6 +265,7 @@ public class MenuInicialController {
         bgMediaView.setVisible(false);
     }
 
+    /** Libera reprodutor de mídia e seus recursos. */
     private void liberarMediaPlayer() {
         if (mediaPlayer != null) {
             mediaPlayer.setOnError(null);
@@ -249,6 +277,7 @@ public class MenuInicialController {
         }
     }
 
+    /** Ajusta vídeo. */
     private void ajustarVideo() {
         if (mediaPlayer == null || mediaPlayer.getMedia() == null) {
             return;
@@ -270,6 +299,7 @@ public class MenuInicialController {
         bgMediaView.setLayoutY(0.0);
     }
 
+    /** Retoma carreira. */
     @FXML
     public void continuarCarreira() {
         SaveGameController.SaveRecente recente = new SaveGameController().carregarMaisRecente();
@@ -283,36 +313,43 @@ public class MenuInicialController {
         SceneManager.irPara(Tela.MAPA);
     }
 
+    /** Inicia carreira. */
     @FXML
     public void iniciarCarreira() {
         SceneManager.irPara(Tela.CRIACAO_PERSONAGEM);
     }
 
+    /** Abre slots de salvamento. */
     @FXML
     public void abrirSaves() {
         SceneManager.abrirModal(Tela.SAVES);
     }
 
+    /** Abre conquistas. */
     @FXML
     public void abrirConquistas() {
         SceneManager.abrirModal(Tela.CONQUISTAS);
     }
 
+    /** Abre tutorial. */
     @FXML
     public void abrirTutorial() {
         SceneManager.abrirModal(Tela.TUTORIAL);
     }
 
+    /** Abre configurações. */
     @FXML
     public void abrirConfiguracoes() {
         SceneManager.abrirModal(Tela.CONFIGURACOES);
     }
 
+    /** Abre créditos. */
     @FXML
     public void abrirCreditos() {
         SceneManager.abrirModal(Tela.CREDITOS);
     }
 
+    /** Solicita a saída do jogo. */
     @FXML
     public void sairJogo() {
         SceneManager.solicitarSaida();

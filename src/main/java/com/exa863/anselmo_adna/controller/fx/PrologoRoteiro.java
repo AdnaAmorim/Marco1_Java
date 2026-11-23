@@ -8,10 +8,13 @@ import java.util.Objects;
 
 /** Transcrição dos seis quadros da HistoriaInicialView (modo terminal) para JavaFX. */
 public final class PrologoRoteiro {
+    /** Impede a criação de instâncias desta classe utilitária. */
     private PrologoRoteiro() { }
 
+    /** Título e texto de uma etapa do prólogo. */
     public record Quadro(String titulo, String texto) { }
 
+    /** Monta os quadros em ordem de exibição, usando o nome e o pronome do protagonista. */
     public static List<Quadro> criar(Player player) {
         Objects.requireNonNull(player, "O protagonista deve existir antes do prólogo.");
         String nome = player.getNome();

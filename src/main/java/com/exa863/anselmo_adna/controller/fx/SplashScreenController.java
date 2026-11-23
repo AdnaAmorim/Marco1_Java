@@ -27,23 +27,33 @@ import java.net.URL;
  */
 public class SplashScreenController {
 
+    /** Caminho logo. */
     private static final String CAMINHO_LOGO = "/images/logo.png";
 
+    /** Painel principal da tela. */
     @FXML private StackPane rootPane;
+    /** Fundo preto. */
     @FXML private Region fundoPreto;
+    /** Logo wrapper. */
     @FXML private StackPane logoWrapper;
+    /** Imagem — logo. */
     @FXML private ImageView imgLogo;
+    /** Texto exibido — made by. */
     @FXML private Label lblMadeBy;
 
+    /** Logo menu. */
     private Node logoMenu;
+    /** Indica se a abertura já foi concluída. */
     private boolean finalizada;
 
+    /** Prepara os componentes da tela após o carregamento do FXML. */
     @FXML
     public void initialize() {
         carregarLogo();
         iniciarAnimacao();
     }
 
+    /** Carrega logo. */
     private void carregarLogo() {
         URL recurso = getClass().getResource(CAMINHO_LOGO);
         if (recurso != null) {
@@ -51,6 +61,7 @@ public class SplashScreenController {
         }
     }
 
+    /** Inicia animação. */
     private void iniciarAnimacao() {
         imgLogo.setScaleX(0.75);
         imgLogo.setScaleY(0.75);
@@ -89,6 +100,7 @@ public class SplashScreenController {
         abertura.play();
     }
 
+    /** Inicia transição da abertura para o menu. */
     private void iniciarTransicaoParaMenu() {
         double deltaX = 0.0;
         double deltaY = -(rootPane.getHeight() * 0.275);
@@ -96,6 +108,7 @@ public class SplashScreenController {
         logoMenu = buscarLogoDoMenu();
         if (logoMenu != null) {
             logoMenu.setOpacity(0.0);
+            // Os dois logos pertencem a painéis diferentes. A posição na cena permite alinhar seus centros.
             Bounds origem = imgLogo.localToScene(imgLogo.getBoundsInLocal());
             Bounds destino = logoMenu.localToScene(logoMenu.getBoundsInLocal());
             deltaX = (destino.getMinX() + destino.getWidth() / 2.0) - (origem.getMinX() + origem.getWidth() / 2.0);
@@ -124,6 +137,7 @@ public class SplashScreenController {
         transicao.play();
     }
 
+    /** Busca logo na tela do menu. */
     private Node buscarLogoDoMenu() {
         if (rootPane.getParent() instanceof StackPane container && !container.getChildren().isEmpty()) {
             Node menu = container.getChildren().get(0);
@@ -133,6 +147,7 @@ public class SplashScreenController {
         return null;
     }
 
+    /** Conclui abertura. */
     private void concluirAbertura() {
         if (finalizada) {
             return;

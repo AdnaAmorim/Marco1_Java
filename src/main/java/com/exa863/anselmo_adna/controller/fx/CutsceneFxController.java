@@ -43,42 +43,76 @@ import java.util.Optional;
 /** Exibe o prólogo e os dez capítulos do grafo narrativo no mesmo palco JavaFX. */
 public class CutsceneFxController {
 
+    /** Etapa. */
     private enum Etapa { PROLOGO, CAPITULO, CONCLUIDA }
 
+    /** Painel principal da tela. */
     @FXML private StackPane rootPane;
+    /** Imagem — cenário. */
     @FXML private ImageView imgCenario;
+    /** Painel personagens. */
     @FXML private HBox painelPersonagens;
+    /** Imagem — protagonista. */
     @FXML private ImageView imgProtagonista;
+    /** Imagem — interlocutor. */
     @FXML private ImageView imgInterlocutor;
+    /** Texto — parte. */
     @FXML private Label lblParte;
+    /** Texto — título. */
     @FXML private Label lblTitulo;
+    /** Texto — progresso. */
     @FXML private Label lblProgresso;
+    /** Texto — emissor. */
     @FXML private Label lblEmissor;
+    /** Texto — texto. */
     @FXML private Label lblTexto;
+    /** Texto — aviso. */
     @FXML private Label lblAviso;
+    /** Caixa opções. */
     @FXML private VBox caixaOpcoes;
+    /** Botão — avancar. */
     @FXML private Button btnAvancar;
+    /** Botão — pular. */
     @FXML private Button btnPular;
+    /** Botão — menu pausa. */
     @FXML private Button btnMenuPausa;
 
+    /** Etapa atual da sequência narrativa. */
     private Etapa etapa;
+    /** Controlador da partida compartilhado pela interface. */
     private final GameController jogo = SceneManager.getGameController();
+    /** Quadros. */
     private List<PrologoRoteiro.Quadro> quadros;
+    /** Índice quadro. */
     private int indiceQuadro;
+    /** Controlador que aplica as escolhas e conclui o capítulo. */
     private CutsceneController capituloController;
+    /** Dialogos. */
     private List<Dialogo> dialogos;
+    /** Índice diálogo. */
     private int indiceDialogo;
+    /** Digitação. */
     private Timeline digitacao;
+    /** Texto completo. */
     private String textoCompleto = "";
+    /** Caracteres exibidos. */
     private int caracteresExibidos;
+    /** Indica se a sequência já foi concluída. */
     private boolean finalizado;
+    /** Imagens. */
     private final Map<String, Image> imagens = new HashMap<>();
+    /** Imagem atual. */
     private String imagemAtual;
+    /** Sprites personagens. */
     private final Map<String, Image> spritesPersonagens = new HashMap<>();
+    /** Interlocutor atual. */
     private String interlocutorAtual;
+    /** Digitação pausada pelo menu. */
     private boolean digitacaoPausadaPeloMenu;
+    /** Tela retorno. */
     private Tela telaRetorno = Tela.MAPA;
 
+    /** Prepara os componentes da tela após o carregamento do FXML. */
     @FXML
     public void initialize() {
         Player player = jogo.getPlayer();
@@ -127,6 +161,7 @@ public class CutsceneFxController {
         }
     }
 
+    /** Mostra quadro atual do prólogo. */
     private void mostrarQuadro() {
         ocultarPersonagens(); // O prologo ja possui artes completas, sem retratos sobrepostos.
         if (indiceQuadro >= quadros.size()) {
@@ -206,6 +241,7 @@ public class CutsceneFxController {
         }
     }
 
+    /** Inicia primeiro capítulo. */
     private void iniciarPrimeiroCapitulo() {
         // Enquanto a exploração JavaFX não está pronta, a casa é acessada
         // automaticamente para disparar o capítulo 1 com o gatilho existente.
@@ -255,6 +291,7 @@ public class CutsceneFxController {
         else mostrarImagem(imagem);
     }
 
+    /** Obtém o número do capítulo para exibição. */
     private int numeroCapitulo() {
         String id = capituloController.getCapitulo().getId();
         try {
@@ -264,6 +301,7 @@ public class CutsceneFxController {
         }
     }
 
+    /** Mostra diálogo. */
     private void mostrarDialogo() {
         if (indiceDialogo >= dialogos.size()) {
             concluirCapitulo();
@@ -322,6 +360,7 @@ public class CutsceneFxController {
         }
     }
 
+    /** Seleciona a ilustração associada à fala atual. */
     private String imagemEspecialDoDialogo(Dialogo dialogo) {
         if (etapa != Etapa.CAPITULO) return null;
         if (numeroCapitulo() != 9 || dialogo == null || dialogo.isEscolha()) return null;
@@ -396,6 +435,7 @@ public class CutsceneFxController {
         }
     }
 
+    /** Seleciona a imagem do protagonista conforme sua aparência. */
     private String spriteProtagonista(Player player) {
         String genero = player.getSexo() == Sexo.FEMININO ? "Feminina" : "Masculino";
         Cores cor = player.getCorOlhos();
@@ -408,6 +448,7 @@ public class CutsceneFxController {
         return "Protagonista_" + genero + sufixo + ".png";
     }
 
+    /** Seleciona a imagem do interlocutor da cena. */
     private String spriteInterlocutor(String nome) {
         return switch (nome.toLowerCase(Locale.ROOT).trim()) {
             case "olivia" -> "Olivia.png";
@@ -421,6 +462,7 @@ public class CutsceneFxController {
         };
     }
 
+    /** Localiza a imagem associada ao personagem. */
     private Image spritePersonagem(String arquivo) {
         String caminho = "/images/visual_novel/" + arquivo;
         return spritesPersonagens.computeIfAbsent(caminho, key -> {
@@ -432,11 +474,13 @@ public class CutsceneFxController {
         });
     }
 
+    /** Oculta personagens. */
     private void ocultarPersonagens() {
         painelPersonagens.setVisible(false);
         painelPersonagens.setManaged(false);
     }
 
+    /** Processa escolha. */
     private void processarEscolha(Dialogo dialogo, int indiceOpcao) {
         if (etapa != Etapa.CAPITULO || indiceDialogo >= dialogos.size()
                 || dialogos.get(indiceDialogo) != dialogo) return;
@@ -450,6 +494,7 @@ public class CutsceneFxController {
         mostrarDialogo();
     }
 
+    /** Registra a conclusão na partida antes de tentar o salvamento automático. */
     private void concluirCapitulo() {
         if (finalizado) return;
         finalizado = true;
@@ -468,6 +513,7 @@ public class CutsceneFxController {
                 aviso, true);
     }
 
+    /** Mostra conclusao. */
     private void mostrarConclusao(String titulo, String aviso, boolean capituloConcluido) {
         ocultarPersonagens();
         etapa = Etapa.CONCLUIDA;
@@ -489,6 +535,7 @@ public class CutsceneFxController {
         btnAvancar.setText(telaRetorno == Tela.MAPA ? "IR PARA O MAPA  →" : "CONTINUAR EXPLORANDO  →");
     }
 
+    /** Continua a sequência exibida na tela. */
     @FXML
     public void avancar() {
         if (digitacao != null && digitacao.getStatus() == Animation.Status.RUNNING) {
@@ -511,6 +558,7 @@ public class CutsceneFxController {
         }
     }
 
+    /** Avança para o próximo ponto permitido da sequência. */
     @FXML
     public void pular() {
         if (etapa == Etapa.PROLOGO) {
@@ -547,6 +595,7 @@ public class CutsceneFxController {
         }
     }
 
+    /** Solicita confirmação para voltar ao menu inicial. */
     @FXML
     public void voltarAoMenu() {
         if (etapa == Etapa.CONCLUIDA) {
@@ -563,6 +612,7 @@ public class CutsceneFxController {
         );
     }
 
+    /** Revela o texto aos poucos na caixa de diálogo. */
     private void mostrarDigitando(String texto) {
         pararDigitacao();
         textoCompleto = texto;
@@ -577,11 +627,13 @@ public class CutsceneFxController {
         digitacao.play();
     }
 
+    /** Conclui exibição gradual do texto. */
     private void concluirDigitacao() {
         pararDigitacao();
         lblTexto.setText(textoCompleto);
     }
 
+    /** Interrompe exibição gradual do texto. */
     private void pararDigitacao() {
         if (digitacao != null) {
             digitacao.stop();

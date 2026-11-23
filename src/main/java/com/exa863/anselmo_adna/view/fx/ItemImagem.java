@@ -14,12 +14,16 @@ import java.util.Map;
  */
 public final class ItemImagem {
 
+    /** Pasta. */
     private static final String PASTA = "/images/itens/";
+    /** Cache. */
     private static final Map<String, Image> CACHE = new HashMap<>();
 
+    /** Impede a criação de instâncias desta classe utilitária. */
     private ItemImagem() {
     }
 
+    /** Busca a ilustração pelo nome do item. Retorna null quando não há imagem disponível. */
     public static Image obter(Item item) {
         if (item == null || item.getNome() == null) {
             return null;
@@ -47,6 +51,7 @@ public final class ItemImagem {
         });
     }
 
+    /** Formata efeitos. */
     public static String formatarEfeitos(Item item) {
         if (item == null || !item.isConsumivel()) {
             return "ITEM ESPECIAL";

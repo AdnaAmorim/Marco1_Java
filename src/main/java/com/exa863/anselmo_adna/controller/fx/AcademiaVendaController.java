@@ -33,31 +33,52 @@ import java.net.URL;
  */
 public class AcademiaVendaController {
 
+    /** Largura cenário. */
     private static final double LARGURA_CENARIO = 960.0;
+    /** Altura cenário. */
     private static final double ALTURA_CENARIO = 540.0;
+    /** Capital necessario. */
     private static final int CAPITAL_NECESSARIO = 5000;
+    /** Imagem academia venda. */
     private static final String IMG_ACADEMIA_VENDA = "/images/locais/Academia_A_Venda.png";
 
+    /** Painel principal da tela. */
     @FXML private StackPane rootPane;
+    /** Area cenário. */
     @FXML private StackPane areaCenario;
+    /** Imagem — fundo desfocado. */
     @FXML private ImageView imgFundoBlur;
+    /** Desfocado escuro. */
     @FXML private Region blurEscuro;
+    /** Cenário canvas. */
     @FXML private Pane cenarioCanvas;
+    /** Imagem — fundo. */
     @FXML private ImageView imgFundo;
 
+    /** Texto — atleta. */
     @FXML private Label lblAtleta;
+    /** Texto — saúde. */
     @FXML private Label lblSaude;
+    /** Texto — energia. */
     @FXML private Label lblEnergia;
+    /** Texto — dinheiro. */
     @FXML private Label lblDinheiro;
+    /** Texto — data e hora. */
     @FXML private Label lblDataHora;
+    /** Botão — pausa. */
     @FXML private Button btnPausa;
 
+    /** Texto — capital. */
     @FXML private Label lblCapital;
+    /** Painel — detalhes. */
     @FXML private VBox boxDetalhes;
+    /** Box opções. */
     @FXML private VBox boxOpcoes;
 
+    /** Controlador da partida compartilhado pela interface. */
     private final GameController jogo = SceneManager.getGameController();
 
+    /** Prepara os componentes da tela após o carregamento do FXML. */
     @FXML
     public void initialize() {
         configurarEscalaCenario();
@@ -67,6 +88,7 @@ public class AcademiaVendaController {
         atualizarConteudo();
     }
 
+    /** Carrega imagem de fundo. */
     private void carregarFundo() {
         URL recurso = getClass().getResource(IMG_ACADEMIA_VENDA);
         if (recurso != null) {
@@ -76,6 +98,7 @@ public class AcademiaVendaController {
         }
     }
 
+    /** Configura escala do cenário para o tamanho da janela. */
     private void configurarEscalaCenario() {
         Rectangle clip = new Rectangle();
         clip.widthProperty().bind(areaCenario.widthProperty());
@@ -112,6 +135,7 @@ public class AcademiaVendaController {
         blurEscuro.visibleProperty().bind(temLacuna);
     }
 
+    /** Configura ícones do painel de status. */
     private void configurarIconesHud() {
         IconManager.aplicarBotao(btnPausa, Icone.PAUSE, 18);
         IconManager.aplicar(lblSaude, Icone.HEART, 17, IconManager.COR_PERIGO);
@@ -119,6 +143,7 @@ public class AcademiaVendaController {
         IconManager.aplicar(lblDataHora, Icone.CLOCK, 17, IconManager.COR_DESTAQUE);
     }
 
+    /** Configura atalhos de teclado da tela. */
     private void configurarTeclado() {
         rootPane.setFocusTraversable(true);
         rootPane.setOnKeyPressed(event -> {
@@ -129,6 +154,7 @@ public class AcademiaVendaController {
         });
     }
 
+    /** Exibe os requisitos para abrir a academia e destaca se o jogador já tem o capital necessário. */
     private void atualizarConteudo() {
         Player player = jogo.getPlayer();
         DataDia data = jogo.getDataDia();
@@ -171,6 +197,7 @@ public class AcademiaVendaController {
         AudioManager.aplicarHoverNosBotoes(boxOpcoes);
     }
 
+    /** Abre menu de pausa. */
     @FXML
     public void abrirPausa() {
         SceneManager.abrirMenuPausa(null);

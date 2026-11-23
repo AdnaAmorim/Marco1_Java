@@ -26,18 +26,28 @@ import java.net.URL;
  */
 public final class SceneManager {
 
+    /** Css global. */
     private static final String CSS_GLOBAL = "/styles/global.css";
 
+    /** Container raiz. */
     private static StackPane containerRaiz;
+    /** Game controller. */
     private static GameController gameController;
+    /** Confirmação saida aberta. */
     private static boolean confirmacaoSaidaAberta;
+
     private static Parent menuPausa;
+    /** Tela desfocada. */
     private static Node telaDesfocada;
+    /** Efeito anterior. */
     private static Effect efeitoAnterior;
+    /** Ação executada ao retomar a tela pausada. */
     private static Runnable aoRetomarPausa;
     // Contexto temporário: capítulos disparados pelo mapa usam o mesmo FXML do prólogo.
+    /** Inicio capítulo pendente. */
     private static InicioCapitulo inicioCapituloPendente;
 
+    /** Capítulo pendente e tela de retorno após a cena. */
     public record InicioCapitulo(Capitulo capitulo, Tela telaRetorno) { }
 
     /** Entra no capítulo disponível para o local, respeitando dependências e requisitos. */
@@ -63,9 +73,11 @@ public final class SceneManager {
         return inicio;
     }
 
+    /** Impede a criação de instâncias desta classe utilitária. */
     private SceneManager() {
     }
 
+    /** Prepara os recursos necessários à inicialização. */
     public static void inicializar(Stage stage, Tela telaInicial) {
         AudioManager.inicializar();
         gameController = new GameController();
@@ -80,6 +92,7 @@ public final class SceneManager {
         AudioManager.tocarMusica(telaInicial.getMusica());
     }
 
+    /** Monta a abertura sobre o menu já carregado para que a animação possa usar a posição do logo do menu. */
     public static void inicializarComAbertura(Stage stage, Tela abertura, Tela telaPrincipal) {
         AudioManager.inicializar();
         gameController = new GameController();
@@ -93,6 +106,7 @@ public final class SceneManager {
         stage.setScene(scene);
     }
 
+    /** Retorna controlador da partida compartilhado pelas telas. */
     public static GameController getGameController() {
         if (gameController == null) {
             gameController = new GameController();
@@ -100,6 +114,7 @@ public final class SceneManager {
         return gameController;
     }
 
+    /** Substitui a tela atual pela tela solicitada. */
     public static void irPara(Tela tela) {
         verificarInicializacao();
         limparEstadoPausa();
@@ -107,6 +122,7 @@ public final class SceneManager {
         AudioManager.tocarMusica(tela.getMusica());
     }
 
+    /** Inicia luta. */
     public static void iniciarLuta(LutaContexto contexto) {
         verificarInicializacao();
         limparEstadoPausa();
@@ -123,6 +139,7 @@ public final class SceneManager {
         }
     }
 
+    /** Sobrepõe a tela solicitada à tela atual. */
     public static void abrirModal(Tela tela) {
         verificarInicializacao();
         AudioManager.tocar(Som.ABRIR_MODAL);
@@ -144,6 +161,7 @@ public final class SceneManager {
         return true;
     }
 
+    /** Indica se o menu de pausa está aberto. */
     public static boolean pausaAtiva() {
         return menuPausa != null;
     }
@@ -160,10 +178,12 @@ public final class SceneManager {
         if (aoRetomar != null) aoRetomar.run();
     }
 
+    /** Abre confirmação. */
     public static void abrirConfirmacao(String titulo, String mensagem, Runnable aoConfirmar) {
         abrirConfirmacao(titulo, mensagem, null, "CONFIRMAR", aoConfirmar);
     }
 
+    /** Abre confirmação. */
     public static void abrirConfirmacao(String titulo, String mensagem, String aviso,
                                         String textoConfirmar, Runnable aoConfirmar) {
         verificarInicializacao();
@@ -180,6 +200,7 @@ public final class SceneManager {
         }
     }
 
+    /** Solicita confirmação de saída do jogo. */
     public static void solicitarSaida() {
         if (confirmacaoSaidaAberta) {
             return;
@@ -194,10 +215,12 @@ public final class SceneManager {
         );
     }
 
+    /** Retira o modal do topo da tela. */
     public static void fecharModal() {
         fecharModal(true);
     }
 
+    /** Retira o modal do topo da tela. */
     public static void fecharModal(boolean tocarSom) {
         verificarInicializacao();
         int total = containerRaiz.getChildren().size();
@@ -215,6 +238,7 @@ public final class SceneManager {
         }
     }
 
+    /** Limpa referências ao menu de pausa e à tela de fundo. */
     private static void limparEstadoPausa() {
         if (telaDesfocada != null) telaDesfocada.setEffect(efeitoAnterior);
         telaDesfocada = null;
@@ -223,12 +247,14 @@ public final class SceneManager {
         aoRetomarPausa = null;
     }
 
+    /** Verifica inicialização do gerenciador de cenas. */
     private static void verificarInicializacao() {
         if (containerRaiz == null) {
             throw new IllegalStateException("SceneManager ainda não foi inicializado.");
         }
     }
 
+    /** Cria carregador do arquivo FXML da tela. */
     private static FXMLLoader criarLoader(Tela tela) {
         URL recurso = SceneManager.class.getResource(tela.getCaminhoFxml());
         if (recurso == null) {
@@ -237,6 +263,7 @@ public final class SceneManager {
         return new FXMLLoader(recurso);
     }
 
+    /** Carrega o conteúdo FXML da tela solicitada. */
     private static Parent carregar(Tela tela) {
         try {
             Parent raiz = criarLoader(tela).load();

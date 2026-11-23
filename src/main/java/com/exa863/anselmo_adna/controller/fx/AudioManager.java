@@ -25,18 +25,27 @@ import java.util.Map;
  */
 public final class AudioManager {
 
+    /** Ganho maximo. */
     private static final double GANHO_MAXIMO = 0.80;
+    /** Cache. */
     private static final Map<Som, AudioClip> CACHE = new EnumMap<>(Som.class);
 
+    /** Volume efeitos. */
     private static double volumeEfeitos = 0.60 * GANHO_MAXIMO;
+    /** Volume música. */
     private static double volumeMusica = 0.80 * GANHO_MAXIMO;
+    /** Música tocando. */
     private static Musica musicaTocando;
+    /** Reprodutor da trilha de fundo. */
     private static MediaPlayer playerMusica;
+    /** Reprodutor dedicado à vinheta. */
     private static MediaPlayer playerVinheta;
 
+    /** Impede a criação de instâncias desta classe utilitária. */
     private AudioManager() {
     }
 
+    /** Prepara os recursos necessários à inicialização. */
     public static void inicializar() {
         Configuracao config = new Configuracao();
         try {
@@ -48,6 +57,7 @@ public final class AudioManager {
         setVolumeEfeitos(config.volumeEfeitos);
     }
 
+    /** Reproduz o efeito sonoro solicitado. */
     public static void tocar(Som som) {
         if (som == null || volumeEfeitos <= 0.0) {
             return;
@@ -58,6 +68,7 @@ public final class AudioManager {
         }
     }
 
+    /** Reproduz a vinheta em um player separado da música de fundo. */
     public static void tocarUmaVez(Musica musica) {
         if (musica == null || volumeMusica <= 0.0) {
             return;
@@ -82,6 +93,7 @@ public final class AudioManager {
         player.play();
     }
 
+    /** Mantém a trilha em andamento quando a próxima tela usa a mesma música. */
     public static void tocarMusica(Musica musica) {
         if (musica == null) {
             pararMusica();
@@ -103,6 +115,7 @@ public final class AudioManager {
         playerMusica.play();
     }
 
+    /** Interrompe música. */
     public static void pararMusica() {
         if (playerMusica != null) {
             playerMusica.stop();
@@ -112,10 +125,12 @@ public final class AudioManager {
         musicaTocando = null;
     }
 
+    /** Ajusta volume efeitos. */
     public static void setVolumeEfeitos(int percentual) {
         volumeEfeitos = (limitarPercentual(percentual) / 100.0) * GANHO_MAXIMO;
     }
 
+    /** Ajusta volume música. */
     public static void setVolumeMusica(int percentual) {
         volumeMusica = (limitarPercentual(percentual) / 100.0) * GANHO_MAXIMO;
         if (playerMusica != null) {
@@ -123,6 +138,7 @@ public final class AudioManager {
         }
     }
 
+    /** Aplica efeito sonoro ao passar o cursor sobre os botões. */
     public static void aplicarHoverNosBotoes(Parent raiz) {
         if (raiz == null) {
             return;
@@ -141,6 +157,7 @@ public final class AudioManager {
         }
     }
 
+    /** Obtém clip. */
     private static AudioClip obterClip(Som som) {
         return CACHE.computeIfAbsent(som, s -> {
             URL recurso = AudioManager.class.getResource(s.getCaminho());
@@ -148,6 +165,7 @@ public final class AudioManager {
         });
     }
 
+    /** Mantém o percentual de volume entre zero e cem. */
     private static int limitarPercentual(int valor) {
         return Math.max(0, Math.min(100, valor));
     }

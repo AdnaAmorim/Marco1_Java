@@ -21,33 +21,54 @@ import javafx.scene.control.Label;
  */
 public class SavesController {
 
+    /** Slot automático. */
     private static final int SLOT_AUTOMATICO = 0;
 
+    /** Controlador responsável pelos arquivos de partida. */
     private final SaveGameController saveController = new SaveGameController();
+    /** Detalhes. */
     private final SaveGame[] detalhes = new SaveGame[SaveGameController.MAX_SLOTS + 1];
 
+    /** Botoes slot. */
     private Button[] botoesSlot;
+    /** Slot selecionado. */
     private int slotSelecionado = 1;
 
+    /** Botão — slot 1. */
     @FXML private Button btnSlot1;
+    /** Botão — slot 2. */
     @FXML private Button btnSlot2;
+    /** Botão — slot 3. */
     @FXML private Button btnSlot3;
+    /** Botão — slot 4. */
     @FXML private Button btnSlot4;
+    /** Botão de seleção do slot automático. */
     @FXML private Button btnAutosave;
 
+    /** Texto — título do slot. */
     @FXML private Label lblSlotTitulo;
+    /** Texto — jogador. */
     @FXML private Label lblJogador;
+    /** Texto — capítulo. */
     @FXML private Label lblCapitulo;
+    /** Texto — local e data. */
     @FXML private Label lblLocalData;
+    /** Texto exibido — data salvamento. */
     @FXML private Label lblDataSalvamento;
 
+    /** Texto exibido — mensagem. */
     @FXML private Label lblMensagem;
 
+    /** Botão — carregar. */
     @FXML private Button btnCarregar;
+    /** Botão — salvar. */
     @FXML private Button btnSalvar;
+    /** Botão — excluir. */
     @FXML private Button btnExcluir;
+    /** Botão — voltar. */
     @FXML private Button btnVoltar;
 
+    /** Prepara os componentes da tela após o carregamento do FXML. */
     @FXML
     public void initialize() {
         botoesSlot = new Button[] { btnAutosave, btnSlot1, btnSlot2, btnSlot3, btnSlot4 };
@@ -59,12 +80,18 @@ public class SavesController {
         selecionarSlot(1, false);
     }
 
+    /** Seleciona — slot 1. */
     @FXML public void selecionarSlot1() { selecionarSlot(1, true); }
+    /** Seleciona — slot 2. */
     @FXML public void selecionarSlot2() { selecionarSlot(2, true); }
+    /** Seleciona — slot 3. */
     @FXML public void selecionarSlot3() { selecionarSlot(3, true); }
+    /** Seleciona — slot 4. */
     @FXML public void selecionarSlot4() { selecionarSlot(4, true); }
+    /** Seleciona autosave. */
     @FXML public void selecionarAutosave() { selecionarSlot(SLOT_AUTOMATICO, true); }
 
+    /** Carrega slot selecionado. */
     @FXML
     public void carregarSlot() {
         SaveGame save = detalhes[slotSelecionado];
@@ -81,6 +108,7 @@ public class SavesController {
         SceneManager.irPara(Tela.MAPA);
     }
 
+    /** Salva slot selecionado. */
     @FXML
     public void salvarSlot() {
         if (slotSelecionado == SLOT_AUTOMATICO) {
@@ -110,6 +138,7 @@ public class SavesController {
         executarSalvamento();
     }
 
+    /** Exclui slot selecionado. */
     @FXML
     public void excluirSlot() {
         if (!existeSlot(slotSelecionado)) {
@@ -130,11 +159,13 @@ public class SavesController {
         );
     }
 
+    /** Retorna à tela anterior. */
     @FXML
     public void voltar() {
         SceneManager.fecharModal();
     }
 
+    /** Seleciona slot selecionado. */
     private void selecionarSlot(int slot, boolean tocarSom) {
         slotSelecionado = slot;
         if (tocarSom) {
@@ -145,6 +176,7 @@ public class SavesController {
         atualizarBotoes();
     }
 
+    /** Recarrega slots. */
     private void recarregarSlots() {
         detalhes[SLOT_AUTOMATICO] = lerAutomatico();
         for (int i = 1; i <= SaveGameController.MAX_SLOTS; i++) {
@@ -157,6 +189,7 @@ public class SavesController {
         btnAutosave.setText(rotuloSlot("AUTO", detalhes[SLOT_AUTOMATICO], saveController.existeAutomatico()));
     }
 
+    /** Atualiza destaque do slot selecionado. */
     private void atualizarSelecaoVisual() {
         for (int i = 0; i < botoesSlot.length; i++) {
             botoesSlot[i].getStyleClass().remove("slot-selecionado");
@@ -166,6 +199,7 @@ public class SavesController {
         }
     }
 
+    /** Atualiza detalhes. */
     private void atualizarDetalhes() {
         boolean automatico = slotSelecionado == SLOT_AUTOMATICO;
         String titulo = automatico ? "SALVAMENTO AUTOMÁTICO" : "SLOT " + slotSelecionado;
@@ -197,6 +231,7 @@ public class SavesController {
         lblDataSalvamento.setText("SALVO EM: " + save.getDataSalvamento());
     }
 
+    /** Permite excluir um arquivo ilegível, mas só habilita o carregamento de uma partida válida. */
     private void atualizarBotoes() {
         boolean existe = existeSlot(slotSelecionado);
         boolean valido = detalhes[slotSelecionado] != null;
@@ -207,6 +242,7 @@ public class SavesController {
         btnExcluir.setDisable(!existe);
     }
 
+    /** Executa salvamento. */
     private void executarSalvamento() {
         try {
             saveController.salvar(slotSelecionado, SceneManager.getGameController().getGameState());
@@ -221,6 +257,7 @@ public class SavesController {
         }
     }
 
+    /** Executa exclusao. */
     private void executarExclusao() {
         boolean excluido = slotSelecionado == SLOT_AUTOMATICO
                 ? saveController.excluirAutomatico()
@@ -233,14 +270,17 @@ public class SavesController {
         mostrarMensagem(excluido ? "SAVE EXCLUÍDO." : "NÃO FOI POSSÍVEL EXCLUIR O SAVE.");
     }
 
+    /** Mostra mensagem. */
     private void mostrarMensagem(String texto) {
         lblMensagem.setText(texto);
     }
 
+    /** Verifica se há um arquivo de partida no slot. */
     private boolean existeSlot(int slot) {
         return slot == SLOT_AUTOMATICO ? saveController.existeAutomatico() : saveController.existe(slot);
     }
 
+    /** Lê slot selecionado. */
     private SaveGame lerSlot(int slot) {
         try {
             return saveController.carregar(slot);
@@ -249,6 +289,7 @@ public class SavesController {
         }
     }
 
+    /** Lê partida do slot automático. */
     private SaveGame lerAutomatico() {
         try {
             return saveController.carregarAutomatico();
@@ -257,6 +298,7 @@ public class SavesController {
         }
     }
 
+    /** Monta o rótulo do slot conforme a situação do arquivo. */
     private String rotuloSlot(String prefixo, SaveGame save, boolean existe) {
         if (save != null) {
             return prefixo + " - " + save.getGameState().getPlayer().getNome().toUpperCase();

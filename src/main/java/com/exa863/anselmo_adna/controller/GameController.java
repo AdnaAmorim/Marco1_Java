@@ -20,6 +20,7 @@ import java.util.Objects;
  */
 public class GameController {
 
+    // As telas do Mundial no terminal e no JavaFX usam os mesmos valores de inscrição, prêmio e preparo.
     public static final int TAXA_MUNDIAL = 3000;
     public static final int PREMIO_MUNDIAL = 15000;
     public static final int MIN_STATUS_MUNDIAL = 70;

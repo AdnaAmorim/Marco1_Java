@@ -29,6 +29,7 @@ public class Application extends javafx.application.Application {
         stage.setMinWidth(640);
         stage.setMinHeight(360);
 
+        // O botão de fechar da janela usa a mesma confirmação de saída do menu.
         stage.setOnCloseRequest(event -> {
             event.consume();
             SceneManager.solicitarSaida();

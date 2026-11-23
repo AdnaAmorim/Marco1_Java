@@ -65,6 +65,7 @@ public class ConfiguracaoXML {
         String autoSave = dados.getProperty("autoSave", "true");
         String pularAnimacao = dados.getProperty("pularAnimacaoCombate", "false");
         String pularCutscene = dados.getProperty("pularCutscene", "false");
+        // Arquivos de configuração anteriores à inclusão do áudio usam os volumes padrão do jogo.
         String volumeMusica = dados.getProperty("volumeMusica", "80");
         String volumeEfeitos = dados.getProperty("volumeEfeitos", "60");
 

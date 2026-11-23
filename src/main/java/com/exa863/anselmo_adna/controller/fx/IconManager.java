@@ -27,26 +27,37 @@ import java.util.regex.Pattern;
  */
 public final class IconManager {
 
+    /** Cor texto. */
     public static final Color COR_TEXTO = Color.web("#FAF0DC");
+    /** Cor destaque. */
     public static final Color COR_DESTAQUE = Color.web("#FFD166");
+    /** Cor perigo. */
     public static final Color COR_PERIGO = Color.web("#E63946");
 
+    /** Svg size. */
     private static final Pattern SVG_SIZE = Pattern.compile("width=\"(\\d+)\"\\s+height=\"(\\d+)\"");
+    /** Rect pattern. */
     private static final Pattern RECT_PATTERN = Pattern.compile(
             "<rect\\s+x=\"(\\d+)\"\\s+y=\"(\\d+)\"\\s+width=\"(\\d+)\"\\s+height=\"(\\d+)\"\\s+fill=\"(#[0-9A-Fa-f]{6})\"");
 
+    /** Retângulo de pixels usado para desenhar o ícone. */
     private record PixelRect(int x, int y, int w, int h, boolean sombreado) {
     }
 
+    /** Dimensões e retângulos lidos do ícone SVG. */
     private record SvgData(int largura, int altura, List<PixelRect> rects) {
     }
 
+    /** Cache svg. */
     private static final Map<Icone, SvgData> CACHE_SVG = new EnumMap<>(Icone.class);
+    /** Cache imagem. */
     private static final Map<String, Image> CACHE_IMG = new HashMap<>();
 
+    /** Impede a criação de instâncias desta classe utilitária. */
     private IconManager() {
     }
 
+    /** Cria a representação visual do ícone. */
     public static ImageView criar(Icone icone, double tamanho, Color cor) {
         ImageView view = new ImageView(renderizar(icone, cor));
         view.setFitWidth(tamanho);
@@ -56,6 +67,7 @@ public final class IconManager {
         return view;
     }
 
+    /** Associa o ícone ao componente. */
     public static void aplicar(Labeled controle, Icone icone, double tamanho, Color cor) {
         if (controle == null || icone == null) {
             return;
@@ -64,14 +76,17 @@ public final class IconManager {
         controle.setGraphicTextGap(8);
     }
 
+    /** Aplica ícone do botão. */
     public static void aplicarBotao(ButtonBase botao, Icone icone, double tamanho) {
         aplicarBotao(botao, icone, tamanho, COR_TEXTO, COR_DESTAQUE);
     }
 
+    /** Aplica ícone do botão de ação destrutiva. */
     public static void aplicarBotaoPerigo(ButtonBase botao, Icone icone, double tamanho) {
         aplicarBotao(botao, icone, tamanho, COR_TEXTO, COR_PERIGO);
     }
 
+    /** Aplica ícone do botão. */
     public static void aplicarBotao(ButtonBase botao, Icone icone, double tamanho, Color corNormal, Color corHover) {
         if (botao == null || icone == null) {
             return;
@@ -91,6 +106,7 @@ public final class IconManager {
         botao.setGraphicTextGap(10);
     }
 
+    /** Pinta os retângulos do SVG e guarda a imagem para reutilizá-la em ícones da mesma cor. */
     private static Image renderizar(Icone icone, Color cor) {
         String chave = icone.name() + ":" + cor.toString();
         return CACHE_IMG.computeIfAbsent(chave, k -> {
@@ -114,6 +130,7 @@ public final class IconManager {
         });
     }
 
+    /** Carrega descrição dos retângulos do ícone SVG. */
     private static SvgData carregarSvg(Icone icone) {
         return CACHE_SVG.computeIfAbsent(icone, i -> {
             try (InputStream in = IconManager.class.getResourceAsStream(i.getCaminho())) {

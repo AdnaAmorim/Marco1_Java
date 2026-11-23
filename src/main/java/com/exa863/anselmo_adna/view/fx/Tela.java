@@ -29,10 +29,14 @@ public enum Tela {
     CONFIRMACAO("modais/Confirmacao"),
     MENU_PAUSA("modais/MenuPausa");
 
+    /** Pasta views. */
     private static final String PASTA_VIEWS = "/views/";
+    /** Extensão. */
     private static final String EXTENSAO = ".fxml";
 
+    /** Caminho relativo. */
     private final String caminhoRelativo;
+    /** Música. */
     private final Musica musica;
 
     Tela(String caminhoRelativo) {
@@ -44,10 +48,12 @@ public enum Tela {
         this.musica = musica;
     }
 
+    /** Retorna caminho do arquivo FXML da tela. */
     public String getCaminhoFxml() {
         return PASTA_VIEWS + caminhoRelativo + EXTENSAO;
     }
 
+    /** Retorna música. */
     public Musica getMusica() {
         return musica;
     }
